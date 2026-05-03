@@ -17,8 +17,35 @@ Here's a little peek into how things are organized!
 ```text
 dotfiles/
 ├── install.sh                # The magic master script ✨
+├── remote-install.sh         # The one-liner magic script 🪄
 └── scripts/
     └── install_anime4k.sh    # Makes videos look super pretty! 📺
+```
+
+<br>
+
+## ✨ ⁺ . ⊹ Quick Start . ⁺ 🍓
+
+Ready to make things pretty with just one command? 🚀
+
+### 🪄 The One-Liner Magic
+
+Paste this into your terminal to clone and install everything automatically:
+
+```bash
+curl -LsSf https://raw.githubusercontent.com/Praveensenpai/dotfiles/main/remote-install.sh | bash
+```
+
+<br>
+
+### 💌 Manual Setup
+
+If you prefer doing things by hand:
+
+```bash
+git clone https://github.com/Praveensenpai/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+./install.sh
 ```
 
 <br>
@@ -28,31 +55,6 @@ dotfiles/
 | Script | What it does (*´▽`*) |
 | :--- | :--- |
 | `install_anime4k.sh` | Downloads and magically configures Anime4K GLSL shaders for `mpv`. |
-
-<br>
-
-## ✨ ⁺ . ⊹ Quick Start . ⁺ 🍓
-
-Ready to make things pretty? Let's go! 🚀
-
-### 1. Clone the repo 💌
-
-First, let's bring these files to your cozy home directory:
-
-```bash
-git clone git@github.com:Praveensenpai/dotfiles.git ~/dotfiles
-cd ~/dotfiles
-```
-
-### 2. Install Everything 🪄
-
-Just run the master install script! It will automatically find and run all the little helper scripts inside the `scripts/` folder for you.
-
-```bash
-./install.sh
-```
-
-> **Note:** *If you want to be selective, you can also run individual scripts manually from the `scripts/` folder.* ( ˶ˆ꒳ˆ˵ )
 
 <br>
 <div align="center">
