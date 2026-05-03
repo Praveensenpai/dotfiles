@@ -6,6 +6,7 @@ Manual, clean configurations and scripts for an Arch-based (Omarchy) system.
 
 ```text
 dotfiles/
+├── install.sh
 └── scripts/
     └── install_anime4k.sh
 ```
@@ -25,10 +26,12 @@ git clone git@github.com:Praveensenpai/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ```
 
-### 2. Run Scripts
+### 2. Install Everything
 
-Scripts must be executed manually:
+Run the master install script to execute all scripts in the `scripts/` directory automatically:
 
 ```bash
-./scripts/install_anime4k.sh
+./install.sh
 ```
+
+*(Alternatively, you can run individual scripts manually from the `scripts/` folder).*
