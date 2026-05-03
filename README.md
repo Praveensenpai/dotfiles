@@ -1,15 +1,11 @@
 # dotfiles
 
-Manual, clean configurations for an Arch-based (Omarchy) system.
+Manual, clean configurations and scripts for an Arch-based (Omarchy) system.
 
 ## Structure
 
 ```text
 dotfiles/
-├── .config/
-│   ├── hypr/      # Tiling WM configs
-│   ├── nvim/      # Editor setup
-│   └── mpv/       # Media player & shaders
 └── scripts/
     └── install_anime4k.sh
 ```
@@ -22,28 +18,17 @@ dotfiles/
 
 ## Quick Start
 
-Clone via SSH and symlink the configurations. GNU `stow` is recommended.
-
 ### 1. Clone
 
 ```bash
-git clone https://github.com/Praveensenpai/dotfiles.git ~/dotfiles
+git clone git@github.com:Praveensenpai/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ```
 
-### 2. Deploy
+### 2. Run Scripts
 
-**Using GNU Stow:**
-
-```bash
-stow .
-```
-*(Ensure your dotfiles directory structure matches your home directory structure if using `stow .`, or target specific directories like `stow -t ~/.config .config`)*
-
-**Manual Symlinking:**
+Scripts must be executed manually:
 
 ```bash
-ln -s ~/dotfiles/.config/hypr ~/.config/hypr
-ln -s ~/dotfiles/.config/nvim ~/.config/nvim
-ln -s ~/dotfiles/.config/mpv ~/.config/mpv
+./scripts/install_anime4k.sh
 ```
