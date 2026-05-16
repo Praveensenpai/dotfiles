@@ -19,6 +19,7 @@ dotfiles/
 ├── install.sh                # The magic master script ✨
 ├── remote-install.sh         # The one-liner magic script 🪄
 └── scripts/
+    ├── disable_bluetooth.sh  # No more annoying bluetooth on boot! 📶
     └── install_anime4k.sh    # Makes videos look super pretty! 📺
 ```
 
@@ -54,6 +55,7 @@ cd ~/dotfiles
 
 | Script | What it does (*´▽`*) |
 | :--- | :--- |
+| `disable_bluetooth.sh` | Disables the bluetooth service and masks it to keep it off. |
 | `install_anime4k.sh` | Downloads and magically configures Anime4K GLSL shaders for `mpv`. |
 
 <br>
