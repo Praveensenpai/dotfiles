@@ -4,14 +4,34 @@
 URL="https://github.com/Tama47/Anime4K/releases/download/v4.0.1/GLSL_Mac_Linux_High-end.zip"
 TARGET="$HOME/.config/mpv"
 
+# Check dependencies
+if command -v curl &> /dev/null; then
+    DOWNLOAD_CMD="curl -L --progress-bar -o Anime4K.zip"
+elif command -v wget &> /dev/null; then
+    DOWNLOAD_CMD="wget -q --show-progress -O Anime4K.zip"
+else
+    echo "❌ Error: Neither curl nor wget is installed!"
+    exit 1
+fi
+
+if ! command -v unzip &> /dev/null; then
+    echo "❌ Error: unzip is not installed!"
+    exit 1
+fi
+
 echo "➜ Step 1: Ensuring $TARGET exists..."
 mkdir -p "$TARGET"
 
 echo "➜ Step 2: Entering /tmp for a clean workspace..."
-cd /tmp || exit
+cd /tmp || exit 1
 
 echo "➜ Step 3: Fetching Anime4K shaders..."
-wget -q --show-progress "$URL" -O Anime4K.zip
+$DOWNLOAD_CMD "$URL"
+
+if [ ! -f Anime4K.zip ]; then
+    echo "❌ Download failed!"
+    exit 1
+fi
 
 echo "➜ Step 4: Extracting archive..."
 unzip -o Anime4K.zip > /dev/null
