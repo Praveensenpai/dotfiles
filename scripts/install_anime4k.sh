@@ -5,12 +5,12 @@ URL="https://github.com/Tama47/Anime4K/releases/download/v4.0.1/GLSL_Mac_Linux_H
 TARGET="$HOME/.config/mpv"
 
 # Check dependencies
-if command -v curl &> /dev/null; then
-    DOWNLOAD_CMD="curl -L --progress-bar -o Anime4K.zip"
-elif command -v wget &> /dev/null; then
+if command -v wget &> /dev/null; then
     DOWNLOAD_CMD="wget -q --show-progress -O Anime4K.zip"
+elif command -v curl &> /dev/null; then
+    DOWNLOAD_CMD="curl -L --progress-bar -o Anime4K.zip"
 else
-    echo "❌ Error: Neither curl nor wget is installed!"
+    echo "❌ Error: Neither wget nor curl is installed!"
     exit 1
 fi
 
