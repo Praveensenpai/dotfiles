@@ -16,10 +16,7 @@ if [ -f "$WAYBAR_STYLE" ]; then
   color: #a9e790;
 }
 
-#network.disconnected {
-  color: #f5a97f;
-}
-
+#network.disconnected,
 #network.disabled {
   color: #565f89;
 }
