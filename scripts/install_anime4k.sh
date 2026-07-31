@@ -43,6 +43,10 @@ echo "➜ Step 6: Moving configuration files..."
 mv -v input.conf "$TARGET/"
 mv -v mpv.conf "$TARGET/"
 
+echo "➜ Step 6b: Setting Mode C + A as default in mpv.conf..."
+sed -i 's|^# glsl-shaders=.*|glsl-shaders="~~/shaders/Anime4K_Clamp_Highlights.glsl:~~/shaders/Anime4K_Upscale_Denoise_CNN_x2_VL.glsl:~~/shaders/Anime4K_AutoDownscalePre_x2.glsl:~~/shaders/Anime4K_AutoDownscalePre_x4.glsl:~~/shaders/Anime4K_Restore_CNN_M.glsl:~~/shaders/Anime4K_Upscale_CNN_x2_M.glsl"|' "$TARGET/mpv.conf"
+
+
 echo "➜ Step 7: Removing temporary junk..."
 rm -rf Anime4K.zip __MACOSX
 
