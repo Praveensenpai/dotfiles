@@ -1,32 +1,21 @@
 #!/bin/bash
 
-# 1. Update Alacritty font size to 10 and inner padding to 14
+# 1. Update Alacritty font size to 10
 ALACRITTY_CONF="$HOME/.config/alacritty/alacritty.toml"
 if [ -f "$ALACRITTY_CONF" ]; then
-    echo "Updating Alacritty font size and padding in $ALACRITTY_CONF..."
+    echo "Updating Alacritty font size in $ALACRITTY_CONF..."
     if grep -q "^size =" "$ALACRITTY_CONF"; then
         sed -i 's/^size = .*/size = 10/' "$ALACRITTY_CONF"
     else
         echo "size = 10" >> "$ALACRITTY_CONF"
     fi
-    if grep -q "^padding.x =" "$ALACRITTY_CONF"; then
-        sed -i 's/^padding.x = .*/padding.x = 14/' "$ALACRITTY_CONF"
-    fi
-    if grep -q "^padding.y =" "$ALACRITTY_CONF"; then
-        sed -i 's/^padding.y = .*/padding.y = 14/' "$ALACRITTY_CONF"
-    fi
-    echo "✔ Alacritty font size & inner padding updated."
+    echo "✔ Alacritty font size updated."
 else
     echo "⚠ $ALACRITTY_CONF not found. Creating..."
     mkdir -p "$(dirname "$ALACRITTY_CONF")"
     cat << 'EOF' > "$ALACRITTY_CONF"
 [font]
 size = 10
-
-[window]
-padding.x = 14
-padding.y = 14
-decorations = "None"
 EOF
     echo "✔ Alacritty config created."
 fi
