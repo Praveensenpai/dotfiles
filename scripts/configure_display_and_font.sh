@@ -1,22 +1,32 @@
 #!/bin/bash
 
-# 1. Update Alacritty font size to 10
+# 1. Update Alacritty font size to 10 and window padding to 14
 ALACRITTY_CONF="$HOME/.config/alacritty/alacritty.toml"
 if [ -f "$ALACRITTY_CONF" ]; then
-    echo "Updating Alacritty font size to 10 in $ALACRITTY_CONF..."
+    echo "Updating Alacritty font size and padding in $ALACRITTY_CONF..."
     if grep -q "^size =" "$ALACRITTY_CONF"; then
         sed -i 's/^size = .*/size = 10/' "$ALACRITTY_CONF"
     else
-        # Append size setting to [font] section if present, or at the end
         echo "size = 10" >> "$ALACRITTY_CONF"
     fi
-    echo "✔ Alacritty font size updated."
+    if grep -q "^padding.x =" "$ALACRITTY_CONF"; then
+        sed -i 's/^padding.x = .*/padding.x = 14/' "$ALACRITTY_CONF"
+    fi
+    if grep -q "^padding.y =" "$ALACRITTY_CONF"; then
+        sed -i 's/^padding.y = .*/padding.y = 14/' "$ALACRITTY_CONF"
+    fi
+    echo "✔ Alacritty font size & padding updated."
 else
     echo "⚠ $ALACRITTY_CONF not found. Creating..."
     mkdir -p "$(dirname "$ALACRITTY_CONF")"
     cat << 'EOF' > "$ALACRITTY_CONF"
 [font]
 size = 10
+
+[window]
+padding.x = 14
+padding.y = 14
+decorations = "None"
 EOF
     echo "✔ Alacritty config created."
 fi
@@ -38,4 +48,17 @@ else
 monitor=,preferred,auto,1.5
 EOF
     echo "✔ Hyprland monitor config created."
+fi
+
+# 3. Update Hyprland border colors in looknfeel.conf
+HYPR_LOOK_CONF="$HOME/.config/hypr/looknfeel.conf"
+if [ -f "$HYPR_LOOK_CONF" ]; then
+    echo "Updating Hyprland border colors in $HYPR_LOOK_CONF..."
+    if grep -q "col.active_border =" "$HYPR_LOOK_CONF"; then
+        sed -i 's/col.active_border = .*/col.active_border = rgba(7aa2f755)/' "$HYPR_LOOK_CONF"
+    fi
+    if grep -q "col.inactive_border =" "$HYPR_LOOK_CONF"; then
+        sed -i 's/col.inactive_border = .*/col.inactive_border = rgba(59595922)/' "$HYPR_LOOK_CONF"
+    fi
+    echo "✔ Hyprland border colors updated."
 fi
