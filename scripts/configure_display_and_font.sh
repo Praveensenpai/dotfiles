@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 1. Update Alacritty font size to 10 and window padding to 14
+# 1. Update Alacritty font size to 10 and inner padding to 14
 ALACRITTY_CONF="$HOME/.config/alacritty/alacritty.toml"
 if [ -f "$ALACRITTY_CONF" ]; then
     echo "Updating Alacritty font size and padding in $ALACRITTY_CONF..."
@@ -15,7 +15,7 @@ if [ -f "$ALACRITTY_CONF" ]; then
     if grep -q "^padding.y =" "$ALACRITTY_CONF"; then
         sed -i 's/^padding.y = .*/padding.y = 14/' "$ALACRITTY_CONF"
     fi
-    echo "✔ Alacritty font size & padding updated."
+    echo "✔ Alacritty font size & inner padding updated."
 else
     echo "⚠ $ALACRITTY_CONF not found. Creating..."
     mkdir -p "$(dirname "$ALACRITTY_CONF")"
@@ -50,15 +50,25 @@ EOF
     echo "✔ Hyprland monitor config created."
 fi
 
-# 3. Update Hyprland border colors in looknfeel.conf
+# 3. Update Hyprland border colors, inner gaps (gaps between windows), and outer gaps in looknfeel.conf
 HYPR_LOOK_CONF="$HOME/.config/hypr/looknfeel.conf"
 if [ -f "$HYPR_LOOK_CONF" ]; then
-    echo "Updating Hyprland border colors in $HYPR_LOOK_CONF..."
-    if grep -q "col.active_border =" "$HYPR_LOOK_CONF"; then
-        sed -i 's/col.active_border = .*/col.active_border = rgba(7aa2f755)/' "$HYPR_LOOK_CONF"
+    echo "Updating Hyprland gaps & border colors in $HYPR_LOOK_CONF..."
+    
+    # Gaps between windows (inner gaps) & outer gaps
+    if grep -q "^[[:space:]]*gaps_in =" "$HYPR_LOOK_CONF"; then
+        sed -i 's/^[[:space:]]*gaps_in = .*/    gaps_in = 0/' "$HYPR_LOOK_CONF"
     fi
-    if grep -q "col.inactive_border =" "$HYPR_LOOK_CONF"; then
-        sed -i 's/col.inactive_border = .*/col.inactive_border = rgba(59595922)/' "$HYPR_LOOK_CONF"
+    if grep -q "^[[:space:]]*gaps_out =" "$HYPR_LOOK_CONF"; then
+        sed -i 's/^[[:space:]]*gaps_out = .*/    gaps_out = 0/' "$HYPR_LOOK_CONF"
     fi
-    echo "✔ Hyprland border colors updated."
+
+    # Border colors
+    if grep -q "^[[:space:]]*col.active_border =" "$HYPR_LOOK_CONF"; then
+        sed -i 's/^[[:space:]]*col.active_border = .*/    col.active_border = rgba(7aa2f755)/' "$HYPR_LOOK_CONF"
+    fi
+    if grep -q "^[[:space:]]*col.inactive_border =" "$HYPR_LOOK_CONF"; then
+        sed -i 's/^[[:space:]]*col.inactive_border = .*/    col.inactive_border = rgba(59595922)/' "$HYPR_LOOK_CONF"
+    fi
+    echo "✔ Hyprland gaps & border colors updated."
 fi
