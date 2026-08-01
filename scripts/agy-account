@@ -77,12 +77,11 @@ def update_gemini_profile(email):
     os.makedirs(prof_dir, exist_ok=True)
     
     if not os.path.islink(GEMINI_LINK) and os.path.isdir(GEMINI_LINK):
-        subprocess.run(["mv", GEMINI_LINK, os.path.join(prof_dir, "gemini")])
+        subprocess.run(["mv", GEMINI_LINK, f"{prof_dir}_backup"])
     elif os.path.islink(GEMINI_LINK):
         os.remove(GEMINI_LINK)
         
-    os.makedirs(os.path.join(prof_dir, "gemini"), exist_ok=True)
-    os.symlink(os.path.join(prof_dir, "gemini"), GEMINI_LINK)
+    os.symlink(prof_dir, GEMINI_LINK)
 
 def get_saved_accounts():
     save_current_account()
@@ -94,9 +93,7 @@ def get_saved_accounts():
     return sorted(accounts)
 
 def set_active_account(target):
-    # Auto-save current before switching
     save_current_account()
-    
     saved = get_saved_accounts()
     matching = [a for a in saved if target.lower() in a.lower()]
     
@@ -104,7 +101,6 @@ def set_active_account(target):
         print(f"\033[38;2;255;121;198mError: Account matching '{target}' not found in saved accounts.\033[0m")
         print("\nSaved accounts:")
         list_accounts()
-        print("\nTo add a new account: run 'agy' and log in via browser once.")
         sys.exit(1)
         
     target_email = matching[0]
@@ -113,13 +109,8 @@ def set_active_account(target):
     with open(token_file, "r") as f:
         token_json = f.read()
         
-    # 1. Update OS Keyring
     write_keyring_token(token_json)
-    
-    # 2. Update SQLite DB
     update_sqlite_db(target_email)
-    
-    # 3. Update ~/.gemini symlink profile
     update_gemini_profile(target_email)
     
     print(f"\033[38;2;80;250;123m✔ Switched active AGY account to: \033[38;2;139;233;253m{target_email}\033[0m")
@@ -145,7 +136,7 @@ def interactive_switch():
     current_email = extract_email_from_token_json(current_token) if current_token else None
 
     if not saved:
-        print("No saved accounts found. Run 'agy' to log in.")
+        print("No saved accounts found.")
         sys.exit(1)
         
     lines = []
@@ -196,11 +187,6 @@ def main():
             print("No active account token found to save.")
     elif cmd in ["help", "-h", "--help"]:
         print("Usage: agy-account [command] [email_substring]")
-        print("\nCommands:")
-        print("  (no args)           Interactive account switcher (fzf)")
-        print("  list                List all saved accounts")
-        print("  switch <email>      Switch active account by email")
-        print("  save                Save currently logged-in keyring account")
     else:
         set_active_account(cmd)
 

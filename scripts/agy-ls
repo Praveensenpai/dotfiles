@@ -1,21 +1,27 @@
 #!/usr/bin/env bash
 
-# agy-ls: Interactive session picker & launcher using fzf
+# agy-ls: Interactive session picker & launcher using fzf (scans all profile brains)
 
-BRAIN_DIR="$HOME/.gemini/antigravity-cli/brain"
+# Search all possible brain directories (current active + all profiles)
+BRAIN_PATHS=(
+    "$HOME/.gemini/antigravity-cli/brain"
+    "$HOME/.gemini-profiles"/*/"antigravity-cli/brain"
+    "$HOME/.gemini-profiles"/*/"gemini/antigravity-cli/brain"
+)
 
-# Generate sessions list
 SESSIONS=$(
-for log in "$BRAIN_DIR"/*/.system_generated/logs/transcript.jsonl; do
-    [ -f "$log" ] || continue
-    cid=$(basename "$(dirname "$(dirname "$(dirname "$log")")")")
-    mtime=$(stat -c %Y "$log")
-    prompt=$(jq -r 'select(.type=="USER_INPUT") | .content' "$log" 2>/dev/null | sed -E 's/<[^>]+>//g' | grep -v '^[[:space:]]*$' | head -n 1 | tr '\n' ' ')
-    if [ -n "$prompt" ]; then
-        dt=$(date -d "@$mtime" "+%Y-%m-%d %H:%M" 2>/dev/null || date -r "$mtime" "+%Y-%m-%d %H:%M")
-        echo "$dt │ $cid │ $prompt"
-    fi
-done | sort -r
+for glob_path in "${BRAIN_PATHS[@]}"; do
+    for log in $glob_path/*/.system_generated/logs/transcript.jsonl; do
+        [ -f "$log" ] || continue
+        cid=$(basename "$(dirname "$(dirname "$(dirname "$log")")")")
+        mtime=$(stat -c %Y "$log")
+        prompt=$(jq -r 'select(.type=="USER_INPUT") | .content' "$log" 2>/dev/null | sed -E 's/<[^>]+>//g' | grep -v '^[[:space:]]*$' | head -n 1 | tr '\n' ' ')
+        if [ -n "$prompt" ]; then
+            dt=$(date -d "@$mtime" "+%Y-%m-%d %H:%M" 2>/dev/null || date -r "$mtime" "+%Y-%m-%d %H:%M")
+            echo "$dt │ $cid │ $prompt"
+        fi
+    done
+done | sort -u -r -k1,2
 )
 
 if [ -z "$SESSIONS" ]; then
@@ -24,7 +30,7 @@ if [ -z "$SESSIONS" ]; then
 fi
 
 # Color scheme for fzf (Dracula / Cyberpunk style)
-FZF_COLORS="bg+:#282a36,bg:#1e1e2e,spinner:#ff79c6,hl:#bd93f9,fg:#f8f8f2,header:#8be9fd,info:#ffb86c,pointer:#ff79c6,marker:#ff79c6,fg+:#f8f8f2,prompt:#50fa7b,hl+:#ff79c6"
+FZF_COLORS="bg+:#282a36,bg:#1e1e2e,spinner:#ff79c6,hl:#bd93f9,fg:#f8f8f2,header:#8be9fd,info:#ffb86c,pointer:#ff79c6,marker:#ff79c6,fg+:#f8f8f2,prompt:#50fa7b"
 
 # Run interactive fzf picker
 SELECTED=$(echo "$SESSIONS" | fzf \
