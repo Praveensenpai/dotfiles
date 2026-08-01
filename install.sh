@@ -62,10 +62,3 @@ echo -e "${PURPLE}${BOLD}💡 System Maintenance Tip:${NC}"
 echo -e "${CYAN}Clean package caches, system logs, & trash anytime with:${NC}"
 echo -e "  ${YELLOW}~/dotfiles/scripts/clean_system_cache.sh${NC}"
 echo ""
-
-if [ -c /dev/tty ]; then
-    read -r -p "Would you like to run the interactive cleanup now? [y/N]: " CLEAN_CHOICE < /dev/tty
-    if [[ "$CLEAN_CHOICE" =~ ^[Yy]$ ]]; then
-        ./scripts/clean_system_cache.sh
-    fi
-fi
