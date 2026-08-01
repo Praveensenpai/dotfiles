@@ -113,7 +113,7 @@ cd ~/dotfiles
 | `set_alacritty_font_size.sh` | Sets Alacritty terminal font size to 10. |
 | `set_hyprland_gaps_and_borders.sh` | Sets Hyprland inner/outer gaps to 0 and configures active/inactive border colors. |
 | `set_hyprland_monitor_scale.sh` | Configures Hyprland monitor resolution and scale to 1.5. |
-| `set_mpv_lang.sh` | Sets default audio & subtitle language priorities & enables auto-saving playback position on quit in `mpv.conf`. |
+| `set_mpv_lang.sh` | Sets default audio & subtitle language priorities in `mpv.conf`. |
 | `set_waybar_battery_colors.sh` | Sets battery icon colors for all charge levels (100% green). |
 | `set_waybar_bluetooth_colors.sh` | Sets Waybar Bluetooth colors (connected green, on orange, off grey). |
 | `set_waybar_config.sh` | Configures Waybar `config.jsonc` modules and layout. |

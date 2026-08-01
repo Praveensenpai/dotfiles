@@ -4,10 +4,10 @@ CYAN='\033[0;36m'
 GREEN='\033[0;32m'
 PURPLE='\033[0;35m'
 BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-URL="https://github.com/Tama47/Anime4K/releases/download/v4.0.1/GLSL_Mac_Linux_High-end.zip"
 TARGET="$HOME/.config/mpv"
 
 echo -e "${PURPLE}📺  Installing Anime4K shaders for mpv...${NC}"
@@ -17,6 +17,48 @@ if ! command -v unzip &> /dev/null; then
     exit 1
 fi
 
+PRESET="${ANIME4K_PRESET:-}"
+
+if [ -z "$PRESET" ]; then
+    HAS_TTY=0
+    INPUT_SRC=""
+    if [ -t 0 ]; then
+        HAS_TTY=1
+        INPUT_SRC="/dev/stdin"
+    elif exec 3< /dev/tty 2>/dev/null; then
+        HAS_TTY=1
+        INPUT_SRC="/dev/tty"
+        exec 3<&-
+    fi
+
+    if [ "$HAS_TTY" -eq 1 ]; then
+        echo -e "\n${YELLOW}🎮 Select Anime4K GPU preset:${NC}"
+        echo -e "  ${CYAN}1)${NC} Higher-end GPU (GTX 1080, RTX 2070/3060+, RX 590/5700XT/6600XT+) ${GREEN}[HQ - VL Shaders]${NC}"
+        echo -e "  ${CYAN}2)${NC} Lower-end GPU (GTX 980, GTX 1060, RX 570, Integrated GPUs) ${YELLOW}[Fast - M/S Shaders]${NC}"
+        
+        read -r -p "Enter choice [1/2] (default: 1): " CHOICE < "$INPUT_SRC" 2>/dev/null || CHOICE="1"
+        case "$CHOICE" in
+            2) PRESET="low" ;;
+            *) PRESET="high" ;;
+        esac
+    else
+        PRESET="high"
+    fi
+fi
+
+if [ "$PRESET" = "low" ]; then
+    URL="https://github.com/Tama47/Anime4K/releases/download/v4.0.1/GLSL_Mac_Linux_Low-end.zip"
+    PRESET_NAME="Lower-end GPU (Fast)"
+    MPV_GLSL_LINE='glsl-shaders="~~/shaders/Anime4K_Clamp_Highlights.glsl:~~/shaders/Anime4K_Restore_CNN_M.glsl:~~/shaders/Anime4K_Upscale_CNN_x2_M.glsl:~~/shaders/Anime4K_AutoDownscalePre_x2.glsl:~~/shaders/Anime4K_AutoDownscalePre_x4.glsl:~~/shaders/Anime4K_Upscale_CNN_x2_S.glsl"'
+    HEADER_COMMENT="# Optimized shaders for lower-end GPU: Mode A (Fast)"
+else
+    URL="https://github.com/Tama47/Anime4K/releases/download/v4.0.1/GLSL_Mac_Linux_High-end.zip"
+    PRESET_NAME="Higher-end GPU (HQ)"
+    MPV_GLSL_LINE='glsl-shaders="~~/shaders/Anime4K_Clamp_Highlights.glsl:~~/shaders/Anime4K_Restore_CNN_VL.glsl:~~/shaders/Anime4K_Upscale_CNN_x2_VL.glsl:~~/shaders/Anime4K_AutoDownscalePre_x2.glsl:~~/shaders/Anime4K_AutoDownscalePre_x4.glsl:~~/shaders/Anime4K_Upscale_CNN_x2_M.glsl"'
+    HEADER_COMMENT="# Optimized shaders for higher-end GPU: Mode A (HQ)"
+fi
+
+echo -e "${GREEN}✨ Selected preset: ${PRESET_NAME}${NC}"
 echo -e "${BLUE}📂 Ensuring ${TARGET} exists...${NC}"
 mkdir -p "$TARGET"
 
@@ -80,30 +122,37 @@ if [ ! -f "$TARGET_FILE" ] || [ ! -s "$TARGET_FILE" ]; then
     exit 1
 fi
 
-echo -e "${BLUE}📂 Extracting Anime4K shaders to ${TARGET}...${NC}"
-unzip -o "$TARGET_FILE" -d "$TMP_DIR" > /dev/null
+echo -e "${BLUE}📂 Copying Anime4K shaders to ${TARGET}/shaders...${NC}"
+mkdir -p "$TARGET/shaders"
+cp -rf "$TMP_DIR"/shaders/* "$TARGET/shaders/" 2>/dev/null || true
 
-if [ ! -d "$TMP_DIR/shaders" ]; then
-    echo -e "${RED}❌ Error: Verification failed! Anime4K shaders directory missing in archive.${NC}"
-    rm -rf "$TMP_DIR"
-    exit 1
+# Handle input.conf safely: preserve existing custom keybindings
+if [ -f "$TARGET/input.conf" ]; then
+    if ! grep -q "Anime4K" "$TARGET/input.conf" 2>/dev/null; then
+        echo -e "${BLUE}📝 Appending Anime4K hotkeys to existing ${TARGET}/input.conf...${NC}"
+        echo "" >> "$TARGET/input.conf"
+        cat "$TMP_DIR/input.conf" >> "$TARGET/input.conf"
+    else
+        echo -e "${BLUE}ℹ️ Anime4K hotkeys already present in ${TARGET}/input.conf${NC}"
+    fi
+else
+    echo -e "${BLUE}📝 Creating ${TARGET}/input.conf with Anime4K hotkeys...${NC}"
+    cp "$TMP_DIR/input.conf" "$TARGET/input.conf"
 fi
 
-mv "$TMP_DIR"/shaders/ "$TARGET/" 2>/dev/null || true
-mv "$TMP_DIR"/input.conf "$TARGET/" 2>/dev/null || true
-mv "$TMP_DIR"/mpv.conf "$TARGET/" 2>/dev/null || true
-
-# Configure Anime4K Mode C+A (HQ) as default shader preset
-if grep -q "glsl-shaders=" "$TARGET/mpv.conf" 2>/dev/null; then
-    sed -i 's|^#* *glsl-shaders=.*|glsl-shaders="~~/shaders/Anime4K_Clamp_Highlights.glsl:~~/shaders/Anime4K_Upscale_Denoise_CNN_x2_VL.glsl:~~/shaders/Anime4K_AutoDownscalePre_x2.glsl:~~/shaders/Anime4K_AutoDownscalePre_x4.glsl:~~/shaders/Anime4K_Restore_CNN_M.glsl:~~/shaders/Anime4K_Upscale_CNN_x2_M.glsl"|' "$TARGET/mpv.conf"
-    sed -i 's|^# Optimized shaders.*|# Optimized shaders for higher-end GPU: Mode C+A (HQ)|' "$TARGET/mpv.conf"
+# Configure Anime4K default shader preset in mpv.conf
+if [ -f "$TARGET/mpv.conf" ] && grep -q "glsl-shaders=" "$TARGET/mpv.conf" 2>/dev/null; then
+    echo -e "${BLUE}⚙️ Updating glsl-shaders preset in ${TARGET}/mpv.conf...${NC}"
+    sed -i "s|^#* *glsl-shaders=.*|${MPV_GLSL_LINE}|" "$TARGET/mpv.conf"
+    sed -i "s|^# Optimized shaders.*|${HEADER_COMMENT}|" "$TARGET/mpv.conf"
 else
-    cat << 'INNER_EOF' >> "$TARGET/mpv.conf"
+    echo -e "${BLUE}⚙️ Appending glsl-shaders preset to ${TARGET}/mpv.conf...${NC}"
+    cat << INNER_EOF >> "$TARGET/mpv.conf"
 
-# Optimized shaders for higher-end GPU: Mode C+A (HQ)
-glsl-shaders="~~/shaders/Anime4K_Clamp_Highlights.glsl:~~/shaders/Anime4K_Upscale_Denoise_CNN_x2_VL.glsl:~~/shaders/Anime4K_AutoDownscalePre_x2.glsl:~~/shaders/Anime4K_AutoDownscalePre_x4.glsl:~~/shaders/Anime4K_Restore_CNN_M.glsl:~~/shaders/Anime4K_Upscale_CNN_x2_M.glsl"
+${HEADER_COMMENT}
+${MPV_GLSL_LINE}
 INNER_EOF
 fi
 
 rm -rf "$TMP_DIR"
-echo -e "${GREEN}🎉 Anime4K shaders installed and configured for mpv!${NC}"
+echo -e "${GREEN}🎉 Anime4K shaders (${PRESET_NAME}) installed and configured for mpv!${NC}"

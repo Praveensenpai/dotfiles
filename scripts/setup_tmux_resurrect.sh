@@ -22,32 +22,14 @@ if ! command -v tmux &>/dev/null; then
     fi
 fi
 
-# 2. Clone TPM & plugins (tmux-resurrect, tmux-continuum)
-PLUGINS_DIR="$HOME/.tmux/plugins"
-mkdir -p "$PLUGINS_DIR"
-
-TPM_DIR="$PLUGINS_DIR/tpm"
+# 2. Clone TPM (Tmux Plugin Manager)
+TPM_DIR="$HOME/.tmux/plugins/tpm"
 if [ ! -d "$TPM_DIR" ]; then
     echo -e "${CYAN}▶ Cloning TPM to ${YELLOW}$TPM_DIR${CYAN}...${NC}"
+    mkdir -p "$HOME/.tmux/plugins"
     git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
 else
     echo -e "${GREEN}✔ TPM is already installed${NC}"
-fi
-
-RESURRECT_DIR="$PLUGINS_DIR/tmux-resurrect"
-if [ ! -d "$RESURRECT_DIR" ]; then
-    echo -e "${CYAN}▶ Cloning tmux-resurrect to ${YELLOW}$RESURRECT_DIR${CYAN}...${NC}"
-    git clone https://github.com/tmux-plugins/tmux-resurrect "$RESURRECT_DIR"
-else
-    echo -e "${GREEN}✔ tmux-resurrect is already installed${NC}"
-fi
-
-CONTINUUM_DIR="$PLUGINS_DIR/tmux-continuum"
-if [ ! -d "$CONTINUUM_DIR" ]; then
-    echo -e "${CYAN}▶ Cloning tmux-continuum to ${YELLOW}$CONTINUUM_DIR${CYAN}...${NC}"
-    git clone https://github.com/tmux-plugins/tmux-continuum "$CONTINUUM_DIR"
-else
-    echo -e "${GREEN}✔ tmux-continuum is already installed${NC}"
 fi
 
 # 3. Configure ~/.tmux.conf
@@ -74,15 +56,10 @@ else
     echo -e "${GREEN}✔ TPM plugins already declared in $TMUX_CONF${NC}"
 fi
 
-# 4. Automatically install TPM plugins non-interactively and reload tmux if running
+# 4. Automatically install TPM plugins non-interactively
 if [ -f "$TPM_DIR/bin/install_plugins" ]; then
     echo -e "${CYAN}▶ Installing tmux plugins via TPM...${NC}"
     "$TPM_DIR/bin/install_plugins" || true
-fi
-
-if tmux info &>/dev/null; then
-    echo -e "${CYAN}▶ Reloading active tmux configuration...${NC}"
-    tmux source-file "$TMUX_CONF" 2>/dev/null || true
 fi
 
 # 5. Create systemd user service for tmux auto-boot
