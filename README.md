@@ -58,7 +58,7 @@ Ready to make things pretty with just one command? 🚀
 Paste this into your terminal to clone and install everything automatically:
 
 ```bash
-curl -LsSf https://raw.githubusercontent.com/Praveensenpai/dotfiles/main/remote-install.sh | bash
+curl -LsSf -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/Praveensenpai/dotfiles/main/remote-install.sh | bash
 ```
 
 <br>
