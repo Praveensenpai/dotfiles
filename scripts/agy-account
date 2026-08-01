@@ -3,9 +3,14 @@
 import os
 import sys
 import json
+import glob
+import time
 import base64
 import sqlite3
+import datetime
 import subprocess
+import urllib.request
+import urllib.error
 
 ACCOUNTS_DIR = os.path.expanduser("~/.gemini-accounts")
 DB_PATH = os.path.expanduser("~/.antigravity-agent/cloud_accounts.db")
@@ -15,13 +20,25 @@ PROFILES_DIR = os.path.expanduser("~/.gemini-profiles")
 os.makedirs(ACCOUNTS_DIR, exist_ok=True)
 os.makedirs(PROFILES_DIR, exist_ok=True)
 
+# Dracula / Cyberpunk Color Palette
+CYAN = "\033[38;2;139;233;253m"
+GREEN = "\033[38;2;80;250;123m"
+YELLOW = "\033[38;2;241;250;140m"
+PINK = "\033[38;2;255;121;198m"
+PURPLE = "\033[38;2;189;147;249m"
+ORANGE = "\033[38;2;255;184;108m"
+RED = "\033[38;2;255;85;85m"
+GRAY = "\033[38;2;98;114;164m"
+BOLD = "\033[1m"
+RESET = "\033[0m"
+
 def get_current_keyring_token():
     try:
         res = subprocess.run(["secret-tool", "lookup", "service", "gemini", "username", "antigravity"], capture_output=True, text=True)
         if res.returncode == 0 and res.stdout.strip():
             return res.stdout.strip()
-    except Exception as e:
-        print(f"Error reading keyring: {e}")
+    except Exception:
+        pass
     return None
 
 def extract_email_from_token_json(token_json_str):
@@ -98,7 +115,7 @@ def set_active_account(target):
     matching = [a for a in saved if target.lower() in a.lower()]
     
     if not matching:
-        print(f"\033[38;2;255;121;198mError: Account matching '{target}' not found in saved accounts.\033[0m")
+        print(f"{RED}Error: Account matching '{target}' not found in saved accounts.{RESET}")
         print("\nSaved accounts:")
         list_accounts()
         sys.exit(1)
@@ -113,7 +130,7 @@ def set_active_account(target):
     update_sqlite_db(target_email)
     update_gemini_profile(target_email)
     
-    print(f"\033[38;2;80;250;123m✔ Switched active AGY account to: \033[38;2;139;233;253m{target_email}\033[0m")
+    print(f"{GREEN}✔ Switched active AGY account to: {CYAN}{target_email}{RESET}")
 
 def list_accounts():
     save_current_account()
@@ -121,13 +138,226 @@ def list_accounts():
     current_email = extract_email_from_token_json(current_token) if current_token else None
     
     saved = get_saved_accounts()
-    print("\033[38;2;139;233;253m✨ SAVED AGY ACCOUNTS\033[0m")
+    print(f"{CYAN}✨ SAVED AGY ACCOUNTS{RESET}")
     print("-----------------------------------")
     for email in saved:
         if email == current_email:
-            print(f"  \033[38;2;80;250;123m* {email} (active)\033[0m")
+            print(f"  {GREEN}* {email} (active){RESET}")
         else:
             print(f"    {email}")
+
+def format_relative_time(ts):
+    if not ts:
+        return "Never"
+    diff = time.time() - ts
+    if diff < 60:
+        return "Just now"
+    elif diff < 3600:
+        mins = int(diff / 60)
+        return f"{mins}m ago"
+    elif diff < 86400:
+        hrs = int(diff / 3600)
+        return f"{hrs}h ago"
+    else:
+        days = int(diff / 86400)
+        return f"{days}d ago"
+
+def get_last_used(email):
+    prefix = email.split("@")[0]
+    possible_dirs = [
+        os.path.join(PROFILES_DIR, prefix, "antigravity-cli", "brain"),
+        os.path.join(PROFILES_DIR, prefix, "gemini", "antigravity-cli", "brain"),
+    ]
+    if os.path.islink(GEMINI_LINK):
+        try:
+            target = os.readlink(GEMINI_LINK)
+            if prefix in target:
+                possible_dirs.append(os.path.expanduser("~/.gemini/antigravity-cli/brain"))
+        except Exception:
+            pass
+
+    latest_time = None
+    for bdir in possible_dirs:
+        if not os.path.exists(bdir):
+            continue
+        logs = glob.glob(os.path.join(bdir, "*", ".system_generated", "logs", "transcript.jsonl"))
+        for log in logs:
+            try:
+                mtime = os.path.getmtime(log)
+                if latest_time is None or mtime > latest_time:
+                    latest_time = mtime
+            except Exception:
+                pass
+
+    if latest_time:
+        dt = datetime.datetime.fromtimestamp(latest_time).strftime("%Y-%m-%d %H:%M")
+        rel = format_relative_time(latest_time)
+        return f"{dt} ({rel})"
+    return "Never"
+
+def fetch_account_models(acc_path):
+    with open(acc_path) as f:
+        data = json.load(f)
+
+    tok_str = data.get("token")
+    tok = json.loads(tok_str) if isinstance(tok_str, str) else tok_str
+    if not tok:
+        return None
+
+    access_token = tok.get("access_token")
+    refresh_token = tok.get("refresh_token")
+
+    url = "https://cloudcode-pa.googleapis.com/v1internal:fetchAvailableModels"
+
+    def make_req(t_val):
+        req = urllib.request.Request(
+            url,
+            data=b"{}",
+            headers={
+                "Authorization": f"Bearer {t_val}",
+                "Content-Type": "application/json",
+                "User-Agent": "Antigravity/1.0"
+            },
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+
+    try:
+        return make_req(access_token)
+    except urllib.error.HTTPError as e:
+        if e.code == 401 and refresh_token:
+            refresh_url = "https://oauth2.googleapis.com/token"
+            payload = f"grant_type=refresh_token&refresh_token={refresh_token}&client_id=764086051850-6qr4p6gpi6hn506pt8ejuq83di341pvb.apps.googleusercontent.com".encode("utf-8")
+            r_req = urllib.request.Request(refresh_url, data=payload, headers={"Content-Type": "application/x-www-form-urlencoded"})
+            try:
+                with urllib.request.urlopen(r_req, timeout=10) as r_resp:
+                    r_json = json.loads(r_resp.read().decode("utf-8"))
+                    new_tok = r_json.get("access_token")
+                    if new_tok:
+                        tok["access_token"] = new_tok
+                        if isinstance(data.get("token"), str):
+                            data["token"] = json.dumps(tok)
+                        else:
+                            data["token"] = tok
+                        with open(acc_path, "w") as fw:
+                            json.dump(data, fw)
+                        return make_req(new_tok)
+            except Exception:
+                pass
+        return None
+    except Exception:
+        return None
+
+def make_progress_bar(fraction, width=15):
+    if fraction is None:
+        return f"{GRAY}[───────────────]{RESET} {GRAY}N/A{RESET}"
+    percent = fraction * 100
+    filled = int(round(fraction * width))
+    empty = width - filled
+    
+    if percent > 50:
+        bar_color = GREEN
+    elif percent > 20:
+        bar_color = YELLOW
+    else:
+        bar_color = RED
+
+    bar = f"{bar_color}" + "█" * filled + f"{GRAY}" + "░" * empty + f"{RESET}"
+    return f"[{bar}] {bar_color}{percent:5.1f}%{RESET}"
+
+def format_reset_time(reset_str):
+    if not reset_str:
+        return f"{GRAY}No reset info{RESET}"
+    try:
+        dt = datetime.datetime.strptime(reset_str.replace("Z", "+0000"), "%Y-%m-%dT%H:%M:%S%z")
+        now = datetime.datetime.now(datetime.timezone.utc)
+        diff = (dt - now).total_seconds()
+        if diff <= 0:
+            return f"{GREEN}Resets now{RESET}"
+        
+        hrs = int(diff // 3600)
+        mins = int((diff % 3600) // 60)
+        if hrs > 24:
+            days = hrs // 24
+            return f"{GRAY}Resets in {days}d {hrs%24}h{RESET}"
+        elif hrs > 0:
+            return f"{GRAY}Resets in {hrs}h {mins}m{RESET}"
+        else:
+            return f"{GRAY}Resets in {mins}m{RESET}"
+    except Exception:
+        return f"{GRAY}{reset_str}{RESET}"
+
+def show_stats(verbose=False):
+    save_current_account()
+    current_token = get_current_keyring_token()
+    active_email = extract_email_from_token_json(current_token) if current_token else None
+
+    acc_files = sorted(glob.glob(os.path.join(ACCOUNTS_DIR, "*.json")))
+    if not acc_files:
+        print(f"{RED}No saved accounts found.{RESET}")
+        return
+
+    print(f"\n{BOLD}{PURPLE}╭──────────────────────────────────────────────────────────────╮{RESET}")
+    print(f"{BOLD}{PURPLE}│ {CYAN}✨ AGY ACCOUNTS QUOTA & MODEL STATS{PURPLE}                         │{RESET}")
+    print(f"{BOLD}{PURPLE}╰──────────────────────────────────────────────────────────────╯{RESET}\n")
+
+    PRIMARY_MODELS = [
+        ("gemini-3.6-flash-high", "⚡ Gemini 3.6 Flash"),
+        ("gemini-3.1-pro-high", "🧠 Gemini 3.1 Pro"),
+        ("claude-sonnet-4-6", "🎭 Claude Sonnet 4.6"),
+        ("claude-opus-4-6-thinking", "🔮 Claude Opus 4.6"),
+        ("gpt-oss-120b-medium", "🤖 GPT 120B Medium"),
+    ]
+
+    for f in acc_files:
+        email = os.path.basename(f)[:-5]
+        is_active = (email == active_email)
+        
+        status_badge = f"{GREEN}★ ACTIVE{RESET}" if is_active else f"{GRAY}  INACTIVE{RESET}"
+        email_display = f"{BOLD}{CYAN}{email:<34}{RESET}" if is_active else f"{BOLD}{ORANGE}{email:<34}{RESET}"
+        
+        last_used = get_last_used(email)
+        
+        print(f"  {email_display} {status_badge}")
+        print(f"  {GRAY}🕒 Last Used:{RESET} {PINK}{last_used}{RESET}")
+        
+        res = fetch_account_models(f)
+        if not res or "models" not in res:
+            print(f"  {RED}⚠️  Failed to fetch quota info (Token invalid or network error){RESET}\n")
+            continue
+            
+        models = res["models"]
+        
+        print(f"  {BOLD}Model Quotas:{RESET}")
+        
+        displayed_keys = set()
+        for m_id, label in PRIMARY_MODELS:
+            displayed_keys.add(m_id)
+            m_info = models.get(m_id)
+            if m_info and "quotaInfo" in m_info:
+                q = m_info["quotaInfo"]
+                frac = q.get("remainingFraction", 0.0)
+                reset_t = q.get("resetTime")
+                pbar = make_progress_bar(frac)
+                reset_disp = format_reset_time(reset_t)
+                print(f"    │ {CYAN}{label:<22}{RESET} {pbar}  ({reset_disp})")
+            else:
+                pbar = make_progress_bar(None)
+                print(f"    │ {GRAY}{label:<22}{RESET} {pbar}")
+
+        if verbose:
+            print(f"\n  {BOLD}{GRAY}Other Models:{RESET}")
+            for m_id, m_info in sorted(models.items()):
+                if m_id not in displayed_keys and "quotaInfo" in m_info:
+                    q = m_info["quotaInfo"]
+                    frac = q.get("remainingFraction", 0.0)
+                    reset_t = q.get("resetTime")
+                    pbar = make_progress_bar(frac)
+                    reset_disp = format_reset_time(reset_t)
+                    print(f"    │ {GRAY}{m_id:<22}{RESET} {pbar}  ({reset_disp})")
+
+        print()
 
 def interactive_switch():
     save_current_account()
@@ -173,9 +403,12 @@ def main():
         interactive_switch()
         return
 
-    cmd = sys.argv[1]
+    cmd = sys.argv[1].lower()
 
-    if cmd in ["list", "ls"]:
+    if cmd in ["stats", "status", "quota", "info"]:
+        verbose = "-v" in sys.argv or "--verbose" in sys.argv
+        show_stats(verbose=verbose)
+    elif cmd in ["list", "ls"]:
         list_accounts()
     elif cmd in ["switch", "sw", "use"] and len(sys.argv) > 2:
         set_active_account(sys.argv[2])
@@ -186,9 +419,17 @@ def main():
         else:
             print("No active account token found to save.")
     elif cmd in ["help", "-h", "--help"]:
-        print("Usage: agy-account [command] [email_substring]")
+        print("Usage: agy-account [command] [options]")
+        print("\nCommands:")
+        print("  (no args)           Interactive account switcher (fzf)")
+        print("  stats, status       Show quota left per account & model + last used time")
+        print("    --verbose, -v     Show all internal model quotas")
+        print("  list, ls            List all saved accounts")
+        print("  switch <email>      Switch active account by email")
+        print("  save                Save currently logged-in keyring account")
     else:
         set_active_account(cmd)
 
 if __name__ == "__main__":
     main()
+
