@@ -131,6 +131,20 @@ cd ~/dotfiles
 
 <br>
 
+## 🛠️ ⁺ . ⊹ Custom CLI Tools & Features . ⁺ ✨
+
+Here are special standalone tools included in this repository to enhance your terminal workflow:
+
+| Tool | Command | Description |
+| :--- | :--- | :--- |
+| 🔍 **Session Picker** | `agy-ls` | Interactive `fzf` menu to search and instantly resume past Antigravity AI sessions. |
+| 👤 **Account Switcher** | `agy-account` | Interactively list, save, and switch between multiple Antigravity AI accounts. |
+| 🧹 **System Cleaner** | `clean_system_cache.sh` | Interactive menu with live disk size detection to clean package caches, journal logs, & trash. |
+| 🎧 **ImmersionPod** | `impd` | Audio language immersion tool integrated with `mpd` & `mpc` targeting `~/Videos/Anime`. |
+| ⚡ **Smart Navigation** | `z <folder>` | `zoxide` integration for jumping to frequently visited directories instantly. |
+
+<br>
+
 <div align="center">
   Made with 💖 by Praveen
 </div>
