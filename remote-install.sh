@@ -28,4 +28,5 @@ fi
 echo "🪄 Launching the master installer..."
 cd "$TARGET_DIR"
 chmod +x install.sh
+chmod +x scripts/*.sh 2>/dev/null || true
 ./install.sh

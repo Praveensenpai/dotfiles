@@ -80,6 +80,7 @@ cd ~/dotfiles
 
 | Script | What it does (*´▽`*) |
 | :--- | :--- |
+| `clean_system_cache.sh` | Cleans Arch package cache, systemd journal logs, and trash. |
 | `disable_bluetooth.sh` | Disables bluetooth auto-power on boot. |
 | `install_anime4k.sh` | Downloads and configures Anime4K GLSL shaders for `mpv`. |
 | `install_antigravity_cli.sh` | Installs Antigravity CLI via `https://antigravity.google/cli/install.sh`. |
@@ -100,13 +101,16 @@ cd ~/dotfiles
 | `set_waybar_style.sh` | Configures Waybar base CSS styles. |
 | `set_waybar_tray_expander.sh` | Deploys dynamic tray expander arrow icon helper. |
 | `set_waybar_wifi_colors.sh` | Sets Waybar Wi-Fi colors (connected green, disconnected/disabled grey). |
+| `setup_blesh.sh` | Configures `ble.sh` for Bash live auto-suggestions & syntax highlighting. |
+| `setup_cli_tools.sh` | Installs `eza` and `bat` for modern icons, colors, and syntax-highlighted `cat`. |
 | `setup_docker.sh` | Enables `docker.service` and `docker.socket`, adds current user to `docker` group. Skips gracefully if already configured. |
 | `setup_editor.sh` | Sets `EDITOR=nvim` and `VISUAL=nvim` in `~/.bashrc` and `~/.zshrc` if not already configured. |
 | `setup_fastfetch_welcome.sh` | Installs `fastfetch` and displays system info summary during setup. |
-| `setup_ufw.sh` | Configures UFW with sensible defaults (deny incoming, allow outgoing, allow SSH) and enables it. |
+| `setup_fzf_keybinds.sh` | Configures `fzf` interactive fuzzy search shortcuts (`Ctrl+R`, `Ctrl+T`). |
 | `setup_git_config.sh` | Sets global `user.name` and `user.email` defaults, with an overwrite confirmation prompt if credentials exist. |
 | `setup_github_ssh.sh` | Generates Ed25519 SSH key if missing, loads it into `ssh-agent`, and prints a beginner-friendly deployment guide for GitHub. |
 | `setup_trash_cli_alias.sh` | Installs `trash-cli` and sets `alias rm='trash-put'` in shell configs. |
+| `setup_ufw.sh` | Configures UFW with sensible defaults (deny incoming, allow outgoing, allow SSH) and enables it. |
 | `setup_vnstat_service.sh` | Installs `vnstat` network traffic monitor and enables `vnstat.service` systemd daemon. |
 
 <br>

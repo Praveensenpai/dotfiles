@@ -28,6 +28,9 @@ if [ ! -d "scripts" ]; then
     exit 1
 fi
 
+# Ensure scripts have execution permissions
+chmod +x scripts/*.sh 2>/dev/null || true
+
 # Run all executable .sh files in the scripts directory
 for script in scripts/*.sh; do
     if [ -x "$script" ]; then
