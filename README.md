@@ -127,6 +127,7 @@ cd ~/dotfiles
 | `setup_immersionpod.sh` | Configures MPD, MPC, and ImmersionPod for audio language immersion (`~/Videos/Anime`). |
 | `setup_tmux_resurrect.sh` | Configures TPM, tmux-resurrect/continuum auto-restore, & systemd user daemon. |
 | `setup_agy_ls.sh` | Installs interactive Antigravity CLI session picker (`agy-ls`) & sets alias. |
+| `setup_agy_account.sh` | Installs multi-account switcher (`agy-account`) for Antigravity AI & sets alias. |
 
 <br>
 

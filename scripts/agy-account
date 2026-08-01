@@ -1,0 +1,208 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import json
+import base64
+import sqlite3
+import subprocess
+
+ACCOUNTS_DIR = os.path.expanduser("~/.gemini-accounts")
+DB_PATH = os.path.expanduser("~/.antigravity-agent/cloud_accounts.db")
+GEMINI_LINK = os.path.expanduser("~/.gemini")
+PROFILES_DIR = os.path.expanduser("~/.gemini-profiles")
+
+os.makedirs(ACCOUNTS_DIR, exist_ok=True)
+os.makedirs(PROFILES_DIR, exist_ok=True)
+
+def get_current_keyring_token():
+    try:
+        res = subprocess.run(["secret-tool", "lookup", "service", "gemini", "username", "antigravity"], capture_output=True, text=True)
+        if res.returncode == 0 and res.stdout.strip():
+            return res.stdout.strip()
+    except Exception as e:
+        print(f"Error reading keyring: {e}")
+    return None
+
+def extract_email_from_token_json(token_json_str):
+    try:
+        data = json.loads(token_json_str)
+        id_token = data.get("id_token", "")
+        if id_token:
+            payload = id_token.split(".")[1]
+            payload += "=" * ((4 - len(payload) % 4) % 4)
+            decoded = json.loads(base64.b64decode(payload))
+            return decoded.get("email")
+    except Exception:
+        pass
+    return None
+
+def save_current_account():
+    token_json = get_current_keyring_token()
+    if not token_json:
+        return None
+    email = extract_email_from_token_json(token_json)
+    if email:
+        save_path = os.path.join(ACCOUNTS_DIR, f"{email}.json")
+        with open(save_path, "w") as f:
+            f.write(token_json)
+        return email
+    return None
+
+def write_keyring_token(token_json_str):
+    proc = subprocess.Popen(
+        ["secret-tool", "store", "--label=Password for 'antigravity' on 'gemini'", "service", "gemini", "username", "antigravity"],
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True
+    )
+    proc.communicate(input=token_json_str)
+
+def update_sqlite_db(email):
+    if os.path.exists(DB_PATH):
+        try:
+            conn = sqlite3.connect(DB_PATH)
+            cur = conn.cursor()
+            cur.execute("UPDATE accounts SET is_active = 0;")
+            cur.execute("UPDATE accounts SET is_active = 1 WHERE email LIKE ?;", (f"%{email}%",))
+            conn.commit()
+            conn.close()
+        except Exception:
+            pass
+
+def update_gemini_profile(email):
+    prefix = email.split("@")[0]
+    prof_dir = os.path.join(PROFILES_DIR, prefix)
+    os.makedirs(prof_dir, exist_ok=True)
+    
+    if not os.path.islink(GEMINI_LINK) and os.path.isdir(GEMINI_LINK):
+        subprocess.run(["mv", GEMINI_LINK, os.path.join(prof_dir, "gemini")])
+    elif os.path.islink(GEMINI_LINK):
+        os.remove(GEMINI_LINK)
+        
+    os.makedirs(os.path.join(prof_dir, "gemini"), exist_ok=True)
+    os.symlink(os.path.join(prof_dir, "gemini"), GEMINI_LINK)
+
+def get_saved_accounts():
+    save_current_account()
+    files = [f for f in os.listdir(ACCOUNTS_DIR) if f.endswith(".json")]
+    accounts = []
+    for f in files:
+        email = f[:-5]
+        accounts.append(email)
+    return sorted(accounts)
+
+def set_active_account(target):
+    # Auto-save current before switching
+    save_current_account()
+    
+    saved = get_saved_accounts()
+    matching = [a for a in saved if target.lower() in a.lower()]
+    
+    if not matching:
+        print(f"\033[38;2;255;121;198mError: Account matching '{target}' not found in saved accounts.\033[0m")
+        print("\nSaved accounts:")
+        list_accounts()
+        print("\nTo add a new account: run 'agy' and log in via browser once.")
+        sys.exit(1)
+        
+    target_email = matching[0]
+    token_file = os.path.join(ACCOUNTS_DIR, f"{target_email}.json")
+    
+    with open(token_file, "r") as f:
+        token_json = f.read()
+        
+    # 1. Update OS Keyring
+    write_keyring_token(token_json)
+    
+    # 2. Update SQLite DB
+    update_sqlite_db(target_email)
+    
+    # 3. Update ~/.gemini symlink profile
+    update_gemini_profile(target_email)
+    
+    print(f"\033[38;2;80;250;123m✔ Switched active AGY account to: \033[38;2;139;233;253m{target_email}\033[0m")
+
+def list_accounts():
+    save_current_account()
+    current_token = get_current_keyring_token()
+    current_email = extract_email_from_token_json(current_token) if current_token else None
+    
+    saved = get_saved_accounts()
+    print("\033[38;2;139;233;253m✨ SAVED AGY ACCOUNTS\033[0m")
+    print("-----------------------------------")
+    for email in saved:
+        if email == current_email:
+            print(f"  \033[38;2;80;250;123m* {email} (active)\033[0m")
+        else:
+            print(f"    {email}")
+
+def interactive_switch():
+    save_current_account()
+    saved = get_saved_accounts()
+    current_token = get_current_keyring_token()
+    current_email = extract_email_from_token_json(current_token) if current_token else None
+
+    if not saved:
+        print("No saved accounts found. Run 'agy' to log in.")
+        sys.exit(1)
+        
+    lines = []
+    for email in saved:
+        status = "(active)" if email == current_email else ""
+        lines.append(f"{email} {status}")
+        
+    fzf_colors = "bg+:#282a36,bg:#1e1e2e,spinner:#ff79c6,hl:#bd93f9,fg:#f8f8f2,header:#8be9fd,info:#ffb86c,pointer:#ff79c6,marker:#ff79c6,fg+:#f8f8f2,prompt:#50fa7b"
+    
+    try:
+        proc = subprocess.Popen(
+            [
+                "fzf",
+                "--height", "40%",
+                "--layout=reverse",
+                "--border=rounded",
+                "--prompt=👤 Select AGY Account > ",
+                "--header=[ ENTER: Switch Account | ESC: Cancel ]",
+                f"--color={fzf_colors}"
+            ],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            text=True
+        )
+        stdout, _ = proc.communicate(input="\n".join(lines))
+        if stdout.strip():
+            selected_email = stdout.strip().split()[0]
+            set_active_account(selected_email)
+    except FileNotFoundError:
+        list_accounts()
+
+def main():
+    if len(sys.argv) < 2:
+        interactive_switch()
+        return
+
+    cmd = sys.argv[1]
+
+    if cmd in ["list", "ls"]:
+        list_accounts()
+    elif cmd in ["switch", "sw", "use"] and len(sys.argv) > 2:
+        set_active_account(sys.argv[2])
+    elif cmd in ["save"]:
+        saved = save_current_account()
+        if saved:
+            print(f"Saved account: {saved}")
+        else:
+            print("No active account token found to save.")
+    elif cmd in ["help", "-h", "--help"]:
+        print("Usage: agy-account [command] [email_substring]")
+        print("\nCommands:")
+        print("  (no args)           Interactive account switcher (fzf)")
+        print("  list                List all saved accounts")
+        print("  switch <email>      Switch active account by email")
+        print("  save                Save currently logged-in keyring account")
+    else:
+        set_active_account(cmd)
+
+if __name__ == "__main__":
+    main()
