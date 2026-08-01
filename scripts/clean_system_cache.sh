@@ -1,28 +1,25 @@
 #!/bin/bash
 
 echo "============================="
-echo "  Cleaning system cache..."
+echo "  Cleaning system cache (Fast)..."
 echo "============================="
 
-# Clean package manager cache
+# Fast package cache clean
 if command -v yay &> /dev/null; then
-    echo "▶ Cleaning yay/pacman package cache..."
+    echo "▶ Cleaning package cache..."
     yay -Sc --noconfirm 2>/dev/null || true
-elif command -v pacman &> /dev/null; then
-    echo "▶ Cleaning pacman package cache..."
-    sudo pacman -Sc --noconfirm 2>/dev/null || true
 fi
 
-# Clean systemd journal logs older than 7 days
+# Fast systemd journal log vacuum (cap at 50MB)
 if command -v journalctl &> /dev/null; then
-    echo "▶ Vacuuming systemd journal logs (>7 days)..."
-    sudo journalctl --vacuum-time=7d 2>/dev/null || true
+    echo "▶ Vacuuming systemd journal logs (50MB cap)..."
+    sudo journalctl --vacuum-size=50M 2>/dev/null || true
 fi
 
-# Empty trash if trash-cli is installed
-if command -v trash-empty &> /dev/null; then
-    echo "▶ Emptying trash..."
-    trash-empty 2>/dev/null || true
+# Instant trash empty (bulk remove without slow file iteration)
+if [ -d "$HOME/.local/share/Trash" ]; then
+    echo "▶ Instantly emptying trash..."
+    rm -rf "$HOME/.local/share/Trash/files/"* "$HOME/.local/share/Trash/info/"* 2>/dev/null || true
 fi
 
 echo "============================="
