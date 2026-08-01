@@ -88,8 +88,8 @@ with urllib.request.urlopen(req) as response, open(output_file, 'wb') as out:
             downloaded_str = format_size(downloaded)
             total_str = format_size(total_size)
             
-            # Print single-line clean progress bar (replaces current terminal line)
-            sys.stdout.write(f"\r  {color_green}⠋{color_reset} [{color_cyan}{bar}{color_reset}] {color_bold}{percent:5.1f}%{color_reset}  ({downloaded_str} / {total_str})  {color_cyan}{speed_str}{color_reset}    ")
+            # Print single-line clean progress bar (clears current line to prevent wrapping)
+            sys.stdout.write(f"\r\033[K  {color_green}⠋{color_reset} [{color_cyan}{bar}{color_reset}] {color_bold}{percent:5.1f}%{color_reset}  ({downloaded_str} / {total_str})  {color_cyan}{speed_str}{color_reset}")
             sys.stdout.flush()
 
 sys.stdout.write("\n")

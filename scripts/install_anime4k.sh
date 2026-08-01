@@ -61,7 +61,7 @@ with urllib.request.urlopen(req) as response, open(output_file, 'wb') as out:
             percent = (downloaded / total_size) * 100 if total_size > 0 else 0
             filled_len = int(bar_length * downloaded // total_size) if total_size > 0 else 0
             bar = '━' * filled_len + color_dim + '━' * (bar_length - filled_len) + color_reset
-            sys.stdout.write(f"\r  {color_green}⠋{color_reset} [{color_cyan}{bar}{color_reset}] {color_bold}{percent:5.1f}%{color_reset}  ({format_size(downloaded)} / {format_size(total_size)})  {color_cyan}{format_size(speed)}/s{color_reset}    ")
+            sys.stdout.write(f"\r\033[K  {color_green}⠋{color_reset} [{color_cyan}{bar}{color_reset}] {color_bold}{percent:5.1f}%{color_reset}  ({format_size(downloaded)} / {format_size(total_size)})  {color_cyan}{format_size(speed)}/s{color_reset}")
             sys.stdout.flush()
 
 sys.stdout.write("\n")
