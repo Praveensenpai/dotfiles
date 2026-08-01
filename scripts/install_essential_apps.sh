@@ -8,6 +8,6 @@ NC='\033[0m'
 
 echo -e "${PURPLE}📦 Installing essential applications...${NC}"
 
-sudo pacman -S --needed --noconfirm mpv anki qbittorrent wget
+sudo pacman -S --needed --noconfirm mpv anki qbittorrent wget neovim
 
-echo -e "${GREEN}🎉 Essential applications (mpv, anki, qbittorrent, wget) installed.${NC}"
+echo -e "${GREEN}🎉 Essential applications (mpv, anki, qbittorrent, wget, neovim) installed.${NC}"

@@ -21,7 +21,8 @@ dotfiles/
 └── scripts/
     ├── disable_bluetooth.sh            # No more annoying bluetooth on boot! 📶
     ├── install_anime4k.sh              # Makes videos look super pretty! 📺
-    ├── install_essential_apps.sh       # Installs mpv, anki, qbittorrent, and wget via pacman 📦
+    ├── install_antigravity_cli.sh      # Installs Antigravity CLI via official curl script 🚀
+    ├── install_essential_apps.sh       # Installs mpv, anki, qbittorrent, wget, neovim via pacman 📦
     ├── install_voicevox.sh             # Fetches latest VOICEVOX release & creates desktop entry 🎙️
     ├── set_alacritty_font_size.sh      # Sets Alacritty font size to 10 🔤
     ├── set_hyprland_gaps_and_borders.sh# Configures window gaps & border colors 🪟
@@ -73,7 +74,8 @@ cd ~/dotfiles
 | :--- | :--- |
 | `disable_bluetooth.sh` | Disables bluetooth auto-power on boot. |
 | `install_anime4k.sh` | Downloads and configures Anime4K GLSL shaders for `mpv`. |
-| `install_essential_apps.sh` | Installs essential software (`mpv`, `anki`, `qbittorrent`, `wget`) using `pacman -S --needed`. |
+| `install_antigravity_cli.sh` | Installs Antigravity CLI via `https://antigravity.google/cli/install.sh`. |
+| `install_essential_apps.sh` | Installs essential software (`mpv`, `anki`, `qbittorrent`, `wget`, `neovim`) using `pacman -S --needed`. |
 | `install_voicevox.sh` | Fetches latest VOICEVOX release from GitHub, extracts to `~/.local/share/voicebox`, and installs desktop entry. |
 | `set_alacritty_font_size.sh` | Sets Alacritty terminal font size to 10. |
 | `set_hyprland_gaps_and_borders.sh` | Sets Hyprland inner/outer gaps to 0 and configures active/inactive border colors. |
