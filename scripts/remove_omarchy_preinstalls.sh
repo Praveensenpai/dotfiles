@@ -29,6 +29,13 @@ PKGS_TO_REMOVE=(
   localsend
   localsend-bin
   ibus
+  gnome-calculator
+  evince
+  system-config-printer
+  cups
+  cups-filters
+  cups-browsed
+  cups-pdf
 )
 
 # Remove packages installed via pacman if present
