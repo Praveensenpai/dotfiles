@@ -22,6 +22,7 @@ dotfiles/
     ├── disable_bluetooth.sh            # No more annoying bluetooth on boot! 📶
     ├── install_anime4k.sh              # Makes videos look super pretty! 📺
     ├── install_essential_apps.sh       # Installs mpv, anki, and qbittorrent via pacman 📦
+    ├── install_voicevox.sh             # Fetches latest VOICEVOX release & creates desktop entry 🎙️
     ├── set_alacritty_font_size.sh      # Sets Alacritty font size to 10 🔤
     ├── set_hyprland_gaps_and_borders.sh# Configures window gaps & border colors 🪟
     ├── set_hyprland_monitor_scale.sh   # Sets monitor scale to 1.5 🖥️
@@ -73,6 +74,7 @@ cd ~/dotfiles
 | `disable_bluetooth.sh` | Disables bluetooth auto-power on boot. |
 | `install_anime4k.sh` | Downloads and configures Anime4K GLSL shaders for `mpv`. |
 | `install_essential_apps.sh` | Installs essential software (`mpv`, `anki`, `qbittorrent`) using `pacman -S --needed`. |
+| `install_voicevox.sh` | Fetches latest VOICEVOX release from GitHub, extracts to `~/.local/share/voicebox`, and installs desktop entry. |
 | `set_alacritty_font_size.sh` | Sets Alacritty terminal font size to 10. |
 | `set_hyprland_gaps_and_borders.sh` | Sets Hyprland inner/outer gaps to 0 and configures active/inactive border colors. |
 | `set_hyprland_monitor_scale.sh` | Configures Hyprland monitor resolution and scale to 1.5. |
