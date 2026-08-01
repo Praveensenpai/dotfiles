@@ -67,14 +67,22 @@ with urllib.request.urlopen(req) as response, open(output_file, 'wb') as out:
 sys.stdout.write("\n")
 PYEOF
 
-if [ ! -f "$TARGET_FILE" ]; then
-    echo -e "${RED}❌ Download failed!${NC}"
+set -eo pipefail
+
+if [ ! -f "$TARGET_FILE" ] || [ ! -s "$TARGET_FILE" ]; then
+    echo -e "${RED}❌ Download failed or archive is empty!${NC}"
     rm -rf "$TMP_DIR"
     exit 1
 fi
 
 echo -e "${BLUE}📂 Extracting Anime4K shaders to ${TARGET}...${NC}"
 unzip -o "$TARGET_FILE" -d "$TMP_DIR" > /dev/null
+
+if [ ! -d "$TMP_DIR/shaders" ]; then
+    echo -e "${RED}❌ Error: Verification failed! Anime4K shaders directory missing in archive.${NC}"
+    rm -rf "$TMP_DIR"
+    exit 1
+fi
 
 mv "$TMP_DIR"/shaders/ "$TARGET/" 2>/dev/null || true
 mv "$TMP_DIR"/input.conf "$TARGET/" 2>/dev/null || true

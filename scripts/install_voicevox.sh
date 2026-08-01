@@ -111,9 +111,11 @@ except urllib.error.HTTPError as e:
         raise e
 PYEOF
 
+set -eo pipefail
+
 if [ ! -f "$TARGET_FILE" ] || [ ! -s "$TARGET_FILE" ]; then
-    echo -e "${RED}❌ Error: Download failed!${NC}"
-    rm -rf "$TMP_DIR"
+    echo -e "${RED}❌ Error: Download failed or file is empty!${NC}"
+    rm -rf "$TARGET_FILE" 2>/dev/null || true
     exit 1
 fi
 
@@ -121,8 +123,18 @@ fi
 echo -e "${BLUE}📂 Extracting archive to ${INSTALL_DIR}...${NC}"
 rm -rf "$INSTALL_DIR"
 mkdir -p "$INSTALL_DIR"
-tar -xzf "$TARGET_FILE" -C "$INSTALL_DIR" --strip-components=1
-rm -rf "$TMP_DIR"
+if ! tar -xzf "$TARGET_FILE" -C "$INSTALL_DIR" --strip-components=1; then
+    echo -e "${RED}❌ Error: Extraction failed! Cleaning corrupted cache...${NC}"
+    rm -rf "$TARGET_FILE" "$INSTALL_DIR"
+    exit 1
+fi
+
+# Verify executable exists
+if [ ! -f "$INSTALL_DIR/voicevox" ]; then
+    echo -e "${RED}❌ Error: Verification failed! VOICEVOX binary missing in ${INSTALL_DIR}.${NC}"
+    rm -rf "$INSTALL_DIR"
+    exit 1
+fi
 
 # Create Desktop entry
 DESKTOP_FILE="$DESKTOP_DIR/voicevox.desktop"

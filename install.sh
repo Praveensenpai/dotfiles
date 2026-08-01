@@ -32,9 +32,13 @@ fi
 for script in scripts/*.sh; do
     if [ -x "$script" ]; then
         echo -e "\n${CYAN}▶ Running $(basename "$script")...${NC}"
-        "$script"
-        echo -e "${GREEN}✔ Finished $(basename "$script")${NC}"
-        echo -e "${BLUE}─────────────────────────────────────────${NC}"
+        if "$script"; then
+            echo -e "${GREEN}✔ Finished $(basename "$script")${NC}"
+            echo -e "${BLUE}─────────────────────────────────────────${NC}"
+        else
+            echo -e "\n${RED}❌ Failed: $(basename "$script") exited with errors! Aborting setup.${NC}"
+            exit 1
+        fi
     else
         echo -e "${YELLOW}⏭ Skipping $(basename "$script") (not executable)${NC}"
     fi
