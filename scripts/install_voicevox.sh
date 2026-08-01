@@ -24,7 +24,7 @@ DOWNLOAD_URL="https://github.com/VOICEVOX/voicevox/releases/download/${LATEST_TA
 # Download archive to temporary location
 TMP_DIR=$(mktemp -d)
 echo "Downloading $TAR_NAME..."
-curl -sL "$DOWNLOAD_URL" -o "$TMP_DIR/$TAR_NAME"
+curl -L --progress-bar "$DOWNLOAD_URL" -o "$TMP_DIR/$TAR_NAME"
 
 if [ ! -f "$TMP_DIR/$TAR_NAME" ]; then
     echo "Error: Download failed!"
