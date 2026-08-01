@@ -28,6 +28,7 @@ PKGS_TO_REMOVE=(
   chromium
   localsend
   localsend-bin
+  ibus
 )
 
 # Remove packages installed via pacman if present
@@ -44,6 +45,32 @@ if [ ${#INSTALLED_PKGS[@]} -gt 0 ]; then
 else
   echo -e "${GREEN}✔ No preinstalled GUI/CLI packages found to remove.${NC}"
 fi
+
+# Remove lingering desktop entry files in ~/.local/share/applications/
+echo -e "${BLUE}🧹 Cleaning up orphaned desktop entries...${NC}"
+rm -f ~/.local/share/applications/typora.desktop \
+      ~/.local/share/applications/localsend.desktop \
+      ~/.local/share/applications/org.freedesktop.IBus.Setup.desktop
+
+# Hide unwanted system launcher entries (Color Profile, IBus) in ~/.local/share/applications/
+HIDE_DESKTOPS=(
+  "org.freedesktop.IBus.Setup.desktop"
+  "gnome-color-panel.desktop"
+  "org.gnome.ColorProfileViewer.desktop"
+)
+
+mkdir -p ~/.local/share/applications
+for ENTRY in "${HIDE_DESKTOPS[@]}"; do
+  TARGET_LOCAL="~/.local/share/applications/$ENTRY"
+  eval TARGET_EXP="$TARGET_LOCAL"
+  if [ ! -f "$TARGET_EXP" ]; then
+    SYS_FILE="/usr/share/applications/$ENTRY"
+    if [ -f "$SYS_FILE" ]; then
+      cp "$SYS_FILE" "$TARGET_EXP"
+      echo "NoDisplay=true" >> "$TARGET_EXP"
+    fi
+  fi
+done
 
 # Remove default npx stubs
 echo -e "${BLUE}🧹 Removing default NPX wrapper stubs...${NC}"
