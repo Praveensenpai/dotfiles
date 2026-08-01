@@ -19,6 +19,18 @@ fi
 
 mkdir -p "$TARGET_DIR"
 
+# Purge unwanted default wallpapers
+UNWANTED_WALLPAPERS=(
+  "5-oma.jpg"
+  "4-oma-cityscape.jpg"
+  "2-pawel-czerwinski.jpg"
+)
+
+echo -e "${BLUE}🧹 Removing unwanted default wallpapers...${NC}"
+for unwanted in "${UNWANTED_WALLPAPERS[@]}"; do
+    rm -f "$TARGET_DIR/$unwanted"
+done
+
 COPIED_COUNT=0
 for img in "$DOTFILES_WALLPAPERS"/*; do
     if [ -f "$img" ]; then
