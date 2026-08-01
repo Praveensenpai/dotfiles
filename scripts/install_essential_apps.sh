@@ -8,6 +8,12 @@ NC='\033[0m'
 
 echo -e "${PURPLE}📦 Installing essential applications...${NC}"
 
-sudo pacman -S --needed --noconfirm mpv anki qbittorrent wget neovim firefox
+echo -e "${BLUE}📦 Installing official packages via pacman...${NC}"
+sudo pacman -S --needed --noconfirm mpv anki qbittorrent wget neovim firefox yazi
 
-echo -e "${GREEN}🎉 Essential applications (mpv, anki, qbittorrent, wget, neovim, firefox) installed.${NC}"
+if command -v yay &>/dev/null; then
+  echo -e "${BLUE}📦 Installing AUR packages via yay...${NC}"
+  yay -S --needed --noconfirm google-chrome
+fi
+
+echo -e "${GREEN}🎉 Essential applications (mpv, anki, qbittorrent, wget, neovim, firefox, yazi, google-chrome) installed.${NC}"

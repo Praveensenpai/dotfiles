@@ -22,7 +22,7 @@ dotfiles/
     ├── disable_bluetooth.sh            # No more annoying bluetooth on boot! 📶
     ├── install_anime4k.sh              # Makes videos look super pretty! 📺
     ├── install_antigravity_cli.sh      # Installs Antigravity CLI via official curl script 🚀
-    ├── install_essential_apps.sh       # Installs mpv, anki, qbittorrent, wget, neovim via pacman 📦
+    ├── install_essential_apps.sh       # Installs mpv, anki, qbittorrent, wget, neovim, firefox, yazi, & google-chrome 📦
     ├── install_voicevox.sh             # Fetches latest VOICEVOX release & creates desktop entry 🎙️
     ├── remove_omarchy_preinstalls.sh   # Purges default Omarchy/DHH packages, web apps, & stubs 🗑️
     ├── set_alacritty_font_size.sh      # Sets Alacritty font size to 10 🔤
@@ -76,7 +76,7 @@ cd ~/dotfiles
 | `disable_bluetooth.sh` | Disables bluetooth auto-power on boot. |
 | `install_anime4k.sh` | Downloads and configures Anime4K GLSL shaders for `mpv`. |
 | `install_antigravity_cli.sh` | Installs Antigravity CLI via `https://antigravity.google/cli/install.sh`. |
-| `install_essential_apps.sh` | Installs essential software (`mpv`, `anki`, `qbittorrent`, `wget`, `neovim`, `firefox`) using `pacman -S --needed`. |
+| `install_essential_apps.sh` | Installs essential software (`mpv`, `anki`, `qbittorrent`, `wget`, `neovim`, `firefox`, `yazi`, `google-chrome`). |
 | `install_voicevox.sh` | Fetches latest VOICEVOX release from GitHub, extracts to `~/.local/share/voicebox`, and installs desktop entry. |
 | `remove_omarchy_preinstalls.sh` | Purges default DHH/Omarchy packages (Chromium, Spotify, 1Password, Obsidian, Typora, etc.), web apps, and NPX stubs. |
 | `set_alacritty_font_size.sh` | Sets Alacritty terminal font size to 10. |
