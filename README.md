@@ -94,7 +94,7 @@ cd ~/dotfiles
 | `set_waybar_style.sh` | Configures Waybar base CSS styles. |
 | `set_waybar_tray_expander.sh` | Deploys dynamic tray expander arrow icon helper. |
 | `set_waybar_wifi_colors.sh` | Sets Waybar Wi-Fi colors (connected green, disconnected/disabled grey). |
-| `setup_fastfetch_welcome.sh` | Installs `fastfetch` and appends welcome banner hook to `~/.bashrc` / `~/.zshrc`. |
+| `setup_fastfetch_welcome.sh` | Installs `fastfetch` and displays system info summary during setup. |
 | `setup_trash_cli_alias.sh` | Installs `trash-cli` and sets `alias rm='trash-put'` in shell configs. |
 | `setup_vnstat_service.sh` | Installs `vnstat` network traffic monitor and enables `vnstat.service` systemd daemon. |
 
