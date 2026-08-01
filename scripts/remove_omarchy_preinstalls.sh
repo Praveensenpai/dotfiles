@@ -94,6 +94,10 @@ if command -v omarchy-tui-remove-all &>/dev/null; then
   omarchy-tui-remove-all || true
 fi
 
+if command -v update-desktop-database &>/dev/null; then
+  update-desktop-database "$HOME/.local/share/applications" &>/dev/null || true
+fi
+
 if command -v omarchy-restart-walker &>/dev/null; then
   omarchy-restart-walker 2>/dev/null || true
 fi
