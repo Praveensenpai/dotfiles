@@ -80,7 +80,7 @@ cd ~/dotfiles
 | `disable_bluetooth.sh` | Disables bluetooth auto-power on boot. |
 | `install_anime4k.sh` | Downloads and configures Anime4K GLSL shaders for `mpv`. |
 | `install_antigravity_cli.sh` | Installs Antigravity CLI via `https://antigravity.google/cli/install.sh`. |
-| `install_essential_apps.sh` | Installs essential software (`mpv`, `anki`, `qbittorrent`, `wget`, `neovim`, `firefox`, `yazi`, `google-chrome`). |
+| `install_essential_apps.sh` | Installs essential software (`mpv`, `anki`, `qbittorrent`, `wget`, `neovim`, `firefox`, `yazi`, `zoxide`, `google-chrome`). |
 | `install_voicevox.sh` | Fetches latest VOICEVOX release from GitHub, extracts to `~/.local/share/voicebox`, and installs desktop entry. |
 | `install_wallpapers.sh` | Deploys custom wallpapers from `dotfiles/wallpapers/` to active Omarchy theme background directory. |
 | `remove_omarchy_preinstalls.sh` | Purges default DHH/Omarchy packages (Chromium, LocalSend, Spotify, 1Password, Obsidian, Typora, etc.), web apps, and NPX stubs. |
