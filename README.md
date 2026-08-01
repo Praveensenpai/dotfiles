@@ -125,6 +125,7 @@ cd ~/dotfiles
 | `setup_vnstat_service.sh` | Installs `vnstat` network traffic monitor and enables `vnstat.service` systemd daemon. |
 | `setup_zoxide.sh` | Configures `zoxide` smart directory navigation (`z` / `cd`). |
 | `setup_immersionpod.sh` | Configures MPD, MPC, and ImmersionPod for audio language immersion (`~/Videos/Anime`). |
+| `setup_tmux_resurrect.sh` | Configures TPM, tmux-resurrect/continuum auto-restore, & systemd user daemon. |
 
 <br>
 
