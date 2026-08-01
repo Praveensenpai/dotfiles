@@ -74,10 +74,15 @@ else
     echo -e "${GREEN}✔ TPM plugins already declared in $TMUX_CONF${NC}"
 fi
 
-# 4. Automatically install TPM plugins non-interactively
+# 4. Automatically install TPM plugins non-interactively and reload tmux if running
 if [ -f "$TPM_DIR/bin/install_plugins" ]; then
     echo -e "${CYAN}▶ Installing tmux plugins via TPM...${NC}"
     "$TPM_DIR/bin/install_plugins" || true
+fi
+
+if tmux info &>/dev/null; then
+    echo -e "${CYAN}▶ Reloading active tmux configuration...${NC}"
+    tmux source-file "$TMUX_CONF" 2>/dev/null || true
 fi
 
 # 5. Create systemd user service for tmux auto-boot
