@@ -31,7 +31,7 @@ echo -e "${GREEN}✨ Found latest VOICEVOX release:${NC} ${CYAN}v${LATEST_TAG}${
 TAR_NAME="voicevox-linux-cpu-x64-${LATEST_TAG}.tar.gz"
 DOWNLOAD_URL="https://github.com/VOICEVOX/voicevox/releases/download/${LATEST_TAG}/${TAR_NAME}"
 
-CACHE_DIR="/tmp/voicevox_cache"
+CACHE_DIR="$HOME/.cache/voicevox"
 mkdir -p "$CACHE_DIR"
 TARGET_FILE="$CACHE_DIR/$TAR_NAME"
 
