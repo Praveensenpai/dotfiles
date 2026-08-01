@@ -16,11 +16,23 @@ Here's a little peek into how things are organized!
 
 ```text
 dotfiles/
-├── install.sh                # The magic master script ✨
-├── remote-install.sh         # The one-liner magic script 🪄
+├── install.sh                          # The magic master script ✨
+├── remote-install.sh                   # The one-liner magic script 🪄
 └── scripts/
-    ├── disable_bluetooth.sh  # No more annoying bluetooth on boot! 📶
-    └── install_anime4k.sh    # Makes videos look super pretty! 📺
+    ├── disable_bluetooth.sh            # No more annoying bluetooth on boot! 📶
+    ├── install_anime4k.sh              # Makes videos look super pretty! 📺
+    ├── set_alacritty_font_size.sh      # Sets Alacritty font size to 10 🔤
+    ├── set_hyprland_gaps_and_borders.sh# Configures window gaps & border colors 🪟
+    ├── set_hyprland_monitor_scale.sh   # Sets monitor scale to 1.5 🖥️
+    ├── set_mpv_lang.sh                 # Sets default mpv audio & subtitle languages 🔊
+    ├── set_waybar_battery_colors.sh    # Dynamic state colors for battery 🔋
+    ├── set_waybar_bluetooth_colors.sh  # State colors for Bluetooth indicator 󰂯
+    ├── set_waybar_config.sh            # Deploys Waybar config.jsonc layout ⚙️
+    ├── set_waybar_japanese_clock.sh    # Enables ja_JP locale & Japanese clock 🎌
+    ├── set_waybar_style.sh             # Deploys Waybar style.css theme 🎨
+    ├── set_waybar_tray_expander.sh     # Dynamic tray expander icon helper 🪶
+    ├── set_waybar_wifi_colors.sh       # State colors for Wi-Fi indicator 󰤨
+    └── setup_trash_cli_alias.sh        # Replaces rm with safe trash-cli (trash-put) 🗑️
 ```
 
 <br>
@@ -55,10 +67,23 @@ cd ~/dotfiles
 
 | Script | What it does (*´▽`*) |
 | :--- | :--- |
-| `disable_bluetooth.sh` | Disables the bluetooth service and masks it to keep it off. |
-| `install_anime4k.sh` | Downloads and magically configures Anime4K GLSL shaders for `mpv`. |
+| `disable_bluetooth.sh` | Disables bluetooth auto-power on boot. |
+| `install_anime4k.sh` | Downloads and configures Anime4K GLSL shaders for `mpv`. |
+| `set_alacritty_font_size.sh` | Sets Alacritty terminal font size to 10. |
+| `set_hyprland_gaps_and_borders.sh` | Sets Hyprland inner/outer gaps to 0 and configures active/inactive border colors. |
+| `set_hyprland_monitor_scale.sh` | Configures Hyprland monitor resolution and scale to 1.5. |
+| `set_mpv_lang.sh` | Sets default audio & subtitle language priorities in `mpv.conf`. |
+| `set_waybar_battery_colors.sh` | Sets battery icon colors for all charge levels (100% green). |
+| `set_waybar_bluetooth_colors.sh` | Sets Waybar Bluetooth colors (connected green, on orange, off grey). |
+| `set_waybar_config.sh` | Configures Waybar `config.jsonc` modules and layout. |
+| `set_waybar_japanese_clock.sh` | Enables system `ja_JP.UTF-8` locale and sets Japanese date/time in Waybar (`土曜日 01:59`). |
+| `set_waybar_style.sh` | Configures Waybar base CSS styles. |
+| `set_waybar_tray_expander.sh` | Deploys dynamic tray expander arrow icon helper. |
+| `set_waybar_wifi_colors.sh` | Sets Waybar Wi-Fi colors (connected green, disconnected/disabled grey). |
+| `setup_trash_cli_alias.sh` | Installs `trash-cli` and sets `alias rm='trash-put'` in shell configs. |
 
 <br>
+
 <div align="center">
   Made with 💖 by Praveen
 </div>
