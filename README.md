@@ -38,6 +38,7 @@ dotfiles/
     ├── set_waybar_style.sh             # Deploys Waybar style.css theme 🎨
     ├── set_waybar_tray_expander.sh     # Dynamic tray expander icon helper 🪶
     ├── set_waybar_wifi_colors.sh       # State colors for Wi-Fi indicator 󰤨
+    ├── setup_editor.sh                 # Sets EDITOR & VISUAL to neovim in shell configs ✏️
     ├── setup_fastfetch_welcome.sh      # Displays fastfetch system summary during setup 💻
     ├── setup_git_config.sh             # Configures global Git name/email with overwrite prompt ⚙️
     ├── setup_github_ssh.sh             # Generates Ed25519 SSH key & guides GitHub key setup 🔑
@@ -96,6 +97,7 @@ cd ~/dotfiles
 | `set_waybar_style.sh` | Configures Waybar base CSS styles. |
 | `set_waybar_tray_expander.sh` | Deploys dynamic tray expander arrow icon helper. |
 | `set_waybar_wifi_colors.sh` | Sets Waybar Wi-Fi colors (connected green, disconnected/disabled grey). |
+| `setup_editor.sh` | Sets `EDITOR=nvim` and `VISUAL=nvim` in `~/.bashrc` and `~/.zshrc` if not already configured. |
 | `setup_fastfetch_welcome.sh` | Installs `fastfetch` and displays system info summary during setup. |
 | `setup_git_config.sh` | Sets global `user.name` and `user.email` defaults, with an overwrite confirmation prompt if credentials exist. |
 | `setup_github_ssh.sh` | Generates Ed25519 SSH key if missing, loads it into `ssh-agent`, and prints a beginner-friendly deployment guide for GitHub. |
