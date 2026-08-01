@@ -76,9 +76,9 @@ cd ~/dotfiles
 | `disable_bluetooth.sh` | Disables bluetooth auto-power on boot. |
 | `install_anime4k.sh` | Downloads and configures Anime4K GLSL shaders for `mpv`. |
 | `install_antigravity_cli.sh` | Installs Antigravity CLI via `https://antigravity.google/cli/install.sh`. |
-| `install_essential_apps.sh` | Installs essential software (`mpv`, `anki`, `qbittorrent`, `wget`, `neovim`) using `pacman -S --needed`. |
+| `install_essential_apps.sh` | Installs essential software (`mpv`, `anki`, `qbittorrent`, `wget`, `neovim`, `firefox`) using `pacman -S --needed`. |
 | `install_voicevox.sh` | Fetches latest VOICEVOX release from GitHub, extracts to `~/.local/share/voicebox`, and installs desktop entry. |
-| `remove_omarchy_preinstalls.sh` | Purges default DHH/Omarchy packages (Spotify, 1Password, Obsidian, Typora, etc.), web apps, and NPX stubs. |
+| `remove_omarchy_preinstalls.sh` | Purges default DHH/Omarchy packages (Chromium, Spotify, 1Password, Obsidian, Typora, etc.), web apps, and NPX stubs. |
 | `set_alacritty_font_size.sh` | Sets Alacritty terminal font size to 10. |
 | `set_hyprland_gaps_and_borders.sh` | Sets Hyprland inner/outer gaps to 0 and configures active/inactive border colors. |
 | `set_hyprland_monitor_scale.sh` | Configures Hyprland monitor resolution and scale to 1.5. |

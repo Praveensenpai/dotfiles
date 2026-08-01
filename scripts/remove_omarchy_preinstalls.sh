@@ -25,6 +25,7 @@ PKGS_TO_REMOVE=(
   kdenlive
   lazydocker
   claude-code
+  chromium
 )
 
 # Remove packages installed via pacman if present
