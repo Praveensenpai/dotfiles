@@ -69,7 +69,7 @@ curl -LsSf https://raw.githubusercontent.com/Praveensenpai/dotfiles/main/remote-
 Run the interactive system cleanup directly without keeping or cloning dotfiles:
 
 ```bash
-curl -LsSf https://raw.githubusercontent.com/Praveensenpai/dotfiles/main/scripts/clean_system_cache.sh | bash
+curl -LsSf -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/Praveensenpai/dotfiles/main/scripts/clean_system_cache.sh | bash
 ```
 
 <br>

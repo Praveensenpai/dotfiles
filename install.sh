@@ -60,8 +60,7 @@ echo -e "${NC}"
 
 echo -e "${PURPLE}${BOLD}💡 System Maintenance Tip:${NC}"
 echo -e "${CYAN}Clean package caches, system logs, & trash anytime with:${NC}"
-echo -e "  ${YELLOW}Local Command:${NC}  ~/dotfiles/scripts/clean_system_cache.sh"
-echo -e "  ${YELLOW}Remote One-Liner:${NC} curl -LsSf https://raw.githubusercontent.com/Praveensenpai/dotfiles/main/scripts/clean_system_cache.sh | bash"
+echo -e "  ${YELLOW}~/dotfiles/scripts/clean_system_cache.sh${NC}"
 echo ""
 
 if [ -c /dev/tty ]; then
