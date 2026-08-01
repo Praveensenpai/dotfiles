@@ -141,7 +141,21 @@ Here are special standalone tools included in this repository to enhance your te
 | 👤 **Account Switcher** | `agy-account` | Interactively list, save, and switch between multiple Antigravity AI accounts. |
 | 🧹 **System Cleaner** | `clean_system_cache.sh` | Interactive menu with live disk size detection to clean package caches, journal logs, & trash. |
 | 🎧 **ImmersionPod** | `impd` | Audio language immersion tool integrated with `mpd` & `mpc` targeting `~/Videos/Anime`. |
-| ⚡ **Smart Navigation** | `z <folder>` | `zoxide` integration for jumping to frequently visited directories instantly. |
+
+<br>
+
+## ⚡ ⁺ . ⊹ Enhanced Shell & Terminal Utilities . ⁺ 🌸
+
+Modern CLI enhancements integrated into your shell environment:
+
+| Tool | Feature | Description |
+| :--- | :--- | :--- |
+| 🎨 **`ble.sh`** | Bash Line Editor | Live syntax highlighting (green/red) and auto-suggestions (gray text) in Bash. |
+| 🚀 **`zoxide`** | Smart Navigation | `z <folder>` jumps instantly to your most visited directories without full paths. |
+| 📂 **`eza`** | Modern `ls` | Color-coded directory listings with file type icons and group-first layout. |
+| 📄 **`bat`** | Modern `cat` | Syntax-highlighted file viewing with automatic line numbers & paging. |
+| 🔍 **`fzf`** | Fuzzy Search | Interactive fuzzy history search (`Ctrl+R`) and file selection (`Ctrl+T`). |
+| 🗑️ **`trash-cli`** | Safe Deletion | Replaces `rm` with `trash-put` to prevent accidental file deletion. |
 
 <br>
 
