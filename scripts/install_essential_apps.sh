@@ -1,8 +1,8 @@
 #!/bin/bash
 
-echo "Installing essential applications (mpv, anki, qbittorrent)..."
+echo "Installing essential applications (mpv, anki, qbittorrent, wget)..."
 
-# Install mpv, anki, and qbittorrent via pacman --needed
-sudo pacman -S --needed --noconfirm mpv anki qbittorrent
+# Install mpv, anki, qbittorrent, and wget via pacman --needed
+sudo pacman -S --needed --noconfirm mpv anki qbittorrent wget
 
-echo "✔ Essential applications (mpv, anki, qbittorrent) installed."
+echo "✔ Essential applications (mpv, anki, qbittorrent, wget) installed."
