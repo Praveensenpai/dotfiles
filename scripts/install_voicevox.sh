@@ -31,14 +31,14 @@ echo -e "${GREEN}✨ Found latest VOICEVOX release:${NC} ${CYAN}v${LATEST_TAG}${
 TAR_NAME="voicevox-linux-cpu-x64-${LATEST_TAG}.tar.gz"
 DOWNLOAD_URL="https://github.com/VOICEVOX/voicevox/releases/download/${LATEST_TAG}/${TAR_NAME}"
 
-TMP_DIR=$(mktemp -d)
-TARGET_FILE="$TMP_DIR/$TAR_NAME"
+CACHE_DIR="/tmp/voicevox_cache"
+mkdir -p "$CACHE_DIR"
+TARGET_FILE="$CACHE_DIR/$TAR_NAME"
 
 echo -e "${BLUE}📦 Downloading ${TAR_NAME}...${NC}"
 
-# Use Python with a clean single-line progress bar (like uv / bun / rich)
 python3 - "$DOWNLOAD_URL" "$TARGET_FILE" << 'PYEOF'
-import sys, urllib.request, time
+import sys, urllib.request, time, os
 
 url = sys.argv[1]
 output_file = sys.argv[2]
@@ -52,47 +52,63 @@ def format_size(bytes_num):
         return f"{bytes_num / 1024:.0f} KB"
     return f"{bytes_num} B"
 
+existing_size = os.path.getsize(output_file) if os.path.exists(output_file) else 0
+
 req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-with urllib.request.urlopen(req) as response, open(output_file, 'wb') as out:
-    total_size = int(response.headers.get('Content-Length', 0))
-    downloaded = 0
-    start_time = time.time()
-    last_update = 0
+if existing_size > 0:
+    req.add_header('Range', f'bytes={existing_size}-')
 
-    bar_length = 30
-    color_cyan = "\033[36m"
-    color_green = "\033[32m"
-    color_dim = "\033[2m"
-    color_bold = "\033[1m"
-    color_reset = "\033[0m"
-
-    while True:
-        chunk = response.read(65536) # 64KB chunks
-        if not chunk:
-            break
-        out.write(chunk)
-        downloaded += len(chunk)
+try:
+    with urllib.request.urlopen(req) as response:
+        code = response.getcode()
         
-        now = time.time()
-        # Update progress 10 times per second for ultra smooth rendering
-        if now - last_update > 0.08 or downloaded == total_size:
-            last_update = now
-            elapsed = now - start_time
-            speed = downloaded / elapsed if elapsed > 0 else 0
-            
-            percent = (downloaded / total_size) * 100 if total_size > 0 else 0
-            filled_len = int(bar_length * downloaded // total_size) if total_size > 0 else 0
-            bar = '━' * filled_len + color_dim + '━' * (bar_length - filled_len) + color_reset
-            
-            speed_str = f"{format_size(speed)}/s"
-            downloaded_str = format_size(downloaded)
-            total_str = format_size(total_size)
-            
-            # Print single-line clean progress bar (clears current line to prevent wrapping)
-            sys.stdout.write(f"\r\033[K  {color_green}⠋{color_reset} [{color_cyan}{bar}{color_reset}] {color_bold}{percent:5.1f}%{color_reset}  ({downloaded_str} / {total_str})  {color_cyan}{speed_str}{color_reset}")
-            sys.stdout.flush()
+        # Determine total size
+        if code == 206: # Partial Content (Resume success)
+            content_range = response.headers.get('Content-Range', '')
+            total_size = int(content_range.split('/')[-1]) if '/' in content_range else existing_size + int(response.headers.get('Content-Length', 0))
+            mode = 'ab'
+            downloaded = existing_size
+        else: # Fresh download
+            total_size = int(response.headers.get('Content-Length', 0))
+            mode = 'wb'
+            downloaded = 0
+            existing_size = 0
 
-sys.stdout.write("\n")
+        if existing_size > 0 and downloaded == total_size:
+            print(f"  \033[32m✔ File already complete in cache ({format_size(total_size)}).\033[0m")
+            sys.exit(0)
+
+        start_time = time.time()
+        last_update = 0
+        bar_length = 30
+        color_cyan, color_green, color_dim, color_bold, color_reset = "\033[36m", "\033[32m", "\033[2m", "\033[1m", "\033[0m"
+
+        with open(output_file, mode) as out:
+            while True:
+                chunk = response.read(65536)
+                if not chunk:
+                    break
+                out.write(chunk)
+                downloaded += len(chunk)
+                
+                now = time.time()
+                if now - last_update > 0.08 or downloaded == total_size:
+                    last_update = now
+                    elapsed = now - start_time
+                    speed = (downloaded - existing_size) / elapsed if elapsed > 0 else 0
+                    percent = (downloaded / total_size) * 100 if total_size > 0 else 0
+                    filled_len = int(bar_length * downloaded // total_size) if total_size > 0 else 0
+                    bar = '━' * filled_len + color_dim + '━' * (bar_length - filled_len) + color_reset
+                    
+                    sys.stdout.write(f"\r\033[K  {color_green}⠋{color_reset} [{color_cyan}{bar}{color_reset}] {color_bold}{percent:5.1f}%{color_reset}  ({format_size(downloaded)} / {format_size(total_size)})  {color_cyan}{format_size(speed)}/s{color_reset}")
+                    sys.stdout.flush()
+
+        sys.stdout.write("\n")
+except urllib.error.HTTPError as e:
+    if e.code == 416: # Range Not Satisfiable -> file fully downloaded
+        print("  \033[32m✔ Cached file complete.\033[0m")
+    else:
+        raise e
 PYEOF
 
 if [ ! -f "$TARGET_FILE" ] || [ ! -s "$TARGET_FILE" ]; then
