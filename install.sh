@@ -33,6 +33,11 @@ chmod +x scripts/*.sh 2>/dev/null || true
 
 # Run all executable .sh files in the scripts directory
 for script in scripts/*.sh; do
+    # Skip clean_system_cache.sh during initial installation loop
+    if [ "$(basename "$script")" = "clean_system_cache.sh" ]; then
+        continue
+    fi
+
     if [ -x "$script" ]; then
         echo -e "\n${CYAN}▶ Running $(basename "$script")...${NC}"
         if "$script"; then
@@ -52,3 +57,16 @@ echo "🎉 ========================================= 🎉"
 echo "       All dotfiles setup completed!          "
 echo "🎉 ========================================= 🎉"
 echo -e "${NC}"
+
+echo -e "${PURPLE}${BOLD}💡 System Maintenance Tip:${NC}"
+echo -e "${CYAN}Clean package caches, system logs, & trash anytime with:${NC}"
+echo -e "  ${YELLOW}Local Command:${NC}  ~/dotfiles/scripts/clean_system_cache.sh"
+echo -e "  ${YELLOW}Remote One-Liner:${NC} curl -LsSf https://raw.githubusercontent.com/Praveensenpai/dotfiles/main/scripts/clean_system_cache.sh | bash"
+echo ""
+
+if [ -c /dev/tty ]; then
+    read -r -p "Would you like to run the interactive cleanup now? [y/N]: " CLEAN_CHOICE < /dev/tty
+    if [[ "$CLEAN_CHOICE" =~ ^[Yy]$ ]]; then
+        ./scripts/clean_system_cache.sh
+    fi
+fi

@@ -81,7 +81,14 @@ show_menu() {
 while true; do
     clear
     show_menu
-    read -p "Enter choice [1-4, c, a, q]: " choice
+    
+    # Read from /dev/tty if available for remote curl | bash execution
+    if [ -t 0 ] || [ -c /dev/tty ]; then
+        read -r -p "Enter choice [1-4, c, a, q]: " choice < /dev/tty
+    else
+        read -r -p "Enter choice [1-4, c, a, q]: " choice
+    fi
+
     case "$choice" in
         1) toggle SEL_1 ;;
         2) toggle SEL_2 ;;

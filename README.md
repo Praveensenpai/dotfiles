@@ -64,6 +64,16 @@ curl -LsSf https://raw.githubusercontent.com/Praveensenpai/dotfiles/main/remote-
 
 <br>
 
+### 🧹 Standalone Interactive System Cleanup (No cloning required)
+
+Run the interactive system cleanup directly without keeping or cloning dotfiles:
+
+```bash
+curl -LsSf https://raw.githubusercontent.com/Praveensenpai/dotfiles/main/scripts/clean_system_cache.sh | bash
+```
+
+<br>
+
 ### 💌 Manual Setup
 
 If you prefer doing things by hand:
