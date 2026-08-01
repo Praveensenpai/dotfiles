@@ -115,7 +115,7 @@ cat << EOF > "$DESKTOP_FILE"
 [Desktop Entry]
 Name=VOICEVOX
 Comment=Voice Synthesis Engine
-Exec=$INSTALL_DIR/voicevox
+Exec=${INSTALL_DIR}/voicevox
 Icon=audio-headphones
 Terminal=false
 Type=Application
