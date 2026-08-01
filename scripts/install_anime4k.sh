@@ -93,7 +93,17 @@ mv "$TMP_DIR"/shaders/ "$TARGET/" 2>/dev/null || true
 mv "$TMP_DIR"/input.conf "$TARGET/" 2>/dev/null || true
 mv "$TMP_DIR"/mpv.conf "$TARGET/" 2>/dev/null || true
 
-sed -i 's|^# glsl-shaders=.*|glsl-shaders="~~/shaders/Anime4K_Clamp_Highlights.glsl:~~/shaders/Anime4K_Upscale_Denoise_CNN_x2_VL.glsl:~~/shaders/Anime4K_AutoDownscalePre_x2.glsl:~~/shaders/Anime4K_AutoDownscalePre_x4.glsl:~~/shaders/Anime4K_Restore_CNN_M.glsl:~~/shaders/Anime4K_Upscale_CNN_x2_M.glsl"|' "$TARGET/mpv.conf" 2>/dev/null || true
+# Configure Anime4K Mode C+A (HQ) as default shader preset
+if grep -q "glsl-shaders=" "$TARGET/mpv.conf" 2>/dev/null; then
+    sed -i 's|^#* *glsl-shaders=.*|glsl-shaders="~~/shaders/Anime4K_Clamp_Highlights.glsl:~~/shaders/Anime4K_Upscale_Denoise_CNN_x2_VL.glsl:~~/shaders/Anime4K_AutoDownscalePre_x2.glsl:~~/shaders/Anime4K_AutoDownscalePre_x4.glsl:~~/shaders/Anime4K_Restore_CNN_M.glsl:~~/shaders/Anime4K_Upscale_CNN_x2_M.glsl"|' "$TARGET/mpv.conf"
+    sed -i 's|^# Optimized shaders.*|# Optimized shaders for higher-end GPU: Mode C+A (HQ)|' "$TARGET/mpv.conf"
+else
+    cat << 'INNER_EOF' >> "$TARGET/mpv.conf"
+
+# Optimized shaders for higher-end GPU: Mode C+A (HQ)
+glsl-shaders="~~/shaders/Anime4K_Clamp_Highlights.glsl:~~/shaders/Anime4K_Upscale_Denoise_CNN_x2_VL.glsl:~~/shaders/Anime4K_AutoDownscalePre_x2.glsl:~~/shaders/Anime4K_AutoDownscalePre_x4.glsl:~~/shaders/Anime4K_Restore_CNN_M.glsl:~~/shaders/Anime4K_Upscale_CNN_x2_M.glsl"
+INNER_EOF
+fi
 
 rm -rf "$TMP_DIR"
 echo -e "${GREEN}🎉 Anime4K shaders installed and configured for mpv!${NC}"
