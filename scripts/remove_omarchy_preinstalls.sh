@@ -26,6 +26,8 @@ PKGS_TO_REMOVE=(
   lazydocker
   claude-code
   chromium
+  localsend
+  localsend-bin
 )
 
 # Remove packages installed via pacman if present
