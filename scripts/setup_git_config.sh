@@ -34,13 +34,28 @@ if [ -n "$CURRENT_NAME" ] || [ -n "$CURRENT_EMAIL" ]; then
     fi
 fi
 
-echo -e "${BLUE}📝 Setting global Git user name: ${CYAN}${DEFAULT_NAME}${NC}"
-git config --global user.name "$DEFAULT_NAME"
+FINAL_NAME="$DEFAULT_NAME"
+FINAL_EMAIL="$DEFAULT_EMAIL"
 
-echo -e "${BLUE}📝 Setting global Git user email: ${CYAN}${DEFAULT_EMAIL}${NC}"
-git config --global user.email "$DEFAULT_EMAIL"
+if [ -t 0 ]; then
+    read -r -p "Enter Git User Name [default: ${DEFAULT_NAME}]: " INPUT_NAME
+    if [ -n "$INPUT_NAME" ]; then
+        FINAL_NAME="$INPUT_NAME"
+    fi
+
+    read -r -p "Enter Git User Email [default: ${DEFAULT_EMAIL}]: " INPUT_EMAIL
+    if [ -n "$INPUT_EMAIL" ]; then
+        FINAL_EMAIL="$INPUT_EMAIL"
+    fi
+fi
+
+echo -e "${BLUE}📝 Setting global Git user name: ${CYAN}${FINAL_NAME}${NC}"
+git config --global user.name "$FINAL_NAME"
+
+echo -e "${BLUE}📝 Setting global Git user email: ${CYAN}${FINAL_EMAIL}${NC}"
+git config --global user.email "$FINAL_EMAIL"
 
 echo -e "${BLUE}📝 Setting default branch name to 'main'...${NC}"
 git config --global init.defaultBranch main
 
-echo -e "${GREEN}🎉 Git configuration complete!${NC}"
+echo -e "${GREEN}🎉 Git configuration complete! (${FINAL_NAME} <${FINAL_EMAIL}>)${NC}"
