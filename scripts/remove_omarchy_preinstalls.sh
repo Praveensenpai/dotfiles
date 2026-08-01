@@ -62,14 +62,13 @@ HIDE_DESKTOPS=(
 mkdir -p ~/.local/share/applications
 for ENTRY in "${HIDE_DESKTOPS[@]}"; do
   TARGET_LOCAL="$HOME/.local/share/applications/$ENTRY"
-  if [ ! -f "$TARGET_LOCAL" ]; then
-    SYS_FILE="/usr/share/applications/$ENTRY"
-    if [ -f "$SYS_FILE" ]; then
-      cp "$SYS_FILE" "$TARGET_LOCAL"
-      echo "NoDisplay=true" >> "$TARGET_LOCAL"
-    fi
-  else
-    if ! grep -q "^NoDisplay=true" "$TARGET_LOCAL"; then
+  SYS_FILE="/usr/share/applications/$ENTRY"
+  
+  if [ -f "$SYS_FILE" ]; then
+    cp "$SYS_FILE" "$TARGET_LOCAL"
+    if grep -q "^\[Desktop Entry\]" "$TARGET_LOCAL"; then
+      sed -i '/^\[Desktop Entry\]/a NoDisplay=true' "$TARGET_LOCAL"
+    else
       echo "NoDisplay=true" >> "$TARGET_LOCAL"
     fi
   fi
