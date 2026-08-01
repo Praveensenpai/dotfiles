@@ -20,7 +20,9 @@ echo -e "${YELLOW}🔒 Sudo authentication required to proceed:${NC}"
 sudo -v || exit 1
 
 # Keep-alive: update existing sudo time stamp until script has finished
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+( while true; do sudo -n true; sleep 60; done ) 2>/dev/null &
+SUDO_LOOP_PID=$!
+trap 'kill "$SUDO_LOOP_PID" 2>/dev/null || true' EXIT INT TERM
 
 # Ensure scripts directory exists
 if [ ! -d "scripts" ]; then
