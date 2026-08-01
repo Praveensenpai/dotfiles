@@ -103,6 +103,7 @@ cd ~/dotfiles
 | `set_waybar_wifi_colors.sh` | Sets Waybar Wi-Fi colors (connected green, disconnected/disabled grey). |
 | `setup_blesh.sh` | Configures `ble.sh` for Bash live auto-suggestions & syntax highlighting. |
 | `setup_cli_tools.sh` | Installs `eza` and `bat` for modern icons, colors, and syntax-highlighted `cat`. |
+| `clean_system_cache.sh` | Cleans Arch package cache, systemd journal logs, and trash. |
 | `setup_docker.sh` | Enables `docker.service` and `docker.socket`, adds current user to `docker` group. Skips gracefully if already configured. |
 | `setup_editor.sh` | Sets `EDITOR=nvim` and `VISUAL=nvim` in `~/.bashrc` and `~/.zshrc` if not already configured. |
 | `setup_fastfetch_welcome.sh` | Installs `fastfetch` and displays system info summary during setup. |
