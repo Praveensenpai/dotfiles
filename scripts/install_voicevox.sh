@@ -12,8 +12,11 @@ NC='\033[0m' # No Color
 echo -e "${PURPLE}🎙️  Installing VOICEVOX...${NC}"
 
 # Target directory for extraction & desktop entry
-INSTALL_DIR="$HOME/.local/share/voicebox"
+INSTALL_DIR="$HOME/.local/share/voicevox"
 DESKTOP_DIR="$HOME/.local/share/applications"
+
+# Remove legacy/duplicate desktop entries if existing
+rm -f "$DESKTOP_DIR/voicebox.desktop"
 
 mkdir -p "$DESKTOP_DIR"
 
