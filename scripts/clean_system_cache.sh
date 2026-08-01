@@ -1,27 +1,130 @@
 #!/bin/bash
 
-echo "============================="
-echo "  Cleaning system cache (Fast)..."
-echo "============================="
+# Aesthetic Colors & Styling
+BOLD="\033[1m"
+GREEN="\033[32m"
+CYAN="\033[36m"
+YELLOW="\033[33m"
+RED="\033[31m"
+MAGENTA="\033[35m"
+RESET="\033[0m"
 
-# Fast package cache clean
-if command -v yay &> /dev/null; then
-    echo "▶ Cleaning package cache..."
-    yay -Sc --noconfirm 2>/dev/null || true
+# Helper to format size
+get_dir_size() {
+    local path="$1"
+    if [ -d "$path" ]; then
+        du -sh "$path" 2>/dev/null | cut -f1
+    else
+        echo "0B"
+    fi
+}
+
+# Calculate current sizes
+PACMAN_SIZE=$(get_dir_size "/var/cache/pacman/pkg")
+YAY_SIZE=$(get_dir_size "$HOME/.cache/yay")
+JOURNAL_SIZE=$(journalctl --disk-usage 2>/dev/null | awk '{print $(NF-1), $NF}' || echo "0B")
+TRASH_SIZE=$(get_dir_size "$HOME/.local/share/Trash")
+THUMB_SIZE=$(get_dir_size "$HOME/.cache/thumbnails")
+
+# Initial selections (1 = enabled by default, 0 = disabled)
+SEL_1=1
+SEL_2=1
+SEL_3=1
+SEL_4=0
+
+toggle() {
+    local var="$1"
+    if [ "${!var}" -eq 1 ]; then
+        eval "$var=0"
+    else
+        eval "$var=1"
+    fi
+}
+
+show_menu() {
+    echo -e "${MAGENTA}${BOLD}=========================================${RESET}"
+    echo -e "${CYAN}${BOLD}   🌸 Interactive System Cleanup Utility ✨${RESET}"
+    echo -e "${MAGENTA}${BOLD}=========================================${RESET}"
+    echo ""
+    echo -e "${BOLD}Select items to clean:${RESET}"
+    echo ""
+    
+    if [ "$SEL_1" -eq 1 ]; then 
+        echo -e "  ${GREEN}[✓] 1.${RESET} Pacman & Yay Cache      ${YELLOW}($PACMAN_SIZE pacman / $YAY_SIZE yay)${RESET}"
+    else 
+        echo -e "  ${RED}[ ] 1.${RESET} Pacman & Yay Cache      ${YELLOW}($PACMAN_SIZE pacman / $YAY_SIZE yay)${RESET}"
+    fi
+
+    if [ "$SEL_2" -eq 1 ]; then 
+        echo -e "  ${GREEN}[✓] 2.${RESET} Systemd Journal Logs  ${YELLOW}($JOURNAL_SIZE)${RESET}"
+    else 
+        echo -e "  ${RED}[ ] 2.${RESET} Systemd Journal Logs  ${YELLOW}($JOURNAL_SIZE)${RESET}"
+    fi
+
+    if [ "$SEL_3" -eq 1 ]; then 
+        echo -e "  ${GREEN}[✓] 3.${RESET} Empty User Trash       ${YELLOW}($TRASH_SIZE)${RESET}"
+    else 
+        echo -e "  ${RED}[ ] 3.${RESET} Empty User Trash       ${YELLOW}($TRASH_SIZE)${RESET}"
+    fi
+
+    if [ "$SEL_4" -eq 1 ]; then 
+        echo -e "  ${GREEN}[✓] 4.${RESET} Thumbnail Cache        ${YELLOW}($THUMB_SIZE)${RESET}"
+    else 
+        echo -e "  ${RED}[ ] 4.${RESET} Thumbnail Cache        ${YELLOW}($THUMB_SIZE)${RESET}"
+    fi
+
+    echo ""
+    echo -e "${CYAN}Commands: [1-4] Toggle option | [a] Select all | [c] Clean selected | [q] Quit${RESET}"
+    echo ""
+}
+
+while true; do
+    clear
+    show_menu
+    read -p "Enter choice [1-4, c, a, q]: " choice
+    case "$choice" in
+        1) toggle SEL_1 ;;
+        2) toggle SEL_2 ;;
+        3) toggle SEL_3 ;;
+        4) toggle SEL_4 ;;
+        a|A) SEL_1=1; SEL_2=1; SEL_3=1; SEL_4=1 ;;
+        c|C|"") break ;;
+        q|Q) 
+            echo -e "${YELLOW}Cleanup cancelled.${RESET}"
+            exit 0 
+            ;;
+        *) 
+            ;;
+    esac
+done
+
+echo ""
+echo -e "${CYAN}${BOLD}▶ Starting selected cleanup...${RESET}"
+echo "-----------------------------------------"
+
+if [ "$SEL_1" -eq 1 ]; then
+    echo -e "🧹 Cleaning package cache..."
+    if command -v yay &>/dev/null; then
+        yay -Sc --noconfirm 2>/dev/null || true
+    elif command -v pacman &>/dev/null; then
+        sudo pacman -Sc --noconfirm 2>/dev/null || true
+    fi
 fi
 
-# Fast systemd journal log vacuum (cap at 50MB)
-if command -v journalctl &> /dev/null; then
-    echo "▶ Vacuuming systemd journal logs (50MB cap)..."
+if [ "$SEL_2" -eq 1 ]; then
+    echo -e "📜 Vacuuming systemd journal logs (50MB cap)..."
     sudo journalctl --vacuum-size=50M 2>/dev/null || true
 fi
 
-# Instant trash empty (bulk remove without slow file iteration)
-if [ -d "$HOME/.local/share/Trash" ]; then
-    echo "▶ Instantly emptying trash..."
+if [ "$SEL_3" -eq 1 ]; then
+    echo -e "🗑️ Emptying user trash..."
     rm -rf "$HOME/.local/share/Trash/files/"* "$HOME/.local/share/Trash/info/"* 2>/dev/null || true
 fi
 
-echo "============================="
-echo "  System cleanup complete!"
-echo "============================="
+if [ "$SEL_4" -eq 1 ]; then
+    echo -e "🖼️ Clearing thumbnail cache..."
+    rm -rf "$HOME/.cache/thumbnails/"* 2>/dev/null || true
+fi
+
+echo "-----------------------------------------"
+echo -e "${GREEN}${BOLD}✔ Selected cleanup completed successfully! ✨${RESET}"
