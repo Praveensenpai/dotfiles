@@ -115,8 +115,8 @@ echo "-----------------------------------------"
 
 if [ "$SEL_1" -eq 1 ]; then
     echo -e "🧹 Cleaning Pacman & Yay package caches..."
-    sudo pacman -Scc --noconfirm 2>/dev/null || sudo rm -rf /var/cache/pacman/pkg/* 2>/dev/null || true
-    rm -rf "$HOME/.cache/yay/"* 2>/dev/null || true
+    sudo pacman -Scc --noconfirm --noconfirm 2>/dev/null || sudo rm -rf /var/cache/pacman/pkg/* 2>/dev/null || true
+    rm -rf "$HOME/.cache/yay" 2>/dev/null || true
 fi
 
 if [ "$SEL_2" -eq 1 ]; then
