@@ -41,7 +41,6 @@ dotfiles/
     ├── set_waybar_wifi_colors.sh       # State colors for Wi-Fi indicator 󰤨
     ├── setup_docker.sh                 # Enables docker.service/socket & adds user to docker group 🐳
     ├── setup_editor.sh                 # Sets EDITOR & VISUAL to neovim in shell configs ✏️
-    ├── setup_fastfetch_welcome.sh      # Displays fastfetch system summary during setup 💻
     ├── setup_git_config.sh             # Configures global Git name/email with overwrite prompt ⚙️
     ├── setup_github_ssh.sh             # Generates Ed25519 SSH key & guides GitHub key setup 🔑
     ├── setup_trash_cli_alias.sh        # Replaces rm with safe trash-cli (trash-put) 🗑️
@@ -116,7 +115,6 @@ cd ~/dotfiles
 | `clean_system_cache.sh` | Cleans Arch package cache, systemd journal logs, and trash. |
 | `setup_docker.sh` | Enables `docker.service` and `docker.socket`, adds current user to `docker` group. Skips gracefully if already configured. |
 | `setup_editor.sh` | Sets `EDITOR=nvim` and `VISUAL=nvim` in `~/.bashrc` and `~/.zshrc` if not already configured. |
-| `setup_fastfetch_welcome.sh` | Installs `fastfetch` and displays system info summary during setup. |
 | `setup_fzf_keybinds.sh` | Configures `fzf` interactive fuzzy search shortcuts (`Ctrl+R`, `Ctrl+T`). |
 | `setup_git_config.sh` | Sets global `user.name` and `user.email` defaults, with an overwrite confirmation prompt if credentials exist. |
 | `setup_github_ssh.sh` | Generates Ed25519 SSH key if missing, loads it into `ssh-agent`, and prints a beginner-friendly deployment guide for GitHub. |
