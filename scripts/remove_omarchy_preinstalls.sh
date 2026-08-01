@@ -8,7 +8,7 @@ NC='\033[0m'
 
 echo -e "${PURPLE}🗑️  Purging default Omarchy/DHH preinstalled applications and tooling...${NC}"
 
-# List of DHH/Omarchy default packages to uninstall
+# List of DHH/Omarchy default packages to uninstall (excluding system deps like ibus/evince)
 PKGS_TO_REMOVE=(
   1password-beta
   1password-cli
@@ -28,9 +28,7 @@ PKGS_TO_REMOVE=(
   chromium
   localsend
   localsend-bin
-  ibus
   gnome-calculator
-  evince
   system-config-printer
   cups
   cups-filters
@@ -38,43 +36,41 @@ PKGS_TO_REMOVE=(
   cups-pdf
 )
 
-# Remove packages installed via pacman if present
-INSTALLED_PKGS=()
+# Remove packages installed via pacman individually to prevent dependency blockages
 for PKG in "${PKGS_TO_REMOVE[@]}"; do
   if pacman -Qq "$PKG" &>/dev/null; then
-    INSTALLED_PKGS+=("$PKG")
+    echo -e "${BLUE}📦 Removing package: ${PKG}...${NC}"
+    sudo pacman -Rns --noconfirm "$PKG" 2>/dev/null || sudo pacman -R --noconfirm "$PKG" 2>/dev/null || true
   fi
 done
-
-if [ ${#INSTALLED_PKGS[@]} -gt 0 ]; then
-  echo -e "${BLUE}📦 Removing packages: ${INSTALLED_PKGS[*]}...${NC}"
-  sudo pacman -Rns --noconfirm "${INSTALLED_PKGS[@]}" || true
-else
-  echo -e "${GREEN}✔ No preinstalled GUI/CLI packages found to remove.${NC}"
-fi
 
 # Remove lingering desktop entry files in ~/.local/share/applications/
 echo -e "${BLUE}🧹 Cleaning up orphaned desktop entries...${NC}"
 rm -f ~/.local/share/applications/typora.desktop \
       ~/.local/share/applications/localsend.desktop \
-      ~/.local/share/applications/org.freedesktop.IBus.Setup.desktop
+      ~/.local/share/applications/org.freedesktop.IBus.Setup.desktop \
+      ~/.local/share/applications/org.gnome.Evince.desktop
 
-# Hide unwanted system launcher entries (Color Profile, IBus) in ~/.local/share/applications/
+# Hide system launcher entries (Color Profile, IBus, Evince) without breaking system dependencies
 HIDE_DESKTOPS=(
   "org.freedesktop.IBus.Setup.desktop"
   "gnome-color-panel.desktop"
   "org.gnome.ColorProfileViewer.desktop"
+  "org.gnome.Evince.desktop"
 )
 
 mkdir -p ~/.local/share/applications
 for ENTRY in "${HIDE_DESKTOPS[@]}"; do
-  TARGET_LOCAL="~/.local/share/applications/$ENTRY"
-  eval TARGET_EXP="$TARGET_LOCAL"
-  if [ ! -f "$TARGET_EXP" ]; then
+  TARGET_LOCAL="$HOME/.local/share/applications/$ENTRY"
+  if [ ! -f "$TARGET_LOCAL" ]; then
     SYS_FILE="/usr/share/applications/$ENTRY"
     if [ -f "$SYS_FILE" ]; then
-      cp "$SYS_FILE" "$TARGET_EXP"
-      echo "NoDisplay=true" >> "$TARGET_EXP"
+      cp "$SYS_FILE" "$TARGET_LOCAL"
+      echo "NoDisplay=true" >> "$TARGET_LOCAL"
+    fi
+  else
+    if ! grep -q "^NoDisplay=true" "$TARGET_LOCAL"; then
+      echo "NoDisplay=true" >> "$TARGET_LOCAL"
     fi
   fi
 done
