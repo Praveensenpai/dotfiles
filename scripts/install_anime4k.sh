@@ -122,6 +122,8 @@ if [ ! -f "$TARGET_FILE" ] || [ ! -s "$TARGET_FILE" ]; then
     exit 1
 fi
 
+unzip -q -o "$TARGET_FILE" -d "$TMP_DIR"
+
 echo -e "${BLUE}📂 Copying Anime4K shaders to ${TARGET}/shaders...${NC}"
 mkdir -p "$TARGET/shaders"
 cp -rf "$TMP_DIR"/shaders/* "$TARGET/shaders/" 2>/dev/null || true
