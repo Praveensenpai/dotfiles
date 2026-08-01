@@ -24,7 +24,7 @@ dotfiles/
     ├── install_antigravity_cli.sh      # Installs Antigravity CLI via official curl script 🚀
     ├── install_essential_apps.sh       # Installs mpv, anki, qbittorrent, wget, neovim via pacman 📦
     ├── install_voicevox.sh             # Fetches latest VOICEVOX release & creates desktop entry 🎙️
-    ├── remove_default_omarchy_webapps.sh# Purges default Omarchy web app launcher shortcuts 🗑️
+    ├── remove_omarchy_preinstalls.sh   # Purges default Omarchy/DHH packages, web apps, & stubs 🗑️
     ├── set_alacritty_font_size.sh      # Sets Alacritty font size to 10 🔤
     ├── set_hyprland_gaps_and_borders.sh# Configures window gaps & border colors 🪟
     ├── set_hyprland_monitor_scale.sh   # Sets monitor scale to 1.5 🖥️
@@ -78,7 +78,7 @@ cd ~/dotfiles
 | `install_antigravity_cli.sh` | Installs Antigravity CLI via `https://antigravity.google/cli/install.sh`. |
 | `install_essential_apps.sh` | Installs essential software (`mpv`, `anki`, `qbittorrent`, `wget`, `neovim`) using `pacman -S --needed`. |
 | `install_voicevox.sh` | Fetches latest VOICEVOX release from GitHub, extracts to `~/.local/share/voicebox`, and installs desktop entry. |
-| `remove_default_omarchy_webapps.sh` | Automatically purges default Omarchy web app desktop launchers. |
+| `remove_omarchy_preinstalls.sh` | Purges default DHH/Omarchy packages (Spotify, 1Password, Obsidian, Typora, etc.), web apps, and NPX stubs. |
 | `set_alacritty_font_size.sh` | Sets Alacritty terminal font size to 10. |
 | `set_hyprland_gaps_and_borders.sh` | Sets Hyprland inner/outer gaps to 0 and configures active/inactive border colors. |
 | `set_hyprland_monitor_scale.sh` | Configures Hyprland monitor resolution and scale to 1.5. |
