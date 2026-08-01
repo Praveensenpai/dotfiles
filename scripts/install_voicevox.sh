@@ -78,9 +78,9 @@ try:
             print(f"  \033[32m✔ File already complete in cache ({format_size(total_size)}).\033[0m")
             sys.exit(0)
 
+        import shutil
         start_time = time.time()
         last_update = 0
-        bar_length = 30
         color_cyan, color_green, color_dim, color_bold, color_reset = "\033[36m", "\033[32m", "\033[2m", "\033[1m", "\033[0m"
 
         with open(output_file, mode) as out:
@@ -97,10 +97,20 @@ try:
                     elapsed = now - start_time
                     speed = (downloaded - existing_size) / elapsed if elapsed > 0 else 0
                     percent = (downloaded / total_size) * 100 if total_size > 0 else 0
+                    
+                    # Dynamically adjust bar length to fit terminal width perfectly
+                    term_cols = shutil.get_terminal_size((80, 24)).columns
+                    downloaded_str = format_size(downloaded)
+                    total_str = format_size(total_size)
+                    speed_str = f"{format_size(speed)}/s"
+                    
+                    overhead = 35 + len(downloaded_str) + len(total_str) + len(speed_str)
+                    bar_length = max(10, term_cols - overhead)
+                    
                     filled_len = int(bar_length * downloaded // total_size) if total_size > 0 else 0
                     bar = '━' * filled_len + color_dim + '━' * (bar_length - filled_len) + color_reset
                     
-                    sys.stdout.write(f"\r\033[K  {color_green}⠋{color_reset} [{color_cyan}{bar}{color_reset}] {color_bold}{percent:5.1f}%{color_reset}  ({format_size(downloaded)} / {format_size(total_size)})  {color_cyan}{format_size(speed)}/s{color_reset}")
+                    sys.stdout.write(f"\r\033[K  {color_green}⠋{color_reset} [{color_cyan}{bar}{color_reset}] {color_bold}{percent:5.1f}%{color_reset}  ({downloaded_str} / {total_str})  {color_cyan}{speed_str}{color_reset}")
                     sys.stdout.flush()
 
         sys.stdout.write("\n")
