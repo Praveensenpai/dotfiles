@@ -21,10 +21,20 @@ echo "Latest VOICEVOX version found: $LATEST_TAG"
 TAR_NAME="voicevox-linux-cpu-x64-${LATEST_TAG}.tar.gz"
 DOWNLOAD_URL="https://github.com/VOICEVOX/voicevox/releases/download/${LATEST_TAG}/${TAR_NAME}"
 
-# Download archive to temporary location
+# Ensure aria2c is installed for fast multi-connection downloading
+if ! command -v aria2c &>/dev/null; then
+    echo "Installing aria2c for fast multi-threaded downloading..."
+    sudo pacman -S --needed --noconfirm aria2c
+fi
+
 TMP_DIR=$(mktemp -d)
-echo "Downloading $TAR_NAME..."
-curl -L --progress-bar "$DOWNLOAD_URL" -o "$TMP_DIR/$TAR_NAME"
+echo "Downloading $TAR_NAME with aria2c..."
+
+if command -v aria2c &>/dev/null; then
+    aria2c -x 8 -s 8 --summary-interval=1 -d "$TMP_DIR" -o "$TAR_NAME" "$DOWNLOAD_URL"
+else
+    curl -L --progress-bar "$DOWNLOAD_URL" -o "$TMP_DIR/$TAR_NAME"
+fi
 
 if [ ! -f "$TMP_DIR/$TAR_NAME" ]; then
     echo "Error: Download failed!"
