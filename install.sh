@@ -1,35 +1,47 @@
 #!/bin/bash
 
-echo "============================="
-echo "  Setting up dotfiles..."
-echo "============================="
+# ANSI Color Tokens
+CYAN='\033[0;36m'
+GREEN='\033[0;32m'
+PURPLE='\033[0;35m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+BOLD='\033[1m'
+NC='\033[0m'
+
+echo -e "${PURPLE}${BOLD}"
+echo "🌸 ========================================= 🌸"
+echo "        Setting up Omarchy Dotfiles...        "
+echo "🌸 ========================================= 🌸"
+echo -e "${NC}"
 
 # Ask for sudo password up front
-echo "🔒 Sudo authentication required to proceed:"
+echo -e "${YELLOW}🔒 Sudo authentication required to proceed:${NC}"
 sudo -v || exit 1
 
 # Keep-alive: update existing sudo time stamp until script has finished
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
-
 # Ensure scripts directory exists
 if [ ! -d "scripts" ]; then
-    echo "Error: 'scripts' directory not found!"
+    echo -e "${RED}❌ Error: 'scripts' directory not found!${NC}"
     exit 1
 fi
 
 # Run all executable .sh files in the scripts directory
 for script in scripts/*.sh; do
     if [ -x "$script" ]; then
-        echo "▶ Running $script..."
+        echo -e "\n${CYAN}▶ Running $(basename "$script")...${NC}"
         "$script"
-        echo "✔ Finished $script"
-        echo "-----------------------------"
+        echo -e "${GREEN}✔ Finished $(basename "$script")${NC}"
+        echo -e "${BLUE}─────────────────────────────────────────${NC}"
     else
-        echo "⏭ Skipping $script (not executable)"
+        echo -e "${YELLOW}⏭ Skipping $(basename "$script") (not executable)${NC}"
     fi
 done
 
-echo "============================="
-echo "  All scripts completed!"
-echo "============================="
+echo -e "\n${GREEN}${BOLD}"
+echo "🎉 ========================================= 🎉"
+echo "       All dotfiles setup completed!          "
+echo "🎉 ========================================= 🎉"
+echo -e "${NC}"

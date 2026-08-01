@@ -1,15 +1,21 @@
 #!/bin/bash
 
-# Ensure vnstat package is installed
+CYAN='\033[0;36m'
+GREEN='\033[0;32m'
+PURPLE='\033[0;35m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+echo -e "${PURPLE}📊 Configuring vnstat data tracking service...${NC}"
+
 if ! command -v vnstat &>/dev/null; then
-    echo "Installing vnstat network traffic monitor..."
-    sudo pacman -S --noconfirm vnstat
+    echo -e "${BLUE}📦 Installing vnstat network traffic monitor...${NC}"
+    sudo pacman -S --needed --noconfirm vnstat
 else
-    echo "✔ vnstat is already installed."
+    echo -e "${GREEN}✔ vnstat is already installed.${NC}"
 fi
 
-# Enable and start the vnstat background service
-echo "Enabling and starting vnstat background service..."
+echo -e "${BLUE}⚡ Enabling and starting vnstat background service...${NC}"
 sudo systemctl enable --now vnstat
 
-echo "✔ vnstat daemon enabled and active."
+echo -e "${GREEN}🎉 vnstat daemon enabled and active.${NC}"

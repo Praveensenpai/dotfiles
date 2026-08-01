@@ -1,33 +1,40 @@
 #!/bin/bash
 
-# Ensure trash-cli package is installed
+CYAN='\033[0;36m'
+GREEN='\033[0;32m'
+PURPLE='\033[0;35m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+BASHRC="$HOME/.bashrc"
+ZSHRC="$HOME/.zshrc"
+
+echo -e "${PURPLE}🗑️  Configuring trash-cli alias...${NC}"
+
 if ! command -v trash-put &>/dev/null; then
-    echo "Installing trash-cli package..."
-    sudo pacman -S --noconfirm trash-cli
+    echo -e "${BLUE}📦 Installing trash-cli package...${NC}"
+    sudo pacman -S --needed --noconfirm trash-cli
 else
-    echo "✔ trash-cli is already installed."
+    echo -e "${GREEN}✔ trash-cli is already installed.${NC}"
 fi
 
-# Add alias rm='trash-put' to ~/.bashrc
-BASHRC="$HOME/.bashrc"
 if [ -f "$BASHRC" ]; then
     if ! grep -q "alias rm='trash-put'" "$BASHRC"; then
-        echo "Adding alias rm='trash-put' to $BASHRC..."
+        echo -e "${BLUE}📝 Adding alias rm='trash-put' to ${BASHRC}...${NC}"
         echo -e "\nalias rm='trash-put'" >> "$BASHRC"
-        echo "✔ Alias added to $BASHRC."
+        echo -e "${GREEN}✔ Alias added to ${BASHRC}.${NC}"
     else
-        echo "✔ Alias rm='trash-put' already exists in $BASHRC."
+        echo -e "${GREEN}✔ Alias rm='trash-put' already exists in ${BASHRC}.${NC}"
     fi
 fi
 
-# Add alias rm='trash-put' to ~/.zshrc if it exists
-ZSHRC="$HOME/.zshrc"
 if [ -f "$ZSHRC" ]; then
     if ! grep -q "alias rm='trash-put'" "$ZSHRC"; then
-        echo "Adding alias rm='trash-put' to $ZSHRC..."
+        echo -e "${BLUE}📝 Adding alias rm='trash-put' to ${ZSHRC}...${NC}"
         echo -e "\nalias rm='trash-put'" >> "$ZSHRC"
-        echo "✔ Alias added to $ZSHRC."
+        echo -e "${GREEN}✔ Alias added to ${ZSHRC}.${NC}"
     else
-        echo "✔ Alias rm='trash-put' already exists in $ZSHRC."
+        echo -e "${GREEN}✔ Alias rm='trash-put' already exists in ${ZSHRC}.${NC}"
     fi
 fi

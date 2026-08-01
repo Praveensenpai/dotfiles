@@ -1,53 +1,86 @@
 #!/bin/bash
 
-# Configuration
+CYAN='\033[0;36m'
+GREEN='\033[0;32m'
+PURPLE='\033[0;35m'
+BLUE='\033[0;34m'
+RED='\033[0;31m'
+NC='\033[0m'
+
 URL="https://github.com/Tama47/Anime4K/releases/download/v4.0.1/GLSL_Mac_Linux_High-end.zip"
 TARGET="$HOME/.config/mpv"
 
-# Check dependencies
-if command -v wget &> /dev/null; then
-    DOWNLOAD_CMD="wget -q --show-progress -O Anime4K.zip"
-elif command -v curl &> /dev/null; then
-    DOWNLOAD_CMD="curl -L --progress-bar -o Anime4K.zip"
-else
-    echo "❌ Error: Neither wget nor curl is installed!"
-    exit 1
-fi
+echo -e "${PURPLE}📺  Installing Anime4K shaders for mpv...${NC}"
 
 if ! command -v unzip &> /dev/null; then
-    echo "❌ Error: unzip is not installed!"
+    echo -e "${RED}❌ Error: unzip is not installed!${NC}"
     exit 1
 fi
 
-echo "➜ Step 1: Ensuring $TARGET exists..."
+echo -e "${BLUE}📂 Ensuring ${TARGET} exists...${NC}"
 mkdir -p "$TARGET"
 
-echo "➜ Step 2: Entering /tmp for a clean workspace..."
-cd /tmp || exit 1
+TMP_DIR=$(mktemp -d)
+TARGET_FILE="$TMP_DIR/Anime4K.zip"
 
-echo "➜ Step 3: Fetching Anime4K shaders..."
-$DOWNLOAD_CMD "$URL"
+echo -e "${BLUE}📦 Downloading Anime4K GLSL package...${NC}"
 
-if [ ! -f Anime4K.zip ]; then
-    echo "❌ Download failed!"
+python3 - "$URL" "$TARGET_FILE" << 'PYEOF'
+import sys, urllib.request, time
+
+url, output_file = sys.argv[1], sys.argv[2]
+
+def format_size(bytes_num):
+    if bytes_num >= 1024**2:
+        return f"{bytes_num / (1024**2):.1f} MB"
+    elif bytes_num >= 1024:
+        return f"{bytes_num / 1024:.0f} KB"
+    return f"{bytes_num} B"
+
+req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+with urllib.request.urlopen(req) as response, open(output_file, 'wb') as out:
+    total_size = int(response.headers.get('Content-Length', 0))
+    downloaded = 0
+    start_time = time.time()
+    last_update = 0
+
+    bar_length = 30
+    color_cyan, color_green, color_dim, color_bold, color_reset = "\033[36m", "\033[32m", "\033[2m", "\033[1m", "\033[0m"
+
+    while True:
+        chunk = response.read(65536)
+        if not chunk:
+            break
+        out.write(chunk)
+        downloaded += len(chunk)
+        now = time.time()
+        if now - last_update > 0.08 or downloaded == total_size:
+            last_update = now
+            elapsed = now - start_time
+            speed = downloaded / elapsed if elapsed > 0 else 0
+            percent = (downloaded / total_size) * 100 if total_size > 0 else 0
+            filled_len = int(bar_length * downloaded // total_size) if total_size > 0 else 0
+            bar = '━' * filled_len + color_dim + '━' * (bar_length - filled_len) + color_reset
+            sys.stdout.write(f"\r  {color_green}⠋{color_reset} [{color_cyan}{bar}{color_reset}] {color_bold}{percent:5.1f}%{color_reset}  ({format_size(downloaded)} / {format_size(total_size)})  {color_cyan}{format_size(speed)}/s{color_reset}    ")
+            sys.stdout.flush()
+
+sys.stdout.write("\n")
+PYEOF
+
+if [ ! -f "$TARGET_FILE" ]; then
+    echo -e "${RED}❌ Download failed!${NC}"
+    rm -rf "$TMP_DIR"
     exit 1
 fi
 
-echo "➜ Step 4: Extracting archive..."
-unzip -o Anime4K.zip > /dev/null
+echo -e "${BLUE}📂 Extracting Anime4K shaders to ${TARGET}...${NC}"
+unzip -o "$TARGET_FILE" -d "$TMP_DIR" > /dev/null
 
-echo "➜ Step 5: Moving shaders folder..."
-mv -v shaders/ "$TARGET/"
+mv "$TMP_DIR"/shaders/ "$TARGET/" 2>/dev/null || true
+mv "$TMP_DIR"/input.conf "$TARGET/" 2>/dev/null || true
+mv "$TMP_DIR"/mpv.conf "$TARGET/" 2>/dev/null || true
 
-echo "➜ Step 6: Moving configuration files..."
-mv -v input.conf "$TARGET/"
-mv -v mpv.conf "$TARGET/"
+sed -i 's|^# glsl-shaders=.*|glsl-shaders="~~/shaders/Anime4K_Clamp_Highlights.glsl:~~/shaders/Anime4K_Upscale_Denoise_CNN_x2_VL.glsl:~~/shaders/Anime4K_AutoDownscalePre_x2.glsl:~~/shaders/Anime4K_AutoDownscalePre_x4.glsl:~~/shaders/Anime4K_Restore_CNN_M.glsl:~~/shaders/Anime4K_Upscale_CNN_x2_M.glsl"|' "$TARGET/mpv.conf" 2>/dev/null || true
 
-echo "➜ Step 6b: Setting Mode C + A as default in mpv.conf..."
-sed -i 's|^# glsl-shaders=.*|glsl-shaders="~~/shaders/Anime4K_Clamp_Highlights.glsl:~~/shaders/Anime4K_Upscale_Denoise_CNN_x2_VL.glsl:~~/shaders/Anime4K_AutoDownscalePre_x2.glsl:~~/shaders/Anime4K_AutoDownscalePre_x4.glsl:~~/shaders/Anime4K_Restore_CNN_M.glsl:~~/shaders/Anime4K_Upscale_CNN_x2_M.glsl"|' "$TARGET/mpv.conf"
-
-
-echo "➜ Step 7: Removing temporary junk..."
-rm -rf Anime4K.zip __MACOSX
-
-echo "➜ Success: Anime4K is ready for mpv."
+rm -rf "$TMP_DIR"
+echo -e "${GREEN}🎉 Anime4K shaders installed and configured for mpv!${NC}"
