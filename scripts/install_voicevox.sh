@@ -15,6 +15,13 @@ echo -e "${PURPLE}🎙️  Installing VOICEVOX...${NC}"
 INSTALL_DIR="$HOME/.local/share/voicevox"
 DESKTOP_DIR="$HOME/.local/share/applications"
 
+# Check if already installed
+if [ "$1" != "--force" ] && [ "$1" != "-f" ] && [ -f "$INSTALL_DIR/voicevox" ]; then
+    echo -e "${GREEN}✔ VOICEVOX is already installed at ${INSTALL_DIR}${NC}"
+    echo -e "${CYAN}ℹ️  Use --force to reinstall/update.${NC}"
+    exit 0
+fi
+
 # Remove legacy/duplicate desktop entries if existing
 rm -f "$DESKTOP_DIR/voicebox.desktop"
 
