@@ -9,11 +9,15 @@ RED="\033[31m"
 MAGENTA="\033[35m"
 RESET="\033[0m"
 
-# Helper to format size
+# Helper to format size (uses sudo if path requires root)
 get_dir_size() {
     local path="$1"
     if [ -d "$path" ]; then
-        du -sh "$path" 2>/dev/null | cut -f1
+        if [ -w "$path" ]; then
+            du -sh "$path" 2>/dev/null | cut -f1
+        else
+            sudo du -sh "$path" 2>/dev/null | cut -f1
+        fi
     else
         echo "0B"
     fi
@@ -110,12 +114,9 @@ echo -e "${CYAN}${BOLD}▶ Starting selected cleanup...${RESET}"
 echo "-----------------------------------------"
 
 if [ "$SEL_1" -eq 1 ]; then
-    echo -e "🧹 Cleaning package cache..."
-    if command -v yay &>/dev/null; then
-        yay -Sc --noconfirm 2>/dev/null || true
-    elif command -v pacman &>/dev/null; then
-        sudo pacman -Sc --noconfirm 2>/dev/null || true
-    fi
+    echo -e "🧹 Cleaning Pacman & Yay package caches..."
+    sudo pacman -Scc --noconfirm 2>/dev/null || sudo rm -rf /var/cache/pacman/pkg/* 2>/dev/null || true
+    rm -rf "$HOME/.cache/yay/"* 2>/dev/null || true
 fi
 
 if [ "$SEL_2" -eq 1 ]; then
