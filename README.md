@@ -19,6 +19,9 @@ dotfiles/
 ├── install.sh                          # The magic master script ✨
 ├── remote-install.sh                   # The one-liner magic script 🪄
 └── scripts/
+    ├── agy-account                     # Multi-account switcher for Antigravity AI 👤
+    ├── agy-ls                          # Interactive fzf session picker for Antigravity AI 🔍
+    ├── clean_system_cache.sh           # Interactive menu to clean pacman cache, logs, & trash 🧹
     ├── disable_bluetooth.sh            # No more annoying bluetooth on boot! 📶
     ├── install_anime4k.sh              # Makes videos look super pretty! 📺
     ├── install_antigravity_cli.sh      # Installs Antigravity CLI via official curl script 🚀
@@ -39,12 +42,21 @@ dotfiles/
     ├── set_waybar_style.sh             # Deploys Waybar style.css theme 🎨
     ├── set_waybar_tray_expander.sh     # Dynamic tray expander icon helper 🪶
     ├── set_waybar_wifi_colors.sh       # State colors for Wi-Fi indicator 󰤨
+    ├── setup_agy_account.sh            # Deploys agy-account binary & sets up PATH/alias 👤
+    ├── setup_agy_ls.sh                 # Deploys agy-ls binary & sets up PATH/alias 🔍
+    ├── setup_blesh.sh                  # Configures ble.sh for Bash live auto-suggestions 🎨
+    ├── setup_cli_tools.sh              # Installs eza & bat for modern terminal icons & cat 📦
     ├── setup_docker.sh                 # Enables docker.service/socket & adds user to docker group 🐳
     ├── setup_editor.sh                 # Sets EDITOR & VISUAL to neovim in shell configs ✏️
+    ├── setup_fzf_keybinds.sh           # Configures fzf interactive fuzzy search shortcuts 🔍
     ├── setup_git_config.sh             # Configures global Git name/email with overwrite prompt ⚙️
     ├── setup_github_ssh.sh             # Generates Ed25519 SSH key & guides GitHub key setup 🔑
+    ├── setup_immersionpod.sh           # Configures MPD & ImmersionPod for audio language immersion 🎧
+    ├── setup_tmux_resurrect.sh         # Configures TPM & tmux-resurrect auto-restore daemon 📟
     ├── setup_trash_cli_alias.sh        # Replaces rm with safe trash-cli (trash-put) 🗑️
-    └── setup_vnstat_service.sh         # Installs & enables vnstat data tracking daemon 📊
+    ├── setup_ufw.sh                    # Configures UFW firewall defaults & enables service 🛡️
+    ├── setup_vnstat_service.sh         # Installs & enables vnstat data tracking daemon 📊
+    └── setup_zoxide.sh                 # Configures zoxide smart directory navigation 🚀
 ```
 
 <br>
