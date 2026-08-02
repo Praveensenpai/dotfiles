@@ -105,7 +105,7 @@ cd ~/dotfiles
 | `install_antigravity_cli.sh` | Installs Antigravity CLI via `https://antigravity.google/cli/install.sh`. |
 | `install_essential_apps.sh` | Installs essential software (`mpv`, `anki`, `qbittorrent`, `wget`, `neovim`, `firefox`, `yazi`, `zoxide`, `google-chrome`). |
 | `install_uv.sh` | Installs `uv` Python package manager via the official Astral installer. Skips if already installed. |
-| `install_voicevox.sh` | Fetches latest VOICEVOX release from GitHub, extracts to `~/.local/share/voicebox`, and installs desktop entry. |
+| `install_voicevox.sh` | Fetches and installs VOICEVOX Japanese TTS engine via [`Praveensenpai/voicevox-linux-installer`](https://github.com/Praveensenpai/voicevox-linux-installer). |
 | `install_wallpapers.sh` | Deploys custom wallpapers from `dotfiles/wallpapers/` to active Omarchy theme background directory. |
 | `remove_omarchy_preinstalls.sh` | Purges default DHH/Omarchy packages (Chromium, LocalSend, Spotify, 1Password, Obsidian, Typora, etc.), web apps, and NPX stubs. |
 | `set_alacritty_font_size.sh` | Sets Alacritty terminal font size to 10. |
@@ -131,8 +131,8 @@ cd ~/dotfiles
 | `setup_ufw.sh` | Configures UFW with sensible defaults (deny incoming, allow outgoing, allow SSH) and enables it. |
 | `setup_vnstat_service.sh` | Installs `vnstat` network traffic monitor and enables `vnstat.service` systemd daemon. |
 | `setup_zoxide.sh` | Configures `zoxide` smart directory navigation (`z` / `cd`). |
-| `setup_immersionpod.sh` | Configures MPD, MPC, and ImmersionPod for audio language immersion (`~/Videos/Anime`). |
-| `setup_tmux_resurrect.sh` | Configures TPM, tmux-resurrect/continuum auto-restore, & systemd user daemon. |
+| `setup_immersionpod.sh` | Configures MPD, MPC, and ImmersionPod via [`Praveensenpai/immersionpod`](https://github.com/Praveensenpai/immersionpod). |
+| `setup_tmux_resurrect.sh` | Configures TPM, tmux-resurrect/continuum, & systemd user daemon via [`Praveensenpai/tmux-resurrect-systemd`](https://github.com/Praveensenpai/tmux-resurrect-systemd). |
 | `setup_agym.sh` | Installs `agym` from GitHub (`Praveensenpai/agym`) & configures shell environment. |
 
 <br>
