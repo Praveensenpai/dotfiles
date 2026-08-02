@@ -84,8 +84,8 @@ cat << 'EOF' > "$WAYBAR_CONFIG"
   "network": {
     "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
     "format": "{icon}",
-    "format-wifi": "{icon}",
-    "format-ethernet": "󰀂",
+    "format-wifi": "{icon}  <span color='#74c7ec'>󰇚</span> {bandwidthDownBytes}  <span color='#b4befe'>󰕒</span> {bandwidthUpBytes}",
+    "format-ethernet": "󰀂  <span color='#74c7ec'>󰇚</span> {bandwidthDownBytes}  <span color='#b4befe'>󰕒</span> {bandwidthUpBytes}",
     "format-disconnected": "󰤮",
     "tooltip-format-wifi": "{essid} ({frequency} GHz)",
     "tooltip-format-ethernet": "Connected",
