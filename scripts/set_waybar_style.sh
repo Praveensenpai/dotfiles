@@ -103,16 +103,19 @@ cat << 'EOF' > "$WAYBAR_STYLE"
   color: #565f89;
 }
 
-#network {
+#network,
+#custom-network {
   margin-right: 13px;
   color: #a9e790;
 }
 
-#network.disconnected {
+#network.disconnected,
+#custom-network.disconnected {
   color: #f5a97f;
 }
 
-#network.disabled {
+#network.disabled,
+#custom-network.disabled {
   color: #565f89;
 }
 
