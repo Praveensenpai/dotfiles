@@ -133,7 +133,7 @@ cd ~/dotfiles
 | `setup_zoxide.sh` | Configures `zoxide` smart directory navigation (`z` / `cd`). |
 | `setup_immersionpod.sh` | Configures MPD, MPC, and ImmersionPod for audio language immersion (`~/Videos/Anime`). |
 | `setup_tmux_resurrect.sh` | Configures TPM, tmux-resurrect/continuum auto-restore, & systemd user daemon. |
-| `setup_agym.sh` | Installs unified Antigravity CLI manager (`agym`) & sets alias. |
+| `setup_agym.sh` | Installs `agym` from GitHub (`Praveensenpai/agym`) & configures shell environment. |
 
 <br>
 
