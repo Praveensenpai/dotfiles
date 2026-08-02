@@ -19,8 +19,6 @@ dotfiles/
 ├── install.sh                          # The magic master script ✨
 ├── remote-install.sh                   # The one-liner magic script 🪄
 └── scripts/
-    ├── agym                            # Unified Antigravity CLI session & account manager 🚀
-    ├── clean_system_cache.sh           # Interactive menu to clean pacman cache, logs, & trash 🧹
     ├── disable_bluetooth.sh            # No more annoying bluetooth on boot! 📶
     ├── install_anime4k.sh              # Makes videos look super pretty! 📺
     ├── install_antigravity_cli.sh      # Installs Antigravity CLI via official curl script 🚀
@@ -42,6 +40,7 @@ dotfiles/
     ├── set_waybar_tray_expander.sh     # Dynamic tray expander icon helper 🪶
     ├── set_waybar_wifi_colors.sh       # State colors for Wi-Fi indicator 󰤨
     ├── setup_agym.sh                   # Deploys agym binary & sets up PATH/alias 👤
+    ├── setup_arch_cleaner.sh           # Installs arch-cleaner package, log, & trash cleaner 🧹
     ├── setup_blesh.sh                  # Configures ble.sh for Bash live auto-suggestions 🎨
     ├── setup_cli_tools.sh              # Installs eza & bat for modern terminal icons & cat 📦
     ├── setup_docker.sh                 # Enables docker.service/socket & adds user to docker group 🐳
@@ -75,10 +74,10 @@ curl -LsSf -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/Pravee
 
 ### 🧹 Standalone Interactive System Cleanup (No cloning required)
 
-Run the interactive system cleanup directly without keeping or cloning dotfiles:
+Run the interactive system cleanup directly via [`Praveensenpai/arch-cleaner`](https://github.com/Praveensenpai/arch-cleaner):
 
 ```bash
-curl -LsSf -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/Praveensenpai/dotfiles/main/scripts/clean_system_cache.sh | bash
+curl -LsSf -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/Praveensenpai/arch-cleaner/main/install.sh | bash
 ```
 
 <br>
@@ -99,7 +98,7 @@ cd ~/dotfiles
 
 | Script | What it does (*´▽`*) |
 | :--- | :--- |
-| `clean_system_cache.sh` | Cleans Arch package cache, systemd journal logs, and trash. |
+| `setup_arch_cleaner.sh` | Installs `arch-cleaner` via [`Praveensenpai/arch-cleaner`](https://github.com/Praveensenpai/arch-cleaner) to clean package cache, journal logs, and trash. |
 | `disable_bluetooth.sh` | Disables bluetooth auto-power on boot. |
 | `install_anime4k.sh` | Downloads and configures Anime4K GLSL shaders for `mpv` via [`Praveensenpai/anime4k-mpv-installer`](https://github.com/Praveensenpai/anime4k-mpv-installer). |
 | `install_antigravity_cli.sh` | Installs Antigravity CLI via `https://antigravity.google/cli/install.sh`. |

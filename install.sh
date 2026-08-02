@@ -35,8 +35,8 @@ chmod +x scripts/*.sh 2>/dev/null || true
 
 # Run all executable .sh files in the scripts directory
 for script in scripts/*.sh; do
-    # Skip clean_system_cache.sh during initial installation loop
-    if [ "$(basename "$script")" = "clean_system_cache.sh" ]; then
+    # Skip setup_arch_cleaner.sh during initial installation loop
+    if [ "$(basename "$script")" = "setup_arch_cleaner.sh" ]; then
         continue
     fi
 
@@ -62,5 +62,5 @@ echo -e "${NC}"
 
 echo -e "${PURPLE}${BOLD}💡 System Maintenance Tip:${NC}"
 echo -e "${CYAN}Clean package caches, system logs, & trash anytime with:${NC}"
-echo -e "  ${YELLOW}~/dotfiles/scripts/clean_system_cache.sh${NC}"
+echo -e "  ${YELLOW}arch-cleaner${NC}"
 echo ""
