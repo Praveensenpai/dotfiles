@@ -48,7 +48,8 @@ dotfiles/
     ├── setup_fzf_keybinds.sh           # Configures fzf interactive fuzzy search shortcuts 🔍
     ├── setup_git_config.sh             # Configures global Git name/email with overwrite prompt ⚙️
     ├── setup_github_ssh.sh             # Generates Ed25519 SSH key & guides GitHub key setup 🔑
-    ├── setup_immersionpod.sh           # Configures MPD & ImmersionPod for audio language immersion 🎧
+    ├── setup_otopod.sh                 # Installs otopod audio condenser for anime immersion 🎧
+    ├── setup_subsink.sh                # Installs subsink automatic Japanese subtitle syncer ⛩️
     ├── setup_tmux_resurrect.sh         # Configures TPM & tmux-resurrect auto-restore daemon 📟
     ├── setup_trash_cli_alias.sh        # Replaces rm with safe trash-cli (trash-put) 🗑️
     ├── setup_ufw.sh                    # Configures UFW firewall defaults & enables service 🛡️
@@ -130,7 +131,8 @@ cd ~/dotfiles
 | `setup_ufw.sh` | Configures UFW with sensible defaults (deny incoming, allow outgoing, allow SSH) and enables it. |
 | `setup_vnstat_service.sh` | Installs `vnstat` network traffic monitor and enables `vnstat.service` systemd daemon. |
 | `setup_zoxide.sh` | Configures `zoxide` smart directory navigation (`z` / `cd`). |
-| `setup_immersionpod.sh` | Configures MPD, MPC, and ImmersionPod via [`Praveensenpai/immersionpod`](https://github.com/Praveensenpai/immersionpod). |
+| `setup_otopod.sh` | Installs `otopod` anime audio condenser via [`Praveensenpai/otopod`](https://github.com/Praveensenpai/otopod). |
+| `setup_subsink.sh` | Installs `subsink` Japanese subtitle synchronizer via [`Praveensenpai/subsink`](https://github.com/Praveensenpai/subsink). |
 | `setup_tmux_resurrect.sh` | Configures TPM, tmux-resurrect/continuum, & systemd user daemon via [`Praveensenpai/tmux-resurrect-systemd`](https://github.com/Praveensenpai/tmux-resurrect-systemd). |
 | `setup_agym.sh` | Installs `agym` from GitHub (`Praveensenpai/agym`) & configures shell environment. |
 
@@ -144,7 +146,8 @@ Here are special standalone tools included in this repository to enhance your te
 | :--- | :--- | :--- |
 | 🚀 **Antigravity Manager** | `agym` | Unified CLI tool combining session picker (`agym`), account switcher (`agym accounts`), and quota stats (`agym stats`). |
 | 🧹 **System Cleaner** | `arch-cleaner` | Interactive Arch Linux package cache, systemd journal log, and trash cleanup utility (`Praveensenpai/arch-cleaner`). |
-| 🎧 **ImmersionPod** | `impd` | Audio language immersion tool integrated with `mpd` & `mpc` targeting `~/Videos/Anime`. |
+| 🎧 **otopod** | `otopod` | Anime audio condenser tool for language immersion ([`Praveensenpai/otopod`](https://github.com/Praveensenpai/otopod)). |
+| ⛩️ **subsink** | `subsink` | Automatic Japanese anime subtitle synchronizer ([`Praveensenpai/subsink`](https://github.com/Praveensenpai/subsink)). |
 
 <br>
 
