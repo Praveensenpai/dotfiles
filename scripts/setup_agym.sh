@@ -25,27 +25,21 @@ chmod +x "$AGYM_SRC"
 cp "$AGYM_SRC" "$BIN_DIR/agym"
 chmod +x "$BIN_DIR/agym"
 
-# Legacy wrappers for agy-ls and agy-account
-cp "$SCRIPT_DIR/agy-ls" "$BIN_DIR/agy-ls"
-cp "$SCRIPT_DIR/agy-account" "$BIN_DIR/agy-account"
-chmod +x "$BIN_DIR/agy-ls" "$BIN_DIR/agy-account"
-
-echo -e "${GREEN}✔ Installed agym, agy-ls, & agy-account to ${BIN_DIR}/.${NC}"
+echo -e "${GREEN}✔ Installed agym to ${BIN_DIR}/.${NC}"
 
 # Shell alias setup
 SHELL_CONFIGS=("$HOME/.bashrc" "$HOME/.zshrc")
 ALIAS_LINE="alias agym='$HOME/.local/bin/agym'"
-ALIAS_LS="alias agy-ls='$HOME/.local/bin/agym sessions'"
-ALIAS_ACC="alias agy-account='$HOME/.local/bin/agym accounts'"
 
 for config in "${SHELL_CONFIGS[@]}"; do
     if [ -f "$config" ]; then
+        # Clean old legacy aliases if present
+        sed -i '/alias agy-ls=/d' "$config" 2>/dev/null
+        sed -i '/alias agy-account=/d' "$config" 2>/dev/null
         if ! grep -q "alias agym=" "$config" 2>/dev/null; then
             echo "" >> "$config"
             echo "$ALIAS_LINE" >> "$config"
-            echo "$ALIAS_LS" >> "$config"
-            echo "$ALIAS_ACC" >> "$config"
-            echo -e "${BLUE}📝 Added agym aliases to $config${NC}"
+            echo -e "${BLUE}📝 Added agym alias to $config${NC}"
         fi
     fi
 done

@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-# Legacy wrapper redirecting to agym accounts
-exec agym accounts "$@"

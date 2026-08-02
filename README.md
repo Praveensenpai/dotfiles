@@ -19,8 +19,7 @@ dotfiles/
 ├── install.sh                          # The magic master script ✨
 ├── remote-install.sh                   # The one-liner magic script 🪄
 └── scripts/
-    ├── agy-account                     # Multi-account switcher for Antigravity AI 👤
-    ├── agy-ls                          # Interactive fzf session picker for Antigravity AI 🔍
+    ├── agym                            # Unified Antigravity CLI session & account manager 🚀
     ├── clean_system_cache.sh           # Interactive menu to clean pacman cache, logs, & trash 🧹
     ├── disable_bluetooth.sh            # No more annoying bluetooth on boot! 📶
     ├── install_anime4k.sh              # Makes videos look super pretty! 📺
@@ -42,8 +41,7 @@ dotfiles/
     ├── set_waybar_style.sh             # Deploys Waybar style.css theme 🎨
     ├── set_waybar_tray_expander.sh     # Dynamic tray expander icon helper 🪶
     ├── set_waybar_wifi_colors.sh       # State colors for Wi-Fi indicator 󰤨
-    ├── setup_agy_account.sh            # Deploys agy-account binary & sets up PATH/alias 👤
-    ├── setup_agy_ls.sh                 # Deploys agy-ls binary & sets up PATH/alias 🔍
+    ├── setup_agym.sh                   # Deploys agym binary & sets up PATH/alias 👤
     ├── setup_blesh.sh                  # Configures ble.sh for Bash live auto-suggestions 🎨
     ├── setup_cli_tools.sh              # Installs eza & bat for modern terminal icons & cat 📦
     ├── setup_docker.sh                 # Enables docker.service/socket & adds user to docker group 🐳
@@ -135,8 +133,7 @@ cd ~/dotfiles
 | `setup_zoxide.sh` | Configures `zoxide` smart directory navigation (`z` / `cd`). |
 | `setup_immersionpod.sh` | Configures MPD, MPC, and ImmersionPod for audio language immersion (`~/Videos/Anime`). |
 | `setup_tmux_resurrect.sh` | Configures TPM, tmux-resurrect/continuum auto-restore, & systemd user daemon. |
-| `setup_agy_ls.sh` | Installs interactive Antigravity CLI session picker (`agy-ls`) & sets alias. |
-| `setup_agy_account.sh` | Installs multi-account switcher (`agy-account`) for Antigravity AI & sets alias. |
+| `setup_agym.sh` | Installs unified Antigravity CLI manager (`agym`) & sets alias. |
 
 <br>
 
@@ -147,8 +144,6 @@ Here are special standalone tools included in this repository to enhance your te
 | Tool | Command | Description |
 | :--- | :--- | :--- |
 | 🚀 **Antigravity Manager** | `agym` | Unified CLI tool combining session picker (`agym`), account switcher (`agym accounts`), and quota stats (`agym stats`). |
-| 🔍 **Session Picker (Legacy)** | `agy-ls` | Interactive `fzf` menu to search and instantly resume past Antigravity AI sessions (alias to `agym sessions`). |
-| 👤 **Account Switcher (Legacy)** | `agy-account` | Interactively list, save, and switch between multiple Antigravity AI accounts (alias to `agym accounts`). |
 | 🧹 **System Cleaner** | `clean_system_cache.sh` | Interactive menu with live disk size detection to clean package caches, journal logs, & trash. |
 | 🎧 **ImmersionPod** | `impd` | Audio language immersion tool integrated with `mpd` & `mpc` targeting `~/Videos/Anime`. |
 
