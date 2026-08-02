@@ -146,8 +146,9 @@ Here are special standalone tools included in this repository to enhance your te
 
 | Tool | Command | Description |
 | :--- | :--- | :--- |
-| 🔍 **Session Picker** | `agy-ls` | Interactive `fzf` menu to search and instantly resume past Antigravity AI sessions. |
-| 👤 **Account Switcher** | `agy-account` | Interactively list, save, and switch between multiple Antigravity AI accounts. |
+| 🚀 **Antigravity Manager** | `agym` | Unified CLI tool combining session picker (`agym`), account switcher (`agym accounts`), and quota stats (`agym stats`). |
+| 🔍 **Session Picker (Legacy)** | `agy-ls` | Interactive `fzf` menu to search and instantly resume past Antigravity AI sessions (alias to `agym sessions`). |
+| 👤 **Account Switcher (Legacy)** | `agy-account` | Interactively list, save, and switch between multiple Antigravity AI accounts (alias to `agym accounts`). |
 | 🧹 **System Cleaner** | `clean_system_cache.sh` | Interactive menu with live disk size detection to clean package caches, journal logs, & trash. |
 | 🎧 **ImmersionPod** | `impd` | Audio language immersion tool integrated with `mpd` & `mpc` targeting `~/Videos/Anime`. |
 
