@@ -50,6 +50,7 @@ dotfiles/
     ├── setup_github_ssh.sh             # Generates Ed25519 SSH key & guides GitHub key setup 🔑
     ├── setup_otopod.sh                 # Installs otopod audio condenser for anime immersion 🎧
     ├── setup_subsink.sh                # Installs subsink automatic Japanese subtitle syncer ⛩️
+    ├── setup_kotonoha.sh               # Installs kotonoha Japanese i+1 sentence miner 🌸
     ├── setup_tmux_resurrect.sh         # Configures TPM & tmux-resurrect auto-restore daemon 📟
     ├── setup_trash_cli_alias.sh        # Replaces rm with safe trash-cli (trash-put) 🗑️
     ├── setup_ufw.sh                    # Configures UFW firewall defaults & enables service 🛡️
@@ -133,6 +134,7 @@ cd ~/dotfiles
 | `setup_zoxide.sh` | Configures `zoxide` smart directory navigation (`z` / `cd`). |
 | `setup_otopod.sh` | Installs `otopod` anime audio condenser via [`Praveensenpai/otopod`](https://github.com/Praveensenpai/otopod). |
 | `setup_subsink.sh` | Installs `subsink` Japanese subtitle synchronizer via [`Praveensenpai/subsink`](https://github.com/Praveensenpai/subsink). |
+| `setup_kotonoha.sh` | Installs `kotonoha` Japanese $i+1$ sentence miner via [`Praveensenpai/kotonoha`](https://github.com/Praveensenpai/kotonoha). |
 | `setup_tmux_resurrect.sh` | Configures TPM, tmux-resurrect/continuum, & systemd user daemon via [`Praveensenpai/tmux-resurrect-systemd`](https://github.com/Praveensenpai/tmux-resurrect-systemd). |
 | `setup_agym.sh` | Installs `agym` from GitHub (`Praveensenpai/agym`) & configures shell environment. |
 
@@ -148,6 +150,7 @@ Here are special standalone tools included in this repository to enhance your te
 | 🧹 **System Cleaner** | `arch-cleaner` | Interactive Arch Linux package cache, systemd journal log, and trash cleanup utility (`Praveensenpai/arch-cleaner`). |
 | 🎧 **otopod** | `otopod` | Anime audio condenser tool for language immersion ([`Praveensenpai/otopod`](https://github.com/Praveensenpai/otopod)). |
 | ⛩️ **subsink** | `subsink` | Automatic Japanese anime subtitle synchronizer ([`Praveensenpai/subsink`](https://github.com/Praveensenpai/subsink)). |
+| 🌸 **kotonoha** | `kotonoha` | Blazing-fast CLI Japanese $i+1$ sentence miner ([`Praveensenpai/kotonoha`](https://github.com/Praveensenpai/kotonoha)). |
 
 <br>
 
