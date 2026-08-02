@@ -65,25 +65,21 @@ cat << 'EOF' > "$WAYBAR_STYLE"
   color: #ff9eaf; /* Soft Red (> 90%) */
 }
 
-/* Charging battery colors (soft tinted pastel Red, Yellow, Green, Purple) */
-#battery.charging.critical,
-#battery.charging.warning,
-#battery.charging.low {
-  color: #ff9eaf; /* Low: Soft Tinted Red (0-30%) */
+/* Battery state colors (always active: discharging, charging, full) */
+#battery.critical,
+#battery.warning,
+#battery.low {
+  color: #ff9eaf; /* Low: Soft Red (0-30%) */
 }
 
-#battery.charging.medium {
-  color: #f3d38c; /* Medium: Soft Tinted Yellow (31-70%) */
+#battery.medium {
+  color: #f3d38c; /* Medium: Soft Yellow (31-70%) */
 }
 
-#battery.charging.high {
-  color: #a9e790; /* High: Soft Tinted Green (71-95%) */
-}
-
-#battery.charging.full,
-#battery.plugged,
-#battery.full {
-  color: #bb9af7; /* Full: Soft Lavender / Purple (100%) */
+#battery.high,
+#battery.full,
+#battery.plugged {
+  color: #a9e790; /* High / Full (100%): Soft Green (71-100%) */
 }
 
 #tray {
