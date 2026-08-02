@@ -107,7 +107,7 @@ cd ~/dotfiles
 | `install_uv.sh` | Installs `uv` Python package manager via the official Astral installer. Skips if already installed. |
 | `install_voicevox.sh` | Fetches and installs VOICEVOX Japanese TTS engine via [`Praveensenpai/voicevox-linux-installer`](https://github.com/Praveensenpai/voicevox-linux-installer). |
 | `install_wallpapers.sh` | Deploys custom wallpapers from `dotfiles/wallpapers/` to active Omarchy theme background directory. |
-| `remove_omarchy_preinstalls.sh` | Purges default DHH/Omarchy packages (Chromium, LocalSend, Spotify, 1Password, Obsidian, Typora, etc.), web apps, and NPX stubs. |
+| `remove_omarchy_preinstalls.sh` | Purges default DHH/Omarchy bloatware via [`Praveensenpai/omarchy-debloat`](https://github.com/Praveensenpai/omarchy-debloat). |
 | `set_alacritty_font_size.sh` | Sets Alacritty terminal font size to 10. |
 | `set_hyprland_gaps_and_borders.sh` | Sets Hyprland inner/outer gaps to 0 and configures active/inactive border colors. |
 | `set_hyprland_monitor_scale.sh` | Configures Hyprland monitor resolution and scale to 1.5. |
@@ -120,13 +120,13 @@ cd ~/dotfiles
 | `set_waybar_style.sh` | Configures Waybar base CSS styles. |
 | `set_waybar_tray_expander.sh` | Deploys dynamic tray expander arrow icon helper. |
 | `set_waybar_wifi_colors.sh` | Sets Waybar Wi-Fi colors (connected green, disconnected/disabled grey). |
-| `setup_blesh.sh` | Configures `ble.sh` for Bash live auto-suggestions & syntax highlighting. |
+| `setup_blesh.sh` | Configures `ble.sh` for Bash live auto-suggestions via [`Praveensenpai/blesh-installer`](https://github.com/Praveensenpai/blesh-installer). |
 | `setup_cli_tools.sh` | Installs `eza` and `bat` for modern icons, colors, and syntax-highlighted `cat`. |
 | `setup_docker.sh` | Enables `docker.service` and `docker.socket`, adds current user to `docker` group. Skips gracefully if already configured. |
 | `setup_editor.sh` | Sets `EDITOR=nvim` and `VISUAL=nvim` in `~/.bashrc` and `~/.zshrc` if not already configured. |
 | `setup_fzf_keybinds.sh` | Configures `fzf` interactive fuzzy search shortcuts (`Ctrl+R`, `Ctrl+T`). |
 | `setup_git_config.sh` | Sets global `user.name` and `user.email` defaults, with an overwrite confirmation prompt if credentials exist. |
-| `setup_github_ssh.sh` | Generates Ed25519 SSH key if missing, loads it into `ssh-agent`, and prints a beginner-friendly deployment guide for GitHub. |
+| `setup_github_ssh.sh` | Generates Ed25519 SSH key & setup via [`Praveensenpai/github-ssh-key-setup`](https://github.com/Praveensenpai/github-ssh-key-setup). |
 | `setup_trash_cli_alias.sh` | Installs `trash-cli` and sets `alias rm='trash-put'` in shell configs. |
 | `setup_ufw.sh` | Configures UFW with sensible defaults (deny incoming, allow outgoing, allow SSH) and enables it. |
 | `setup_vnstat_service.sh` | Installs `vnstat` network traffic monitor and enables `vnstat.service` systemd daemon. |
