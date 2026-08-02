@@ -1,138 +1,14 @@
 #!/bin/bash
 
-# Aesthetic Colors & Styling
-BOLD="\033[1m"
-GREEN="\033[32m"
-CYAN="\033[36m"
-YELLOW="\033[33m"
-RED="\033[31m"
-MAGENTA="\033[35m"
-RESET="\033[0m"
+# ANSI Color Tokens
+CYAN='\033[0;36m'
+PURPLE='\033[0;35m'
+NC='\033[0m'
 
-# Helper to format size (uses sudo if path requires root)
-get_dir_size() {
-    local path="$1"
-    if [ -d "$path" ]; then
-        if [ -w "$path" ]; then
-            du -sh "$path" 2>/dev/null | cut -f1
-        else
-            sudo du -sh "$path" 2>/dev/null | cut -f1
-        fi
-    else
-        echo "0B"
-    fi
-}
+echo -e "${PURPLE}🧹 Launching arch-cleaner from GitHub...${NC}\n"
 
-# Calculate current sizes
-PACMAN_SIZE=$(get_dir_size "/var/cache/pacman/pkg")
-YAY_SIZE=$(get_dir_size "$HOME/.cache/yay")
-JOURNAL_SIZE=$(journalctl --disk-usage 2>/dev/null | awk '{print $(NF-1), $NF}' || echo "0B")
-TRASH_SIZE=$(get_dir_size "$HOME/.local/share/Trash")
-THUMB_SIZE=$(get_dir_size "$HOME/.cache/thumbnails")
+curl -sSL -H 'Cache-Control: no-cache' "https://raw.githubusercontent.com/Praveensenpai/arch-cleaner/main/install.sh?v=$(date +%s)" | bash
 
-# Initial selections (1 = enabled by default, 0 = disabled)
-SEL_1=1
-SEL_2=1
-SEL_3=1
-SEL_4=0
-
-toggle() {
-    local var="$1"
-    if [ "${!var}" -eq 1 ]; then
-        eval "$var=0"
-    else
-        eval "$var=1"
-    fi
-}
-
-show_menu() {
-    echo -e "${MAGENTA}${BOLD}=========================================${RESET}"
-    echo -e "${CYAN}${BOLD}   🌸 Interactive System Cleanup Utility ✨${RESET}"
-    echo -e "${MAGENTA}${BOLD}=========================================${RESET}"
-    echo ""
-    echo -e "${BOLD}Select items to clean:${RESET}"
-    echo ""
-    
-    if [ "$SEL_1" -eq 1 ]; then 
-        echo -e "  ${GREEN}[✓] 1.${RESET} Pacman & Yay Cache      ${YELLOW}($PACMAN_SIZE pacman / $YAY_SIZE yay)${RESET}"
-    else 
-        echo -e "  ${RED}[ ] 1.${RESET} Pacman & Yay Cache      ${YELLOW}($PACMAN_SIZE pacman / $YAY_SIZE yay)${RESET}"
-    fi
-
-    if [ "$SEL_2" -eq 1 ]; then 
-        echo -e "  ${GREEN}[✓] 2.${RESET} Systemd Journal Logs  ${YELLOW}($JOURNAL_SIZE)${RESET}"
-    else 
-        echo -e "  ${RED}[ ] 2.${RESET} Systemd Journal Logs  ${YELLOW}($JOURNAL_SIZE)${RESET}"
-    fi
-
-    if [ "$SEL_3" -eq 1 ]; then 
-        echo -e "  ${GREEN}[✓] 3.${RESET} Empty User Trash       ${YELLOW}($TRASH_SIZE)${RESET}"
-    else 
-        echo -e "  ${RED}[ ] 3.${RESET} Empty User Trash       ${YELLOW}($TRASH_SIZE)${RESET}"
-    fi
-
-    if [ "$SEL_4" -eq 1 ]; then 
-        echo -e "  ${GREEN}[✓] 4.${RESET} Thumbnail Cache        ${YELLOW}($THUMB_SIZE)${RESET}"
-    else 
-        echo -e "  ${RED}[ ] 4.${RESET} Thumbnail Cache        ${YELLOW}($THUMB_SIZE)${RESET}"
-    fi
-
-    echo ""
-    echo -e "${CYAN}Commands: [1-4] Toggle option | [a] Select all | [c] Clean selected | [q] Quit${RESET}"
-    echo ""
-}
-
-while true; do
-    clear
-    show_menu
-    
-    # Read from /dev/tty if available for remote curl | bash execution
-    if [ -t 0 ] || [ -c /dev/tty ]; then
-        read -r -p "Enter choice [1-4, c, a, q]: " choice < /dev/tty
-    else
-        read -r -p "Enter choice [1-4, c, a, q]: " choice
-    fi
-
-    case "$choice" in
-        1) toggle SEL_1 ;;
-        2) toggle SEL_2 ;;
-        3) toggle SEL_3 ;;
-        4) toggle SEL_4 ;;
-        a|A) SEL_1=1; SEL_2=1; SEL_3=1; SEL_4=1 ;;
-        c|C|"") break ;;
-        q|Q) 
-            echo -e "${YELLOW}Cleanup cancelled.${RESET}"
-            exit 0 
-            ;;
-        *) 
-            ;;
-    esac
-done
-
-echo ""
-echo -e "${CYAN}${BOLD}▶ Starting selected cleanup...${RESET}"
-echo "-----------------------------------------"
-
-if [ "$SEL_1" -eq 1 ]; then
-    echo -e "🧹 Cleaning Pacman & Yay package caches..."
-    sudo rm -rf /var/cache/pacman/pkg/* 2>/dev/null || true
-    rm -rf "$HOME/.cache/yay" 2>/dev/null || true
+if command -v arch-cleaner >/dev/null 2>&1; then
+    exec arch-cleaner "$@"
 fi
-
-if [ "$SEL_2" -eq 1 ]; then
-    echo -e "📜 Vacuuming systemd journal logs (50MB cap)..."
-    sudo journalctl --vacuum-size=50M 2>/dev/null || true
-fi
-
-if [ "$SEL_3" -eq 1 ]; then
-    echo -e "🗑️ Emptying user trash..."
-    rm -rf "$HOME/.local/share/Trash/files/"* "$HOME/.local/share/Trash/info/"* 2>/dev/null || true
-fi
-
-if [ "$SEL_4" -eq 1 ]; then
-    echo -e "🖼️ Clearing thumbnail cache..."
-    rm -rf "$HOME/.cache/thumbnails/"* 2>/dev/null || true
-fi
-
-echo "-----------------------------------------"
-echo -e "${GREEN}${BOLD}✔ Selected cleanup completed successfully! ✨${RESET}"

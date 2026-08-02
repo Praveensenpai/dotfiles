@@ -144,7 +144,7 @@ Here are special standalone tools included in this repository to enhance your te
 | Tool | Command | Description |
 | :--- | :--- | :--- |
 | 🚀 **Antigravity Manager** | `agym` | Unified CLI tool combining session picker (`agym`), account switcher (`agym accounts`), and quota stats (`agym stats`). |
-| 🧹 **System Cleaner** | `clean_system_cache.sh` | Interactive menu with live disk size detection to clean package caches, journal logs, & trash. |
+| 🧹 **System Cleaner** | `arch-cleaner` | Interactive Arch Linux package cache, systemd journal log, and trash cleanup utility (`Praveensenpai/arch-cleaner`). |
 | 🎧 **ImmersionPod** | `impd` | Audio language immersion tool integrated with `mpd` & `mpc` targeting `~/Videos/Anime`. |
 
 <br>
