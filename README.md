@@ -52,7 +52,7 @@ dotfiles/
     ├── setup_subsink.sh                # Installs subsink automatic Japanese subtitle syncer ⛩️
     ├── setup_kotonoha.sh               # Installs kotonoha Japanese i+1 sentence miner 🌸
     ├── setup_tmux_resurrect.sh         # Configures TPM & tmux-resurrect auto-restore daemon 📟
-    ├── setup_trash_cli_alias.sh        # Replaces rm with safe trash-cli (trash-put) 🗑️
+    ├── setup_toss.sh                   # Installs toss (Rust TUI trash manager) 🗑️
     ├── setup_ufw.sh                    # Configures UFW firewall defaults & enables service 🛡️
     ├── setup_vnstat_service.sh         # Installs & enables vnstat data tracking daemon 📊
     └── setup_zoxide.sh                 # Configures zoxide smart directory navigation 🚀
@@ -128,7 +128,7 @@ cd ~/dotfiles
 | `setup_fzf_keybinds.sh` | Configures `fzf` interactive fuzzy search shortcuts (`Ctrl+R`, `Ctrl+T`). |
 | `setup_git_config.sh` | Sets global `user.name` and `user.email` defaults, with an overwrite confirmation prompt if credentials exist. |
 | `setup_github_ssh.sh` | Generates Ed25519 SSH key & setup via [`Praveensenpai/github-ssh-key-setup`](https://github.com/Praveensenpai/github-ssh-key-setup). |
-| `setup_trash_cli_alias.sh` | Installs `trash-cli` and sets `alias rm='trash-put'` in shell configs. |
+| `setup_toss.sh` | Installs `toss` via [`Praveensenpai/toss-rs`](https://github.com/Praveensenpai/toss-rs) and configures shell completions & alias. |
 | `setup_ufw.sh` | Configures UFW with sensible defaults (deny incoming, allow outgoing, allow SSH) and enables it. |
 | `setup_vnstat_service.sh` | Installs `vnstat` network traffic monitor and enables `vnstat.service` systemd daemon. |
 | `setup_zoxide.sh` | Configures `zoxide` smart directory navigation (`z` / `cd`). |
@@ -165,7 +165,7 @@ Modern CLI enhancements integrated into your shell environment:
 | 📂 **`eza`** | Modern `ls` | Color-coded directory listings with file type icons and group-first layout. |
 | 📄 **`bat`** | Modern `cat` | Syntax-highlighted file viewing with automatic line numbers & paging. |
 | 🔍 **`fzf`** | Fuzzy Search | Interactive fuzzy history search (`Ctrl+R`) and file selection (`Ctrl+T`). |
-| 🗑️ **`trash-cli`** | Safe Deletion | Replaces `rm` with `trash-put` to prevent accidental file deletion. |
+| 🗑️ **`toss`** | Safe Deletion | FreeDesktop Rust TUI trash manager ([`Praveensenpai/toss-rs`](https://github.com/Praveensenpai/toss-rs)). |
 | 📊 **`vnstat`** | Traffic Monitor | Background daemon logging hourly, daily, and monthly network bandwidth usage. |
 | 📟 **`tmux`** | Session Resurrect | Terminal multiplexer with auto-save & auto-restore across reboots. |
 
