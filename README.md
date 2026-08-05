@@ -22,6 +22,7 @@ dotfiles/
     ├── disable_bluetooth.sh            # No more annoying bluetooth on boot! 📶
     ├── install_anime4k.sh              # Makes videos look super pretty! 📺
     ├── install_antigravity_cli.sh      # Installs Antigravity CLI via official curl script 🚀
+    ├── install_codex.sh                # Installs OpenAI Codex CLI package 🤖
     ├── install_essential_apps.sh       # Installs mpv, anki, qbittorrent, wget, neovim, firefox, yazi, & google-chrome 📦
     ├── install_uv.sh                   # Installs uv Python package manager via official installer 🐍
     ├── install_voicevox.sh             # Fetches latest VOICEVOX release & creates desktop entry 🎙️
@@ -104,6 +105,7 @@ cd ~/dotfiles
 | `disable_bluetooth.sh` | Disables bluetooth auto-power on boot. |
 | `install_anime4k.sh` | Downloads and configures Anime4K GLSL shaders for `mpv` via [`Praveensenpai/anime4k-mpv-installer`](https://github.com/Praveensenpai/anime4k-mpv-installer). |
 | `install_antigravity_cli.sh` | Installs Antigravity CLI via `https://antigravity.google/cli/install.sh`. |
+| `install_codex.sh` | Installs OpenAI Codex CLI (`openai-codex`) via `pacman` / `yay`. |
 | `install_essential_apps.sh` | Installs essential software (`mpv`, `anki`, `qbittorrent`, `wget`, `neovim`, `firefox`, `yazi`, `zoxide`, `google-chrome`). |
 | `install_uv.sh` | Installs `uv` Python package manager via the official Astral installer. Skips if already installed. |
 | `install_voicevox.sh` | Fetches and installs VOICEVOX Japanese TTS engine via [`Praveensenpai/voicevox-linux-installer`](https://github.com/Praveensenpai/voicevox-linux-installer). |
