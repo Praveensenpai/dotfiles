@@ -29,7 +29,8 @@ dotfiles/
     ├── install_wallpapers.sh           # Deploys custom wallpapers to active Omarchy theme 🖼️
     ├── remove_omarchy_preinstalls.sh   # Purges default Omarchy/DHH packages, web apps, & stubs 🗑️
     ├── set_alacritty_font_size.sh      # Sets Alacritty font size to 10 🔤
-    ├── set_hyprland_gaps_and_borders.sh# Configures window gaps & border colors 🪟
+    ├── set_hyprland_gaps_and_borders.sh # Configures window gaps & border colors 🪟
+    ├── set_hyprland_idle_and_keybinds.sh # Configures Hyprland idle timeouts & keybindings ⌨️
     ├── set_hyprland_monitor_scale.sh   # Sets monitor scale to 1.5 🖥️
     ├── set_mpv_lang.sh                 # Sets default mpv audio & subtitle languages 🔊
     ├── set_waybar_battery_colors.sh    # Dynamic state colors for battery 🔋
@@ -44,11 +45,14 @@ dotfiles/
     ├── setup_arch_cleaner.sh           # Installs arch-cleaner package, log, & trash cleaner 🧹
     ├── setup_blesh.sh                  # Configures ble.sh for Bash live auto-suggestions 🎨
     ├── setup_cli_tools.sh              # Installs eza & bat for modern terminal icons & cat 📦
+    ├── setup_cxm.sh                    # Installs the Codex account manager & switcher 🤖
+    ├── setup_dns.sh                    # Configures persistent systemd-resolved DNS servers 🌐
     ├── setup_docker.sh                 # Enables docker.service/socket & adds user to docker group 🐳
     ├── setup_editor.sh                 # Sets EDITOR & VISUAL to neovim in shell configs ✏️
     ├── setup_fzf_keybinds.sh           # Configures fzf interactive fuzzy search shortcuts 🔍
     ├── setup_git_config.sh             # Configures global Git name/email with overwrite prompt ⚙️
     ├── setup_github_ssh.sh             # Generates Ed25519 SSH key & guides GitHub key setup 🔑
+    ├── setup_mtu_fix.sh                # Applies and persists a NetworkManager MTU override 🔧
     ├── setup_otopod.sh                 # Installs otopod audio condenser for anime immersion 🎧
     ├── setup_subsink.sh                # Installs subsink automatic Japanese subtitle syncer ⛩️
     ├── setup_kotonoha.sh               # Installs kotonoha Japanese i+1 sentence miner 🌸
@@ -113,6 +117,7 @@ cd ~/dotfiles
 | `remove_omarchy_preinstalls.sh` | Purges default DHH/Omarchy bloatware via [`Praveensenpai/omarchy-debloat`](https://github.com/Praveensenpai/omarchy-debloat). |
 | `set_alacritty_font_size.sh` | Sets Alacritty terminal font size to 10. |
 | `set_hyprland_gaps_and_borders.sh` | Sets Hyprland inner/outer gaps to 0 and configures active/inactive border colors. |
+| `set_hyprland_idle_and_keybinds.sh` | Configures Hyprland idle timeouts and applies the configured keybindings. |
 | `set_hyprland_monitor_scale.sh` | Configures Hyprland monitor resolution and scale to 1.5. |
 | `set_mpv_lang.sh` | Sets default audio & subtitle language priorities in `mpv.conf`. |
 | `set_waybar_battery_colors.sh` | Sets battery icon colors for all charge levels (100% green). |
@@ -125,11 +130,14 @@ cd ~/dotfiles
 | `set_waybar_wifi_colors.sh` | Sets Waybar Wi-Fi colors (connected green, disconnected/disabled grey). |
 | `setup_blesh.sh` | Configures `ble.sh` for Bash live auto-suggestions via [`Praveensenpai/blesh-installer`](https://github.com/Praveensenpai/blesh-installer). |
 | `setup_cli_tools.sh` | Installs `eza` and `bat` for modern icons, colors, and syntax-highlighted `cat`. |
+| `setup_cxm.sh` | Installs `cxm`, the Codex account manager and account switcher, from GitHub. |
+| `setup_dns.sh` | Configures persistent Cloudflare, Quad9, and Google DNS servers through `systemd-resolved`. |
 | `setup_docker.sh` | Enables `docker.service` and `docker.socket`, adds current user to `docker` group. Skips gracefully if already configured. |
 | `setup_editor.sh` | Sets `EDITOR=nvim` and `VISUAL=nvim` in `~/.bashrc` and `~/.zshrc` if not already configured. |
 | `setup_fzf_keybinds.sh` | Configures `fzf` interactive fuzzy search shortcuts (`Ctrl+R`, `Ctrl+T`). |
 | `setup_git_config.sh` | Sets global `user.name` and `user.email` defaults, with an overwrite confirmation prompt if credentials exist. |
 | `setup_github_ssh.sh` | Generates Ed25519 SSH key & setup via [`Praveensenpai/github-ssh-key-setup`](https://github.com/Praveensenpai/github-ssh-key-setup). |
+| `setup_mtu_fix.sh` | Applies an MTU immediately and creates a NetworkManager dispatcher hook to reapply it after reconnects. Defaults to `wlan0` and MTU `1400`; accepts `<interface> <mtu>`. |
 | `setup_toss.sh` | Installs `toss` via [`Praveensenpai/toss-rs`](https://github.com/Praveensenpai/toss-rs) and configures shell completions & alias. |
 | `setup_ufw.sh` | Configures UFW with sensible defaults (deny incoming, allow outgoing, allow SSH) and enables it. |
 | `setup_vnstat_service.sh` | Installs `vnstat` network traffic monitor and enables `vnstat.service` systemd daemon. |
