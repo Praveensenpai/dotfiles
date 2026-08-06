@@ -10,4 +10,4 @@ NC='\033[0m'
 
 echo -e "${PURPLE}🚀 Installing agym (Unified Antigravity CLI Manager) from GitHub...${NC}\n"
 
-curl -4 -fsSL -H 'Cache-Control: no-cache' "https://raw.githubusercontent.com/Praveensenpai/agym/main/install.sh?v=$(date +%s)" | bash
+curl -4 -sSL -H "Accept: application/vnd.github.v3.raw" "https://api.github.com/repos/Praveensenpai/agym/contents/install.sh" | bash
