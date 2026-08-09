@@ -53,7 +53,6 @@ dotfiles/
     ├── setup_git_config.sh             # Configures global Git name/email with overwrite prompt ⚙️
     ├── setup_github_ssh.sh             # Generates Ed25519 SSH key & guides GitHub key setup 🔑
     ├── setup_mtu_fix.sh                # Applies and persists a NetworkManager MTU override 🔧
-    ├── setup_omarch_sync.sh            # Installs omarch-sync declarative system auditor & dotfile sync tool ⚡
     ├── setup_otopod.sh                 # Installs otopod audio condenser for anime immersion 🎧
     ├── setup_subsink.sh                # Installs subsink automatic Japanese subtitle syncer ⛩️
     ├── setup_kotonoha.sh               # Installs kotonoha Japanese i+1 sentence miner 🌸
@@ -149,7 +148,6 @@ cd ~/dotfiles
 | `setup_tmux_resurrect.sh` | Configures TPM, tmux-resurrect/continuum, & systemd user daemon via [`Praveensenpai/tmux-resurrect-systemd`](https://github.com/Praveensenpai/tmux-resurrect-systemd). |
 | `setup_agym.sh` | Installs `agym` from GitHub (`Praveensenpai/agym`) & configures shell environment. |
 | `setup_sys_chronicle.sh` | Installs `sys-chronicle` system activity logger & TUI dashboard via [`Praveensenpai/sys-chronicle`](https://github.com/Praveensenpai/sys-chronicle). |
-| `setup_omarch_sync.sh` | Installs `omarch-sync` system auditor & dotfile sync tool via [`Praveensenpai/omarch-sync`](https://github.com/Praveensenpai/omarch-sync). |
 
 <br>
 
@@ -159,7 +157,6 @@ Here are special standalone tools included in this repository to enhance your te
 
 | Tool | Command | Description |
 | :--- | :--- | :--- |
-| ⚡ **OmarchSync Auditor** | `omarch-sync` | Declarative system state & dotfiles auditor with interactive Ratatui TUI dashboard (`Praveensenpai/omarch-sync`). |
 | 🚀 **Antigravity Manager** | `agym` | Unified CLI tool combining session picker (`agym`), account switcher (`agym accounts`), and quota stats (`agym stats`). |
 | ⏱️ **System Activity Chronicle** | `sys-chronicle` | System activity, power state, & resource load logger with AI markdown exporter & Ratatui TUI (`Praveensenpai/sys-chronicle`). |
 | 🧹 **System Cleaner** | `arch-cleaner` | Interactive Arch Linux package cache, systemd journal log, and trash cleanup utility (`Praveensenpai/arch-cleaner`). |
