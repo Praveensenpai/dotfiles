@@ -25,5 +25,5 @@ else
     echo -e "${GREEN}✔ uv installed successfully!${NC}"
 fi
 
-echo -e "${CYAN}ℹ️  Restart your terminal or run: source ~/.bashrc (or ~/.zshrc) to use uv.${NC}"
+echo -e "${CYAN}ℹ️  Restart your terminal or run: source ~/.bashrc to use uv.${NC}"
 echo -e "${GREEN}🎉 uv setup complete!${NC}"
