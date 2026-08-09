@@ -59,7 +59,7 @@ dotfiles/
     ├── setup_tmux_resurrect.sh         # Configures TPM & tmux-resurrect auto-restore daemon 📟
     ├── setup_toss.sh                   # Installs toss (Rust TUI trash manager) 🗑️
     ├── setup_ufw.sh                    # Configures UFW firewall defaults & enables service 🛡️
-    ├── setup_vnstat_service.sh         # Installs & enables vnstat data tracking daemon 📊
+    ├── setup_sys_chronicle.sh         # Installs sys-chronicle system activity logger & TUI dashboard ⏱️
     └── setup_zoxide.sh                 # Configures zoxide smart directory navigation 🚀
 ```
 
@@ -147,6 +147,7 @@ cd ~/dotfiles
 | `setup_kotonoha.sh` | Installs `kotonoha` Japanese $i+1$ sentence miner via [`Praveensenpai/kotonoha`](https://github.com/Praveensenpai/kotonoha). |
 | `setup_tmux_resurrect.sh` | Configures TPM, tmux-resurrect/continuum, & systemd user daemon via [`Praveensenpai/tmux-resurrect-systemd`](https://github.com/Praveensenpai/tmux-resurrect-systemd). |
 | `setup_agym.sh` | Installs `agym` from GitHub (`Praveensenpai/agym`) & configures shell environment. |
+| `setup_sys_chronicle.sh` | Installs `sys-chronicle` system activity logger & TUI dashboard via [`Praveensenpai/sys-chronicle`](https://github.com/Praveensenpai/sys-chronicle). |
 
 <br>
 
@@ -157,6 +158,7 @@ Here are special standalone tools included in this repository to enhance your te
 | Tool | Command | Description |
 | :--- | :--- | :--- |
 | 🚀 **Antigravity Manager** | `agym` | Unified CLI tool combining session picker (`agym`), account switcher (`agym accounts`), and quota stats (`agym stats`). |
+| ⏱️ **System Activity Chronicle** | `sys-chronicle` | System activity, power state, & resource load logger with AI markdown exporter & Ratatui TUI (`Praveensenpai/sys-chronicle`). |
 | 🧹 **System Cleaner** | `arch-cleaner` | Interactive Arch Linux package cache, systemd journal log, and trash cleanup utility (`Praveensenpai/arch-cleaner`). |
 | 🎧 **otopod** | `otopod` | Anime audio condenser tool for language immersion ([`Praveensenpai/otopod`](https://github.com/Praveensenpai/otopod)). |
 | ⛩️ **subsink** | `subsink` | Automatic Japanese anime subtitle synchronizer ([`Praveensenpai/subsink`](https://github.com/Praveensenpai/subsink)). |
