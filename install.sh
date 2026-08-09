@@ -61,6 +61,8 @@ echo "🎉 ========================================= 🎉"
 echo -e "${NC}"
 
 echo -e "${PURPLE}${BOLD}💡 System Maintenance Tips:${NC}"
+echo -e "${CYAN}Audit system state & dotfiles synchronization with:${NC}"
+echo -e "  ${YELLOW}omarch-sync status${NC}"
 echo -e "${CYAN}Clean package caches, system logs, & trash anytime with:${NC}"
 echo -e "  ${YELLOW}arch-cleaner${NC}"
 echo -e "${CYAN}View live system activity, battery state, & resource load with:${NC}"
