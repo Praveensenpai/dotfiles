@@ -105,6 +105,7 @@ cat << 'EOF' > "$WAYBAR_STYLE"
 
 #network,
 #custom-network {
+  min-width: 175px;
   margin-right: 13px;
   color: #a9e790;
 }

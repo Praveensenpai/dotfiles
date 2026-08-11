@@ -82,7 +82,7 @@ cat << 'EOF' > "$WAYBAR_CONFIG"
     "on-click-right": "omarchy-launch-floating-terminal-with-presentation omarchy-tz-select"
   },
   "custom/network": {
-    "exec": "~/.config/waybar/scripts/network-status.py",
+    "exec": "~/.config/waybar/scripts/network-status-bin",
     "return-type": "json",
     "interval": 2,
     "on-click": "omarchy-launch-wifi"
