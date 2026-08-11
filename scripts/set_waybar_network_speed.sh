@@ -17,7 +17,7 @@ if command -v cargo &> /dev/null && [ -d "$RS_DIR" ]; then
     chmod +x "$WAYBAR_SCRIPTS/network-status-bin"
     echo "✔ Rust network-status-bin compiled and installed."
 else
-    echo "⚠ Cargo or Rust source not found, falling back to python script."
+    echo "⚠ Cargo or Rust source not found."
 fi
 
 if [ -f "$WAYBAR_CONFIG" ]; then

@@ -17,22 +17,14 @@ if [ -f "$HYPRIDLE_CONF" ]; then
     sed -i 's/# Start screensaver after.*/# Start screensaver after 30 minutes/' "$HYPRIDLE_CONF"
     sed -i 's/# Lock system after.*/# Lock system after 1 hour (screensaver resets idle timer, so have to just do half + 2s margin)/' "$HYPRIDLE_CONF"
     
-    python3 -c '
-lines = open("'"$HYPRIDLE_CONF"'").readlines()
-new_lines = []
-listener_count = 0
-for line in lines:
-    if "listener {" in line:
-        listener_count += 1
-    if "timeout =" in line:
-        if listener_count == 1:
-            line = "    timeout = 1800\n"
-        elif listener_count == 2:
-            line = "    timeout = 1802\n"
-    new_lines.append(line)
-
-open("'"$HYPRIDLE_CONF"'", "w").writelines(new_lines)
-'
+    awk '
+    /listener \{/ { count++ }
+    /timeout =/ {
+        if (count == 1) { print "    timeout = 1800"; next }
+        if (count == 2) { print "    timeout = 1802"; next }
+    }
+    { print }
+    ' "$HYPRIDLE_CONF" > "$HYPRIDLE_CONF.tmp" && mv "$HYPRIDLE_CONF.tmp" "$HYPRIDLE_CONF"
     echo -e "${GREEN}✔ Updated hypridle timeouts (30m screensaver, 1h lock).${NC}"
 fi
 
