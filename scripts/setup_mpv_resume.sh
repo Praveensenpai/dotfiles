@@ -32,6 +32,21 @@ INNER_EOF
     echo -e "${GREEN}✔ Appended save-position-on-quit setting to mpv.conf.${NC}"
 fi
 
+# Check if input-ipc-server is already set in mpv.conf
+if [ -f "$MPV_CONF" ] && grep -q "^#* *input-ipc-server=" "$MPV_CONF" 2>/dev/null; then
+    echo -e "${BLUE}⚙ Updating input-ipc-server in mpv.conf...${NC}"
+    sed -i "s|^#* *input-ipc-server=.*|input-ipc-server=/tmp/mpvsocket|" "$MPV_CONF"
+    echo -e "${GREEN}✔ IPC socket server setting updated in mpv.conf.${NC}"
+else
+    echo -e "${BLUE}⚙ Appending input-ipc-server setting to mpv.conf...${NC}"
+    cat << 'INNER_EOF' >> "$MPV_CONF"
+
+# Enable IPC socket server for sys-chronicle real-time media telemetry
+input-ipc-server=/tmp/mpvsocket
+INNER_EOF
+    echo -e "${GREEN}✔ Appended input-ipc-server setting to mpv.conf.${NC}"
+fi
+
 # Deploy autoload.lua for auto-loading season episodes into playlist
 if [ -f "$DOTFILES_DIR/mpv/scripts/autoload.lua" ]; then
     echo -e "${BLUE}⚙ Deploying autoload.lua script...${NC}"
