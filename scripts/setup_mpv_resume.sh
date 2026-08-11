@@ -7,11 +7,15 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 MPV_CONF="$HOME/.config/mpv/mpv.conf"
+MPV_SCRIPTS_DIR="$HOME/.config/mpv/scripts"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="$(dirname "$SCRIPT_DIR")"
 
-echo -e "${PURPLE}🎬 Setting up MPV playback position saving...${NC}"
+echo -e "${PURPLE}🎬 Setting up MPV playback position saving & directory auto-playlist...${NC}"
 
-# Ensure mpv config directory exists
+# Ensure mpv config directories exist
 mkdir -p "$(dirname "$MPV_CONF")"
+mkdir -p "$MPV_SCRIPTS_DIR"
 
 # Check if save-position-on-quit is already set in mpv.conf
 if [ -f "$MPV_CONF" ] && grep -q "^#* *save-position-on-quit=" "$MPV_CONF" 2>/dev/null; then
@@ -26,4 +30,17 @@ else
 save-position-on-quit=yes
 INNER_EOF
     echo -e "${GREEN}✔ Appended save-position-on-quit setting to mpv.conf.${NC}"
+fi
+
+# Deploy autoload.lua for auto-loading season episodes into playlist
+if [ -f "$DOTFILES_DIR/mpv/scripts/autoload.lua" ]; then
+    echo -e "${BLUE}⚙ Deploying autoload.lua script...${NC}"
+    cp "$DOTFILES_DIR/mpv/scripts/autoload.lua" "$MPV_SCRIPTS_DIR/autoload.lua"
+    echo -e "${GREEN}✔ Deployed autoload.lua script to $MPV_SCRIPTS_DIR.${NC}"
+elif [ ! -f "$MPV_SCRIPTS_DIR/autoload.lua" ]; then
+    echo -e "${BLUE}📥 Downloading autoload.lua script...${NC}"
+    curl -sSL "https://raw.githubusercontent.com/mpv-player/mpv/master/TOOLS/lua/autoload.lua" -o "$MPV_SCRIPTS_DIR/autoload.lua"
+    echo -e "${GREEN}✔ Downloaded autoload.lua script to $MPV_SCRIPTS_DIR.${NC}"
+else
+    echo -e "${GREEN}✔ autoload.lua script already present.${NC}"
 fi
