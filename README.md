@@ -33,6 +33,7 @@ dotfiles/
     ├── set_hyprland_idle_and_keybinds.sh # Configures Hyprland idle timeouts & keybindings ⌨️
     ├── set_hyprland_monitor_scale.sh   # Sets monitor scale to 1.5 🖥️
     ├── set_mpv_lang.sh                 # Sets default mpv audio & subtitle languages 🔊
+    ├── setup_mpv_resume.sh             # Enables saving playback position on quit in mpv ⏯️
     ├── set_waybar_battery_colors.sh    # Dynamic state colors for battery 🔋
     ├── set_waybar_bluetooth_colors.sh  # State colors for Bluetooth indicator 󰂯
     ├── set_waybar_config.sh            # Deploys Waybar config.jsonc layout ⚙️
@@ -120,6 +121,7 @@ cd ~/dotfiles
 | `set_hyprland_idle_and_keybinds.sh` | Configures Hyprland idle timeouts and applies the configured keybindings. |
 | `set_hyprland_monitor_scale.sh` | Configures Hyprland monitor resolution and scale to 1.5. |
 | `set_mpv_lang.sh` | Sets default audio & subtitle language priorities in `mpv.conf`. |
+| `setup_mpv_resume.sh` | Enables saving playback position on quit in `mpv.conf`. |
 | `set_waybar_battery_colors.sh` | Sets battery icon colors for all charge levels (100% green). |
 | `set_waybar_bluetooth_colors.sh` | Sets Waybar Bluetooth colors (connected green, on orange, off grey). |
 | `set_waybar_config.sh` | Configures Waybar `config.jsonc` modules and layout. |
