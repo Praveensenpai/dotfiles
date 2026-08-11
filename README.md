@@ -27,7 +27,7 @@ dotfiles/
     ├── install_uv.sh                   # Installs uv Python package manager via official installer 🐍
     ├── install_voicevox.sh             # Fetches latest VOICEVOX release & creates desktop entry 🎙️
     ├── install_wallpapers.sh           # Deploys custom wallpapers to active Omarchy theme 🖼️
-    ├── remove_omarchy_preinstalls.sh   # Purges default Omarchy/DHH packages, web apps, & stubs 🗑️
+    ├── remove_omarchy_preinstalls.sh   # Installs & runs omarchy-debloat Rust CLI tool 🗑️
     ├── set_alacritty_font_size.sh      # Sets Alacritty font size to 10 🔤
     ├── set_hyprland_gaps_and_borders.sh # Configures window gaps & border colors 🪟
     ├── set_hyprland_idle_and_keybinds.sh # Configures Hyprland idle timeouts & keybindings ⌨️
@@ -37,7 +37,7 @@ dotfiles/
     ├── set_waybar_bluetooth_colors.sh  # State colors for Bluetooth indicator 󰂯
     ├── set_waybar_config.sh            # Deploys Waybar config.jsonc layout ⚙️
     ├── set_waybar_japanese_clock.sh    # Enables ja_JP locale & Japanese clock 🎌
-    ├── set_waybar_network_speed.sh     # Network download/upload speed indicator & tooltips 🌐
+    ├── set_waybar_network_speed.sh     # Compiles & deploys Rust network speed status binary & vnstat tooltips 🌐
     ├── set_waybar_style.sh             # Deploys Waybar style.css theme 🎨
     ├── set_waybar_tray_expander.sh     # Dynamic tray expander icon helper 🪶
     ├── set_waybar_wifi_colors.sh       # State colors for Wi-Fi indicator 󰤨
