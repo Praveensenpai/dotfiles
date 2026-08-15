@@ -18,7 +18,7 @@ cat << 'EOF' > "$WAYBAR_CONFIG"
   "modules-right": [
     "group/tray-expander",
     "bluetooth",
-    "custom/network",
+    "network",
     "pulseaudio",
     "cpu",
     "battery"
@@ -81,10 +81,11 @@ cat << 'EOF' > "$WAYBAR_CONFIG"
     "tooltip": false,
     "on-click-right": "omarchy-launch-floating-terminal-with-presentation omarchy-tz-select"
   },
-  "custom/network": {
-    "exec": "~/.config/waybar/scripts/network-status-bin",
-    "return-type": "json",
-    "interval": 2,
+  "network": {
+    "format-wifi": "󰤨",
+    "format-ethernet": "󰈀",
+    "format-disconnected": "󰤭",
+    "tooltip-format": "{ifname} via {gwaddr}",
     "on-click": "omarchy-launch-wifi"
   },
   "battery": {

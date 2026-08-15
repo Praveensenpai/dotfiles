@@ -35,8 +35,8 @@ chmod +x scripts/*.sh 2>/dev/null || true
 
 # Run all executable .sh files in the scripts directory
 for script in scripts/*.sh; do
-    # Skip setup_arch_cleaner.sh during initial installation loop
-    if [ "$(basename "$script")" = "setup_arch_cleaner.sh" ]; then
+    # Skip setup_arch_cleaner.sh and set_waybar_network_speed.sh during initial installation loop
+    if [ "$(basename "$script")" = "setup_arch_cleaner.sh" ] || [ "$(basename "$script")" = "set_waybar_network_speed.sh" ]; then
         continue
     fi
 

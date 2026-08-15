@@ -38,7 +38,7 @@ dotfiles/
     ├── set_waybar_bluetooth_colors.sh  # State colors for Bluetooth indicator 󰂯
     ├── set_waybar_config.sh            # Deploys Waybar config.jsonc layout ⚙️
     ├── set_waybar_japanese_clock.sh    # Enables ja_JP locale & Japanese clock 🎌
-    ├── set_waybar_network_speed.sh     # Compiles & deploys Rust network speed status binary & vnstat tooltips 🌐
+    ├── set_waybar_network_speed.sh     # Optional: Compiles & deploys Rust network speed status binary & vnstat tooltips 🌐
     ├── set_waybar_style.sh             # Deploys Waybar style.css theme 🎨
     ├── set_waybar_tray_expander.sh     # Dynamic tray expander icon helper 🪶
     ├── set_waybar_wifi_colors.sh       # State colors for Wi-Fi indicator 󰤨
@@ -126,7 +126,7 @@ cd ~/dotfiles
 | `set_waybar_bluetooth_colors.sh` | Sets Waybar Bluetooth colors (connected green, on orange, off grey). |
 | `set_waybar_config.sh` | Configures Waybar `config.jsonc` modules and layout. |
 | `set_waybar_japanese_clock.sh` | Enables system `ja_JP.UTF-8` locale and sets Japanese date/time in Waybar (`土曜日 01:59`). |
-| `set_waybar_network_speed.sh` | Configures network download/upload bandwidth speed display (`󰇚 46.0kB/s  󰕒 3.9kB/s`) and hover tooltips. |
+| `set_waybar_network_speed.sh` | (Optional) Configures network download/upload bandwidth speed display (`󰇚 46.0kB/s  󰕒 3.9kB/s`) and hover tooltips. |
 | `set_waybar_style.sh` | Configures Waybar base CSS styles. |
 | `set_waybar_tray_expander.sh` | Deploys dynamic tray expander arrow icon helper. |
 | `set_waybar_wifi_colors.sh` | Sets Waybar Wi-Fi colors (connected green, disconnected/disabled grey). |
