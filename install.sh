@@ -40,6 +40,16 @@ for script in scripts/*.sh; do
         continue
     fi
 
+    # Omarchy 4 moved the visible bar from Waybar to the Quickshell-based
+    # Omarchy Shell. Keep the Waybar helpers available for older releases,
+    # but do not apply inactive configuration on current Omarchy installs.
+    if command -v omarchy >/dev/null 2>&1 \
+        && [ "$(omarchy version | cut -d. -f1)" -ge 4 ] \
+        && [[ "$(basename "$script")" == set_waybar_* ]]; then
+        echo -e "${YELLOW}⏭ Skipping $(basename "$script") (Omarchy 4 uses Omarchy Shell).${NC}"
+        continue
+    fi
+
     if [ -x "$script" ]; then
         echo -e "\n${CYAN}▶ Running $(basename "$script")...${NC}"
         if "$script"; then
