@@ -12,13 +12,30 @@ fi
 
 WAYBAR_DIR="$HOME/.config/waybar"
 WAYBAR_CONFIG="$WAYBAR_DIR/config.jsonc"
+HYPR_ENVS_LUA="$HOME/.config/hypr/envs.lua"
+HYPR_MAIN_LUA="$HOME/.config/hypr/hyprland.lua"
+BASHRC="$HOME/.bashrc"
 
-mkdir -p "$WAYBAR_DIR"
+echo "Setting Japanese locale clock module & environment variables..."
 
-echo "Setting Japanese locale clock module in Waybar config..."
+if [ -f "$HYPR_MAIN_LUA" ] && ! grep -q "require(\"hypr.envs\")" "$HYPR_MAIN_LUA"; then
+    sed -i '/require("hypr.monitors")/a require("hypr.envs")' "$HYPR_MAIN_LUA"
+fi
+
+if [ -f "$HYPR_ENVS_LUA" ]; then
+    if ! grep -q 'LC_TIME' "$HYPR_ENVS_LUA"; then
+        echo 'hl.env("LC_TIME", "ja_JP.UTF-8")' >> "$HYPR_ENVS_LUA"
+    fi
+else
+    mkdir -p "$(dirname "$HYPR_ENVS_LUA")"
+    echo 'hl.env("LC_TIME", "ja_JP.UTF-8")' > "$HYPR_ENVS_LUA"
+fi
+
+if ! grep -q 'LC_TIME' "$BASHRC"; then
+    echo 'export LC_TIME="ja_JP.UTF-8"' >> "$BASHRC"
+fi
 
 if [ -f "$WAYBAR_CONFIG" ]; then
-    # Ensure clock module has Japanese locale and format
     sed -i 's/"locale": .*/"locale": "ja_JP.UTF-8",/' "$WAYBAR_CONFIG"
     echo "✔ Japanese clock module configured."
 fi
