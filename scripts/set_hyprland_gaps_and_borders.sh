@@ -6,38 +6,50 @@ PURPLE='\033[0;35m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-HYPR_LOOK_CONF="$HOME/.config/hypr/looknfeel.conf"
-HYPR_LOOK_LUA="$HOME/.config/hypr/looknfeel.lua"
+HYPR_DIR="$HOME/.config/hypr"
+HYPR_LOOK_CONF="$HYPR_DIR/looknfeel.conf"
+HYPR_LOOK_LUA="$HYPR_DIR/looknfeel.lua"
 
 echo -e "${PURPLE}🪟 Configuring Hyprland gaps & border colors...${NC}"
 
-if [ -f "$HYPR_LOOK_LUA" ]; then
-    echo -e "${BLUE}📝 Updating gaps and borders in ${HYPR_LOOK_LUA}...${NC}"
-    
-    if grep -q "gaps_in =" "$HYPR_LOOK_LUA"; then
-        sed -i 's/^[[:space:]]*gaps_in = .*/    gaps_in = 0,/' "$HYPR_LOOK_LUA"
-    fi
-    if grep -q "gaps_out =" "$HYPR_LOOK_LUA"; then
-        sed -i 's/^[[:space:]]*gaps_out = .*/    gaps_out = 0,/' "$HYPR_LOOK_LUA"
-    fi
-    echo -e "${GREEN}✔ Hyprland Lua window gaps & border colors updated.${NC}"
-fi
+mkdir -p "$HYPR_DIR"
 
-if [ -f "$HYPR_LOOK_CONF" ]; then
-    echo -e "${BLUE}📝 Updating gaps and borders in ${HYPR_LOOK_CONF}...${NC}"
-    
-    if grep -q "^[[:space:]]*gaps_in =" "$HYPR_LOOK_CONF"; then
-        sed -i 's/^[[:space:]]*gaps_in = .*/    gaps_in = 0/' "$HYPR_LOOK_CONF"
-    fi
-    if grep -q "^[[:space:]]*gaps_out =" "$HYPR_LOOK_CONF"; then
-        sed -i 's/^[[:space:]]*gaps_out = .*/    gaps_out = 0/' "$HYPR_LOOK_CONF"
-    fi
+# 1. Update/Deploy Lua config (Omarchy 4+)
+cat << 'EOF' > "$HYPR_LOOK_LUA"
+-- Change the default Omarchy look'n'feel.
 
-    if grep -q "^[[:space:]]*col.active_border =" "$HYPR_LOOK_CONF"; then
-        sed -i 's/^[[:space:]]*col.active_border = .*/    col.active_border = rgba(7aa2f755)/' "$HYPR_LOOK_CONF"
-    fi
-    if grep -q "^[[:space:]]*col.inactive_border =" "$HYPR_LOOK_CONF"; then
-        sed -i 's/^[[:space:]]*col.inactive_border = .*/    col.inactive_border = rgba(59595922)/' "$HYPR_LOOK_CONF"
-    fi
-    echo -e "${GREEN}✔ Hyprland conf window gaps & border colors updated.${NC}"
-fi
+-- https://wiki.hypr.land/Configuring/Basics/Variables/#general
+hl.config({
+  general = {
+    -- No gaps between windows or borders.
+    gaps_in = 0,
+    gaps_out = 0,
+    border_size = 1,
+
+    col = {
+      active_border = "rgba(7aa2f755)",
+      inactive_border = "rgba(59595922)",
+    },
+  },
+})
+EOF
+echo -e "${GREEN}✔ Hyprland Lua gaps & border config deployed to ${HYPR_LOOK_LUA}.${NC}"
+
+# 2. Update/Deploy standard conf config
+cat << 'EOF' > "$HYPR_LOOK_CONF"
+# Change the default Omarchy look'n'feel
+
+# https://wiki.hypr.land/Configuring/Basics/Variables/#general
+general {
+    # No gaps between windows or borders
+    gaps_in = 0
+    gaps_out = 0
+    border_size = 1
+
+    # Faded / semi-transparent border color
+    col.active_border = rgba(7aa2f755)
+    col.inactive_border = rgba(59595922)
+}
+EOF
+echo -e "${GREEN}✔ Hyprland conf gaps & border config deployed to ${HYPR_LOOK_CONF}.${NC}"
+

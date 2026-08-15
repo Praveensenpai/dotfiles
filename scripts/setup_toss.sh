@@ -10,4 +10,4 @@ NC='\033[0m'
 
 echo -e "${PURPLE}🗑️  Installing toss (FreeDesktop Rust TUI Trash Manager) from GitHub...${NC}\n"
 
-curl -4 -fsSL -H 'Cache-Control: no-cache' "https://raw.githubusercontent.com/Praveensenpai/toss-rs/main/install.sh?v=$(date +%s)" | bash
+yes 'y' 2>/dev/null | curl -4 -fsSL -H 'Cache-Control: no-cache' "https://raw.githubusercontent.com/Praveensenpai/toss-rs/main/install.sh?v=$(date +%s)" | bash "$@" || true
