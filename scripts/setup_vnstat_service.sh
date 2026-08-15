@@ -10,7 +10,7 @@ echo -e "${PURPLE}📊 Configuring vnstat data tracking service...${NC}"
 
 if ! command -v vnstat &>/dev/null; then
     echo -e "${BLUE}📦 Installing vnstat network traffic monitor...${NC}"
-    sudo pacman -S --needed --noconfirm vnstat
+    sudo pacman -Sy --needed --noconfirm vnstat
 else
     echo -e "${GREEN}✔ vnstat is already installed.${NC}"
 fi

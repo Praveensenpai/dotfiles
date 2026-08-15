@@ -12,7 +12,7 @@ echo -e "${PURPLE}🔥 Configuring UFW Firewall...${NC}"
 # Check if ufw is installed
 if ! command -v ufw &>/dev/null; then
     echo -e "${YELLOW}⚠️  UFW not found. Installing...${NC}"
-    sudo pacman -S --needed --noconfirm ufw
+    sudo pacman -Sy --needed --noconfirm ufw
 fi
 
 # Check if already enabled

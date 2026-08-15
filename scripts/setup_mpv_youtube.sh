@@ -16,7 +16,7 @@ if ! command -v yt-dlp &>/dev/null; then
     if command -v yay &>/dev/null; then
         yay -S --needed --noconfirm yt-dlp
     else
-        sudo pacman -S --needed --noconfirm yt-dlp
+        sudo pacman -Sy --needed --noconfirm yt-dlp
     fi
 else
     echo -e "${GREEN}✔ yt-dlp is already installed.${NC}"

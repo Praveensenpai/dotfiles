@@ -19,7 +19,7 @@ fi
 echo -e "${BLUE}📦 Installing openai-codex package...${NC}"
 
 if command -v pacman &>/dev/null; then
-    if sudo pacman -S --needed --noconfirm openai-codex; then
+    if sudo pacman -Sy --needed --noconfirm openai-codex; then
         echo -e "${GREEN}🎉 OpenAI Codex CLI setup complete.${NC}"
         exit 0
     fi
