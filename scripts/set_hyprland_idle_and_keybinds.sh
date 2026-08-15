@@ -8,6 +8,7 @@ NC='\033[0m'
 
 HYPRIDLE_CONF="$HOME/.config/hypr/hypridle.conf"
 BINDINGS_CONF="$HOME/.config/hypr/bindings.conf"
+BINDINGS_LUA="$HOME/.config/hypr/bindings.lua"
 
 echo -e "${PURPLE}⚙️ Configuring Hyprland idle timeouts and keybindings...${NC}"
 
@@ -28,11 +29,20 @@ if [ -f "$HYPRIDLE_CONF" ]; then
     echo -e "${GREEN}✔ Updated hypridle timeouts (30m screensaver, 1h lock).${NC}"
 fi
 
+# Configure bindings.lua (Super+BrightnessDown to 0%)
+if [ -f "$BINDINGS_LUA" ]; then
+    if ! grep -q "XF86MonBrightnessDown" "$BINDINGS_LUA"; then
+        echo -e "${BLUE}📝 Adding Super+BrightnessDown binding to ${BINDINGS_LUA}...${NC}"
+        echo 'o.bind("SUPER + XF86MonBrightnessDown", "Brightness 0%", "omarchy-brightness-display 0%")' >> "$BINDINGS_LUA"
+        echo -e "${GREEN}✔ Added Super+BrightnessDown 0% keybinding to bindings.lua.${NC}"
+    fi
+fi
+
 # Configure bindings.conf (Super+BrightnessDown to 0%)
 if [ -f "$BINDINGS_CONF" ]; then
     if ! grep -q "XF86MonBrightnessDown.*0%" "$BINDINGS_CONF"; then
         echo -e "${BLUE}📝 Adding Super+BrightnessDown binding to ${BINDINGS_CONF}...${NC}"
         echo 'bindeld = SUPER, XF86MonBrightnessDown, Brightness 0%, exec, omarchy-brightness-display 0%' >> "$BINDINGS_CONF"
-        echo -e "${GREEN}✔ Added Super+BrightnessDown 0% keybinding.${NC}"
+        echo -e "${GREEN}✔ Added Super+BrightnessDown 0% keybinding to bindings.conf.${NC}"
     fi
 fi

@@ -7,6 +7,7 @@ mkdir -p "$WAYBAR_DIR"
 
 echo "Deploying Waybar style.css..."
 cat << 'EOF' > "$WAYBAR_STYLE"
+@import "../../.local/state/omarchy/current/theme/waybar.css";
 @import "../omarchy/current/theme/waybar.css";
 
 * {

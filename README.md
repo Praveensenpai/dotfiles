@@ -130,7 +130,7 @@ cd ~/dotfiles
 | `set_waybar_style.sh` | Configures Waybar base CSS styles. |
 | `set_waybar_tray_expander.sh` | Deploys dynamic tray expander arrow icon helper. |
 | `set_waybar_wifi_colors.sh` | Sets Waybar Wi-Fi colors (connected green, disconnected/disabled grey). |
-| `setup_blesh.sh` | Configures `ble.sh` for Bash live auto-suggestions via [`Praveensenpai/blesh-installer`](https://github.com/Praveensenpai/blesh-installer). |
+| `setup_blesh.sh` | Configures `ble.sh` for Bash live auto-suggestions. |
 | `setup_cli_tools.sh` | Installs `eza` and `bat` for modern icons, colors, and syntax-highlighted `cat`. |
 | `setup_cxm.sh` | Installs `cxm`, the Codex account manager and account switcher, from GitHub. |
 | `setup_dns.sh` | Configures persistent Cloudflare, Quad9, and Google DNS servers through `systemd-resolved`. |
