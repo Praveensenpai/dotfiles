@@ -23,9 +23,9 @@ dotfiles/
     ├── install_anime4k.sh              # Makes videos look super pretty! 📺
     ├── install_antigravity_cli.sh      # Installs Antigravity CLI via official curl script 🚀
     ├── install_codex.sh                # Installs OpenAI Codex CLI package 🤖
-    ├── install_essential_apps.sh       # Installs mpv, anki, qbittorrent, wget, neovim, firefox, yazi, & google-chrome 📦
+    ├── install_essential_apps.sh       # Installs mpv, anki, qbittorrent, wget, neovim, firefox, yazi, zoxide, rust, & google-chrome 📦
     ├── install_uv.sh                   # Installs uv Python package manager via official installer 🐍
-    ├── install_voicevox.sh             # Fetches latest VOICEVOX release & creates desktop entry 🎙️
+    ├── install_voicevox.sh             # VOICEVOX installer (disabled) 🎙️
     ├── install_wallpapers.sh           # Deploys custom wallpapers to active Omarchy theme 🖼️
     ├── remove_omarchy_preinstalls.sh   # Installs & runs omarchy-debloat Rust CLI tool 🗑️
     ├── set_alacritty_font_size.sh      # Sets Alacritty font size to 10 🔤
@@ -112,9 +112,9 @@ cd ~/dotfiles
 | `install_anime4k.sh` | Downloads and configures Anime4K GLSL shaders for `mpv` via [`Praveensenpai/anime4k-mpv-installer`](https://github.com/Praveensenpai/anime4k-mpv-installer). |
 | `install_antigravity_cli.sh` | Installs Antigravity CLI via `https://antigravity.google/cli/install.sh`. |
 | `install_codex.sh` | Installs OpenAI Codex CLI (`openai-codex`) via `pacman` / `yay`. |
-| `install_essential_apps.sh` | Installs essential software (`mpv`, `anki`, `qbittorrent`, `wget`, `neovim`, `firefox`, `yazi`, `zoxide`, `google-chrome`). |
+| `install_essential_apps.sh` | Installs essential software (`mpv`, `anki`, `qbittorrent`, `wget`, `neovim`, `firefox`, `yazi`, `zoxide`, `rust`, `google-chrome`). |
 | `install_uv.sh` | Installs `uv` Python package manager via the official Astral installer. Skips if already installed. |
-| `install_voicevox.sh` | Fetches and installs VOICEVOX Japanese TTS engine via [`Praveensenpai/voicevox-linux-installer`](https://github.com/Praveensenpai/voicevox-linux-installer). |
+| `install_voicevox.sh` | Fetches and installs VOICEVOX Japanese TTS engine (disabled). |
 | `install_wallpapers.sh` | Deploys custom wallpapers from `dotfiles/wallpapers/` to active Omarchy theme background directory. |
 | `remove_omarchy_preinstalls.sh` | Purges default DHH/Omarchy bloatware via [`Praveensenpai/omarchy-debloat`](https://github.com/Praveensenpai/omarchy-debloat). |
 | `set_alacritty_font_size.sh` | Sets Alacritty terminal font size to 10. |
