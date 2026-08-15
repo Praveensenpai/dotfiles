@@ -58,6 +58,7 @@ dotfiles/
     ├── setup_otopod.sh                 # Installs otopod audio condenser for anime immersion 🎧
     ├── setup_subsink.sh                # Installs subsink automatic Japanese subtitle syncer ⛩️
     ├── setup_kotonoha.sh               # Installs kotonoha Japanese i+1 sentence miner 🌸
+    ├── setup_mpd.sh                    # Installs MPD, generates mpd.conf, & enables user service 🎵
     ├── setup_tmux_resurrect.sh         # Configures TPM & tmux-resurrect auto-restore daemon 📟
     ├── setup_toss.sh                   # Installs toss (Rust TUI trash manager) 🗑️
     ├── setup_ufw.sh                    # Configures UFW firewall defaults & enables service 🛡️
@@ -151,6 +152,7 @@ cd ~/dotfiles
 | `setup_kotonoha.sh` | Installs `kotonoha` Japanese $i+1$ sentence miner via [`Praveensenpai/kotonoha`](https://github.com/Praveensenpai/kotonoha). |
 | `setup_tmux_resurrect.sh` | Configures TPM, tmux-resurrect/continuum, & systemd user daemon via [`Praveensenpai/tmux-resurrect-systemd`](https://github.com/Praveensenpai/tmux-resurrect-systemd). |
 | `setup_agym.sh` | Installs `agym` from GitHub (`Praveensenpai/agym`) & configures shell environment. |
+| `setup_mpd.sh` | Installs MPD (Music Player Daemon), generates default user `~/.config/mpd/mpd.conf`, and enables/starts `mpd` systemd user service. |
 | `setup_ototune.sh` | Installs `ototune` minimal Rust TUI MPD player tailored for audio immersion. |
 | `setup_sys_chronicle.sh` | Installs `sys-chronicle` system activity logger & TUI dashboard via [`Praveensenpai/sys-chronicle`](https://github.com/Praveensenpai/sys-chronicle). |
 
