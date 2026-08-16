@@ -129,13 +129,443 @@ if ! grep -q 'japaneseMonths' "$CLOCK_PANEL_QML"; then
     sed -i 's|Qt.formatDate(root.viewDate, "MMMM yyyy").toUpperCase()|root.viewYear + "年" + root.japaneseMonths[root.viewMonth]|' "$CLOCK_PANEL_QML"
 fi
 
-jq --arg clock "$USER_PREFIX.clock" '
+# Setup System Resources (CPU & RAM) Plugin
+SYS_RES_DIR="$PLUGINS_DIR/$USER_PREFIX.system-resources"
+mkdir -p "$SYS_RES_DIR"
+
+cat << 'EOF' > "$SYS_RES_DIR/manifest.json"
+{
+  "schemaVersion": 1,
+  "id": "paisen.system-resources",
+  "name": "System Resources",
+  "version": "1.0.0",
+  "author": "Paisen",
+  "description": "CPU and RAM system resource usage monitor with detail popover",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Panel.qml"
+  },
+  "barWidget": {
+    "displayName": "System Resources",
+    "description": "CPU and RAM system resource usage monitor with detail popover",
+    "category": "System",
+    "allowMultiple": false
+  }
+}
+EOF
+
+cat << 'EOF' > "$SYS_RES_DIR/stats.sh"
+#!/bin/bash
+
+# Reads live CPU load, Memory, Swap, and Temperature stats for Omarchy Shell
+
+read -r cpu user nice system idle iowait irq softirq steal guest guest_nice < /proc/stat
+total=$((user + nice + system + idle + iowait + irq + softirq + steal))
+idle_sum=$((idle + iowait))
+
+prev_file="/tmp/omarchy_sys_stat.prev"
+if [[ -r $prev_file ]]; then
+  read -r prev_total prev_idle < "$prev_file"
+  diff_total=$((total - prev_total))
+  diff_idle=$((idle_sum - prev_idle))
+  if (( diff_total > 0 )); then
+    cpu_percent=$(( 100 * (diff_total - diff_idle) / diff_total ))
+  else
+    cpu_percent=0
+  fi
+else
+  cpu_percent=0
+fi
+echo "$total $idle_sum" > "$prev_file"
+
+printf "cpu_percent\t%d\n" "$cpu_percent"
+
+awk '
+  /^MemTotal:/ { total = $2 }
+  /^MemAvailable:/ { avail = $2 }
+  /^SwapTotal:/ { stotal = $2 }
+  /^SwapFree:/ { sfree = $2 }
+  END {
+    used = total - avail
+    sused = stotal - sfree
+    printf "mem_used\t%.1f\nmem_total\t%.1f\nmem_percent\t%.0f\nswap_used\t%.1f\nswap_total\t%.1f\n",
+      used/1024/1024, total/1024/1024, (used > 0 && total > 0 ? (used/total)*100 : 0), sused/1024/1024, stotal/1024/1024
+  }
+' /proc/meminfo
+
+awk '{ printf "load_1\t%s\nload_5\t%s\nload_15\t%s\n", $1, $2, $3 }' /proc/loadavg
+nproc | awk '{ printf "cpu_cores\t%s\n", $1 }'
+
+if [[ -r /sys/class/thermal/thermal_zone0/temp ]]; then
+  temp=$(< /sys/class/thermal/thermal_zone0/temp)
+  printf "cpu_temp\t%d\n" "$((temp / 1000))"
+fi
+EOF
+chmod +x "$SYS_RES_DIR/stats.sh"
+
+cat << 'EOF' > "$SYS_RES_DIR/Panel.qml"
+import QtQuick
+import Quickshell
+import Quickshell.Io
+import qs.Commons
+import qs.Ui
+
+Panel {
+  id: root
+  moduleName: "paisen.system-resources"
+  ipcTarget: "paisen.system-resources"
+
+  property var statsInfo: ({})
+
+  readonly property int cpuPercent: parseInt(statsInfo["cpu_percent"] || "0")
+  readonly property real memUsed: parseFloat(statsInfo["mem_used"] || "0")
+  readonly property real memTotal: parseFloat(statsInfo["mem_total"] || "0")
+  readonly property int memPercent: parseInt(statsInfo["mem_percent"] || "0")
+  readonly property real swapUsed: parseFloat(statsInfo["swap_used"] || "0")
+  readonly property real swapTotal: parseFloat(statsInfo["swap_total"] || "0")
+  readonly property string load1: statsInfo["load_1"] || "0.00"
+  readonly property string load5: statsInfo["load_5"] || "0.00"
+  readonly property string load15: statsInfo["load_15"] || "0.00"
+  readonly property string cpuCores: statsInfo["cpu_cores"] || "4"
+  readonly property string cpuTemp: statsInfo["cpu_temp"] || "--"
+
+  function refresh() {
+    if (!statsProc.running) statsProc.running = true
+  }
+
+  function parseKeyValue(raw) {
+    var next = {}
+    var lines = String(raw || "").split("\n")
+    for (var i = 0; i < lines.length; i++) {
+      var idx = lines[i].indexOf("\t")
+      if (idx <= 0) continue
+      next[lines[i].substring(0, idx)] = lines[i].substring(idx + 1).trim()
+    }
+    return next
+  }
+
+  function updateKeyValue(raw) {
+    var next = parseKeyValue(raw)
+    if (Object.keys(next).length > 0) statsInfo = next
+  }
+
+  function launchTaskContainer() {
+    actionProc.command = ["omarchy-launch-terminal", "btop"]
+    actionProc.running = true
+  }
+
+  onOpenedChanged: {
+    if (opened) {
+      refresh()
+    }
+  }
+
+  implicitWidth: button.implicitWidth
+  implicitHeight: button.implicitHeight
+
+  Process {
+    id: statsProc
+    command: ["/home/paisen/.config/omarchy/plugins/paisen.system-resources/stats.sh"]
+    stdout: StdioCollector { waitForEnd: true; onStreamFinished: root.updateKeyValue(text) }
+  }
+
+  Process {
+    id: actionProc
+  }
+
+  Timer {
+    interval: 2000
+    running: root.opened
+    repeat: true
+    triggeredOnStart: true
+    onTriggered: root.refresh()
+  }
+
+  Timer {
+    interval: 3000
+    running: !root.opened
+    repeat: true
+    triggeredOnStart: true
+    onTriggered: root.refresh()
+  }
+
+  BarIconButton {
+    id: button
+    anchors.fill: parent
+    bar: root.bar
+    text: "󰍛"
+    slotSize: Style.bar.iconSlot
+    tooltipText: "System Resources"
+    onPressed: function(b) {
+      root.toggle()
+    }
+  }
+
+  KeyboardPanel {
+    id: panel
+    anchorItem: button
+    owner: root
+    bar: root.bar
+    open: root.opened
+    focusTarget: keyCatcher
+    contentWidth: panel.fittedContentWidth(Style.space(360))
+    contentHeight: panel.fittedContentHeight(column.implicitHeight)
+
+    PanelKeyCatcher {
+      id: keyCatcher
+      anchors.fill: parent
+      onCloseRequested: root.close()
+
+      Column {
+        id: column
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        spacing: Style.space(14)
+
+        // ---------- Hero Section ----------
+        Item {
+          width: parent.width
+          implicitHeight: Math.max(heroIcon.implicitHeight, heroLabels.implicitHeight, heroRight.implicitHeight)
+
+          Text {
+            id: heroIcon
+            text: "󰍛"
+            color: root.bar.foreground
+            font.family: root.bar.fontFamily
+            font.pixelSize: Style.font.display
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+          }
+
+          Column {
+            id: heroLabels
+            anchors.left: heroIcon.right
+            anchors.leftMargin: Style.space(14)
+            anchors.right: heroRight.left
+            anchors.rightMargin: Style.space(10)
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: Style.space(2)
+
+            Text {
+              text: "System"
+              color: root.bar.foreground
+              font.family: root.bar.fontFamily
+              font.pixelSize: Style.font.title
+              font.bold: true
+              elide: Text.ElideRight
+              width: parent.width
+            }
+
+            Text {
+              text: "CPU & MEMORY LOAD"
+              color: Qt.darker(root.bar.foreground, 1.4)
+              font.family: root.bar.fontFamily
+              font.pixelSize: Style.font.caption
+              font.bold: true
+              font.letterSpacing: 1.2
+              elide: Text.ElideRight
+              width: parent.width
+            }
+          }
+
+          Column {
+            id: heroRight
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: Style.space(2)
+
+            Text {
+              text: root.cpuPercent + "% CPU"
+              color: root.bar.foreground
+              font.family: root.bar.fontFamily
+              font.pixelSize: Style.font.title
+              font.bold: true
+              horizontalAlignment: Text.AlignRight
+            }
+
+            Text {
+              text: root.memPercent + "% RAM"
+              color: Qt.darker(root.bar.foreground, 1.3)
+              font.family: root.bar.fontFamily
+              font.pixelSize: Style.font.caption
+              font.bold: true
+              horizontalAlignment: Text.AlignRight
+            }
+          }
+        }
+
+        // ---------- CPU Load Section ----------
+        Column {
+          width: parent.width
+          spacing: Style.space(6)
+
+          Item {
+            width: parent.width
+            implicitHeight: cpuLabelText.implicitHeight
+
+            Text {
+              id: cpuLabelText
+              anchors.left: parent.left
+              text: "CPU LOAD"
+              color: Qt.darker(root.bar.foreground, 1.4)
+              font.family: root.bar.fontFamily
+              font.pixelSize: Style.font.caption
+              font.bold: true
+              font.letterSpacing: 1.1
+            }
+
+            Text {
+              anchors.right: parent.right
+              text: root.cpuPercent + "%"
+              color: root.bar.foreground
+              font.family: root.bar.fontFamily
+              font.pixelSize: Style.font.caption
+              font.bold: true
+            }
+          }
+
+          // CPU Progress Track
+          Rectangle {
+            width: parent.width
+            height: Style.space(6)
+            radius: Style.space(3)
+            color: Qt.rgba(root.bar.foreground.r, root.bar.foreground.g, root.bar.foreground.b, 0.15)
+
+            Rectangle {
+              width: parent.width * Math.min(1.0, Math.max(0.0, root.cpuPercent / 100.0))
+              height: parent.height
+              radius: parent.radius
+              color: root.cpuPercent > 85 ? "#ff9eaf" : (root.cpuPercent > 60 ? "#f3d38c" : "#89b4fa")
+            }
+          }
+
+          Text {
+            text: root.cpuCores + " Cores  ·  Load: " + root.load1 + " " + root.load5 + "  ·  Temp: " + root.cpuTemp + "°C"
+            color: Qt.darker(root.bar.foreground, 1.3)
+            font.family: root.bar.fontFamily
+            font.pixelSize: Style.font.caption
+          }
+        }
+
+        // ---------- RAM Memory Section ----------
+        Column {
+          width: parent.width
+          spacing: Style.space(6)
+
+          Item {
+            width: parent.width
+            implicitHeight: ramLabelText.implicitHeight
+
+            Text {
+              id: ramLabelText
+              anchors.left: parent.left
+              text: "MEMORY (RAM)"
+              color: Qt.darker(root.bar.foreground, 1.4)
+              font.family: root.bar.fontFamily
+              font.pixelSize: Style.font.caption
+              font.bold: true
+              font.letterSpacing: 1.1
+            }
+
+            Text {
+              anchors.right: parent.right
+              text: root.memUsed.toFixed(1) + " / " + root.memTotal.toFixed(1) + " GB"
+              color: root.bar.foreground
+              font.family: root.bar.fontFamily
+              font.pixelSize: Style.font.caption
+              font.bold: true
+            }
+          }
+
+          // RAM Progress Track
+          Rectangle {
+            width: parent.width
+            height: Style.space(6)
+            radius: Style.space(3)
+            color: Qt.rgba(root.bar.foreground.r, root.bar.foreground.g, root.bar.foreground.b, 0.15)
+
+            Rectangle {
+              width: parent.width * Math.min(1.0, Math.max(0.0, root.memPercent / 100.0))
+              height: parent.height
+              radius: parent.radius
+              color: root.memPercent > 85 ? "#ff9eaf" : (root.memPercent > 70 ? "#f3d38c" : "#a6e3a1")
+            }
+          }
+
+          Text {
+            text: "Swap: " + root.swapUsed.toFixed(1) + " / " + root.swapTotal.toFixed(1) + " GB"
+            color: Qt.darker(root.bar.foreground, 1.3)
+            font.family: root.bar.fontFamily
+            font.pixelSize: Style.font.caption
+          }
+        }
+
+        // ---------- Launch Task Manager Button ----------
+        Rectangle {
+          width: parent.width
+          height: Style.space(36)
+          radius: Style.space(6)
+          color: btnArea.containsMouse ? Qt.rgba(root.bar.foreground.r, root.bar.foreground.g, root.bar.foreground.b, 0.15) : Qt.rgba(root.bar.foreground.r, root.bar.foreground.g, root.bar.foreground.b, 0.08)
+
+          Row {
+            anchors.centerIn: parent
+            spacing: Style.space(8)
+
+            Text {
+              text: "󰄍"
+              color: root.bar.foreground
+              font.family: root.bar.fontFamily
+              font.pixelSize: Style.font.body
+            }
+
+            Text {
+              text: "Open Task Manager (btop)"
+              color: root.bar.foreground
+              font.family: root.bar.fontFamily
+              font.pixelSize: Style.font.body
+              font.bold: true
+            }
+          }
+
+          MouseArea {
+            id: btnArea
+            anchors.fill: parent
+            hoverEnabled: true
+            onClicked: {
+              root.launchTaskContainer()
+              root.close()
+            }
+          }
+        }
+      }
+    }
+  }
+}
+EOF
+
+omarchy plugin enable "$USER_PREFIX.system-resources" >/dev/null 2>&1 || true
+
+jq --arg sysres "$USER_PREFIX.system-resources" --arg clock "$USER_PREFIX.clock" '
   .bar.layout.center |= map(
     if .id == $clock then . + {
       format: "yyyy年M月d日（ddd） HH:mm",
       formatAlt: "yyyy年M月d日（dddd） HH:mm"
     } else . end
   )
+  | if (.bar.layout.right | map(.id) | index($sysres)) == null then
+      .bar.layout.right |= map(
+        if .id == "omarchy.monitor" then
+          ., { "id": $sysres }
+        else
+          .
+        end
+      )
+    else
+      .
+    end
 ' "$SHELL_CONFIG" > "$SHELL_CONFIG.tmp"
 mv "$SHELL_CONFIG.tmp" "$SHELL_CONFIG"
 
@@ -144,6 +574,8 @@ omarchy plugin validate "$PLUGINS_DIR/$USER_PREFIX.bluetooth"
 omarchy plugin validate "$PLUGINS_DIR/$USER_PREFIX.network"
 omarchy plugin validate "$PLUGINS_DIR/$USER_PREFIX.audio"
 omarchy plugin validate "$PLUGINS_DIR/$USER_PREFIX.clock"
+omarchy plugin validate "$SYS_RES_DIR"
 omarchy restart shell
 
-echo "✔ Omarchy Shell bar colours and Japanese clock configured."
+echo "✔ Omarchy Shell bar colours, Japanese clock, and System Resources widget configured."
+
