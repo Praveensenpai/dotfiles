@@ -133,13 +133,13 @@ fi
 SYS_RES_DIR="$PLUGINS_DIR/$USER_PREFIX.system-resources"
 mkdir -p "$SYS_RES_DIR"
 
-cat << 'EOF' > "$SYS_RES_DIR/manifest.json"
+cat << EOF > "$SYS_RES_DIR/manifest.json"
 {
   "schemaVersion": 1,
-  "id": "paisen.system-resources",
+  "id": "$USER_PREFIX.system-resources",
   "name": "System Resources",
   "version": "1.0.0",
-  "author": "Paisen",
+  "author": "$USER_PREFIX",
   "description": "CPU and RAM system resource usage monitor with detail popover",
   "kinds": [
     "bar-widget"
@@ -205,7 +205,7 @@ fi
 EOF
 chmod +x "$SYS_RES_DIR/stats.sh"
 
-cat << 'EOF' > "$SYS_RES_DIR/Panel.qml"
+cat << EOF > "$SYS_RES_DIR/Panel.qml"
 import QtQuick
 import Quickshell
 import Quickshell.Io
@@ -214,8 +214,8 @@ import qs.Ui
 
 Panel {
   id: root
-  moduleName: "paisen.system-resources"
-  ipcTarget: "paisen.system-resources"
+  moduleName: "$USER_PREFIX.system-resources"
+  ipcTarget: "$USER_PREFIX.system-resources"
 
   property var statsInfo: ({})
 
@@ -265,9 +265,11 @@ Panel {
   implicitWidth: button.implicitWidth
   implicitHeight: button.implicitHeight
 
+  readonly property string statsScriptPath: Qt.resolvedUrl("stats.sh").toString().replace("file://", "")
+
   Process {
     id: statsProc
-    command: ["/home/paisen/.config/omarchy/plugins/paisen.system-resources/stats.sh"]
+    command: [root.statsScriptPath]
     stdout: StdioCollector { waitForEnd: true; onStreamFinished: root.updateKeyValue(text) }
   }
 
