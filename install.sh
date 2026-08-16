@@ -35,18 +35,8 @@ chmod +x scripts/*.sh 2>/dev/null || true
 
 # Run all executable .sh files in the scripts directory
 for script in scripts/*.sh; do
-    # Skip setup_arch_cleaner.sh, set_waybar_network_speed.sh, and install_voicevox.sh during initial installation loop
-    if [ "$(basename "$script")" = "setup_arch_cleaner.sh" ] || [ "$(basename "$script")" = "set_waybar_network_speed.sh" ] || [ "$(basename "$script")" = "install_voicevox.sh" ]; then
-        continue
-    fi
-
-    # Omarchy 4 moved the visible bar from Waybar to the Quickshell-based
-    # Omarchy Shell. Keep the Waybar helpers available for older releases,
-    # but do not apply inactive configuration on current Omarchy installs.
-    if command -v omarchy >/dev/null 2>&1 \
-        && [ "$(omarchy version | cut -d. -f1)" -ge 4 ] \
-        && [[ "$(basename "$script")" == set_waybar_* ]]; then
-        echo -e "${YELLOW}⏭ Skipping $(basename "$script") (Omarchy 4 uses Omarchy Shell).${NC}"
+    # Skip setup_arch_cleaner.sh and install_voicevox.sh during initial installation loop
+    if [ "$(basename "$script")" = "setup_arch_cleaner.sh" ] || [ "$(basename "$script")" = "install_voicevox.sh" ]; then
         continue
     fi
 

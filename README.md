@@ -33,16 +33,8 @@ dotfiles/
     ├── set_hyprland_idle_and_keybinds.sh # Configures Hyprland idle timeouts & keybindings ⌨️
     ├── set_hyprland_monitor_scale.sh   # Sets monitor scale to 1.5 🖥️
     ├── set_mpv_lang.sh                 # Sets default mpv audio & subtitle languages 🔊
-    ├── set_omarchy_shell_bar.sh        # Configures Omarchy 4 bar colors & Japanese calendar 🎨
+    ├── set_omarchy_shell_bar.sh        # Configures Omarchy 4 bar colors, System Resources widget & Japanese calendar 🎨
     ├── setup_mpv_resume.sh             # Enables saving playback position on quit in mpv ⏯️
-    ├── set_waybar_battery_colors.sh    # Dynamic state colors for battery 🔋
-    ├── set_waybar_bluetooth_colors.sh  # State colors for Bluetooth indicator 󰂯
-    ├── set_waybar_config.sh            # Deploys Waybar config.jsonc layout ⚙️
-    ├── set_waybar_japanese_clock.sh    # Enables ja_JP locale & Japanese clock 🎌
-    ├── set_waybar_network_speed.sh     # Optional: Compiles & deploys Rust network speed status binary & vnstat tooltips 🌐
-    ├── set_waybar_style.sh             # Deploys Waybar style.css theme 🎨
-    ├── set_waybar_tray_expander.sh     # Dynamic tray expander icon helper 🪶
-    ├── set_waybar_wifi_colors.sh       # State colors for Wi-Fi indicator 󰤨
     ├── setup_agym.sh                   # Deploys agym binary & sets up PATH/alias 👤
     ├── setup_arch_cleaner.sh           # Installs arch-cleaner package, log, & trash cleaner 🧹
     ├── setup_blesh.sh                  # Configures ble.sh for Bash live auto-suggestions 🎨
@@ -124,15 +116,7 @@ cd ~/dotfiles
 | `set_hyprland_monitor_scale.sh` | Configures Hyprland monitor resolution and scale to 1.5. |
 | `set_mpv_lang.sh` | Sets default audio & subtitle language priorities in `mpv.conf`. |
 | `setup_mpv_resume.sh` | Enables saving playback position on quit in `mpv.conf`. |
-| `set_omarchy_shell_bar.sh` | On Omarchy 4+, clones the live Quickshell bar widgets and configures state colors for battery, Bluetooth, Wi-Fi, and audio plus a Japanese date and calendar. Skips older Omarchy releases. |
-| `set_waybar_battery_colors.sh` | Legacy Omarchy 3/Waybar battery colors; skipped automatically on Omarchy 4+. |
-| `set_waybar_bluetooth_colors.sh` | Legacy Omarchy 3/Waybar Bluetooth colors; skipped automatically on Omarchy 4+. |
-| `set_waybar_config.sh` | Legacy Omarchy 3/Waybar `config.jsonc` layout; skipped automatically on Omarchy 4+. |
-| `set_waybar_japanese_clock.sh` | Legacy Omarchy 3/Waybar Japanese clock; skipped automatically on Omarchy 4+. |
-| `set_waybar_network_speed.sh` | (Optional) Configures network download/upload bandwidth speed display (`󰇚 46.0kB/s  󰕒 3.9kB/s`) and hover tooltips. |
-| `set_waybar_style.sh` | Legacy Omarchy 3/Waybar base CSS; skipped automatically on Omarchy 4+. |
-| `set_waybar_tray_expander.sh` | Deploys dynamic tray expander arrow icon helper. |
-| `set_waybar_wifi_colors.sh` | Legacy Omarchy 3/Waybar Wi-Fi colors; skipped automatically on Omarchy 4+. |
+| `set_omarchy_shell_bar.sh` | Configures live Quickshell bar widgets (battery, Bluetooth, Wi-Fi, audio, Japanese date/calendar, and System Resources CPU/RAM widget). |
 | `setup_blesh.sh` | Configures `ble.sh` for Bash live auto-suggestions. |
 | `setup_cli_tools.sh` | Installs `eza` and `bat` for modern icons, colors, and syntax-highlighted `cat`. |
 | `setup_cxm.sh` | Installs `cxm`, the Codex account manager and account switcher, from GitHub. |
