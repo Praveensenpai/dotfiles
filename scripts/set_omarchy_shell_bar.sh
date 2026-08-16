@@ -36,6 +36,10 @@ for widget in power bluetooth network audio clock; do
     clone_widget "$widget"
 done
 
+# Ensure Codex / AI agent navbar icon (omarchy.agents) is disabled
+omarchy plugin disable omarchy.agents >/dev/null 2>&1 || true
+
+
 POWER_QML="$PLUGINS_DIR/$USER_PREFIX.power/Panel.qml"
 BLUETOOTH_QML="$PLUGINS_DIR/$USER_PREFIX.bluetooth/Panel.qml"
 NETWORK_QML="$PLUGINS_DIR/$USER_PREFIX.network/Panel.qml"
