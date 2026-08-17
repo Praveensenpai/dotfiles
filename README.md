@@ -24,6 +24,7 @@ dotfiles/
     ├── install_antigravity_cli.sh      # Installs Antigravity CLI via official curl script 🚀
     ├── install_codex.sh                # Installs OpenAI Codex CLI package 🤖
     ├── install_essential_apps.sh       # Installs mpv, anki, qbittorrent, wget, neovim, firefox, yazi, zoxide, rust, & google-chrome 📦
+    ├── install_jdk.sh                  # Installs OpenJDK 21 LTS & hides launcher entries ☕
     ├── install_uv.sh                   # Installs uv Python package manager via official installer 🐍
     ├── install_voicevox.sh             # VOICEVOX installer (disabled) 🎙️
     ├── install_wallpapers.sh           # Deploys custom wallpapers to active Omarchy theme 🖼️
@@ -106,6 +107,7 @@ cd ~/dotfiles
 | `install_antigravity_cli.sh` | Installs Antigravity CLI via `https://antigravity.google/cli/install.sh`. |
 | `install_codex.sh` | Installs OpenAI Codex CLI (`openai-codex`) via `pacman` / `yay`. |
 | `install_essential_apps.sh` | Installs essential software (`mpv`, `anki`, `qbittorrent`, `wget`, `neovim`, `firefox`, `yazi`, `zoxide`, `rust`, `google-chrome`). |
+| `install_jdk.sh` | Installs `jdk21-openjdk` (LTS) via pacman, sets it as default with `archlinux-java`, and hides the JDK desktop entries from the launcher. |
 | `install_uv.sh` | Installs `uv` Python package manager via the official Astral installer. Skips if already installed. |
 | `install_voicevox.sh` | Fetches and installs VOICEVOX Japanese TTS engine (disabled). |
 | `install_wallpapers.sh` | Deploys custom wallpapers from `dotfiles/wallpapers/` to active Omarchy theme background directory. |
