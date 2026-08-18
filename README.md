@@ -20,6 +20,7 @@ dotfiles/
 ├── remote-install.sh                   # The one-liner magic script 🪄
 └── scripts/
     ├── disable_bluetooth.sh            # No more annoying bluetooth on boot! 📶
+    ├── disable_voxtype.sh              # Disables Voxtype service and dictation keybind 🎙️
     ├── install_anime4k.sh              # Makes videos look super pretty! 📺
     ├── install_antigravity_cli.sh      # Installs Antigravity CLI via official curl script 🚀
     ├── install_codex.sh                # Installs OpenAI Codex CLI package 🤖
@@ -103,6 +104,7 @@ cd ~/dotfiles
 | :--- | :--- |
 | `setup_arch_cleaner.sh` | Installs `arch-cleaner` via [`Praveensenpai/arch-cleaner`](https://github.com/Praveensenpai/arch-cleaner) to clean package cache, journal logs, and trash. |
 | `disable_bluetooth.sh` | Disables bluetooth auto-power on boot. |
+| `disable_voxtype.sh` | Disables `voxtype` systemd user service and dictation keybindings. |
 | `install_anime4k.sh` | Downloads and configures Anime4K GLSL shaders for `mpv` via [`Praveensenpai/anime4k-mpv-installer`](https://github.com/Praveensenpai/anime4k-mpv-installer). |
 | `install_antigravity_cli.sh` | Installs Antigravity CLI via `https://antigravity.google/cli/install.sh`. |
 | `install_codex.sh` | Installs OpenAI Codex CLI (`openai-codex`) via `pacman` / `yay`. |
