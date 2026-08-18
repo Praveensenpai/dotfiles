@@ -57,7 +57,6 @@ dotfiles/
     ├── setup_toss.sh                   # Installs toss (Rust TUI trash manager) 🗑️
     ├── setup_ufw.sh                    # Configures UFW firewall defaults & enables service 🛡️
     ├── setup_sys_chronicle.sh         # Installs sys-chronicle system activity logger & TUI dashboard ⏱️
-    ├── setup_screensaver.sh            # Installs cbonsai & configures Zen Bonsai / ttfx screensaver 🌲
     └── setup_zoxide.sh                 # Configures zoxide smart directory navigation 🚀
 ```
 
@@ -144,7 +143,6 @@ cd ~/dotfiles
 | `setup_mpd.sh` | Installs MPD (Music Player Daemon), generates default user `~/.config/mpd/mpd.conf`, and enables/starts `mpd` systemd user service. |
 | `setup_ototune.sh` | Installs `ototune` minimal Rust TUI MPD player tailored for audio immersion. |
 | `setup_sys_chronicle.sh` | Installs `sys-chronicle` system activity logger & TUI dashboard via [`Praveensenpai/sys-chronicle`](https://github.com/Praveensenpai/sys-chronicle). |
-| `setup_screensaver.sh` | Installs `cbonsai` and configures Zen Bonsai live growth screensaver with mode switching support (`bonsai` / `default`). |
 
 <br>
 
