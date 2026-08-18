@@ -36,8 +36,9 @@ for widget in power bluetooth network audio clock; do
     clone_widget "$widget"
 done
 
-# Ensure Codex / AI agent navbar icon (omarchy.agents) is disabled
+# Ensure unused plugins (AI agent navbar icon & weather) are disabled
 omarchy plugin disable omarchy.agents >/dev/null 2>&1 || true
+omarchy plugin disable omarchy.weather >/dev/null 2>&1 || true
 
 
 POWER_QML="$PLUGINS_DIR/$USER_PREFIX.power/Panel.qml"
@@ -61,10 +62,12 @@ if ! grep -q 'barBatteryColor' "$POWER_QML"; then
 }' "$POWER_QML"
 fi
 
-if ! grep -q 'barBluetoothColor' "$BLUETOOTH_QML"; then
+if grep -q 'barBluetoothColor' "$BLUETOOTH_QML"; then
+    sed -i '/readonly property color barBluetoothColor:/,/^  }/c\  readonly property color barBluetoothColor: {\n    if (!adapter || !adapter.enabled) return root.bar ? root.bar.foreground : "#ffffff" // off: default\n    if (connectedDevices.length > 0) return "#a9e790" // connected: green\n    return "#f5a97f" // enabled, no device: orange\n  }' "$BLUETOOTH_QML"
+else
     sed -i '/^  property int phraseIndex:/i\
   readonly property color barBluetoothColor: {\
-    if (!adapter || !adapter.enabled) return "#565f89" // off: gray\
+    if (!adapter || !adapter.enabled) return root.bar ? root.bar.foreground : "#ffffff" // off: default\
     if (connectedDevices.length > 0) return "#a9e790" // connected: green\
     return "#f5a97f" // enabled, no device: orange\
   }\
@@ -87,18 +90,10 @@ if ! grep -q 'barNetworkColor' "$NETWORK_QML"; then
 }' "$NETWORK_QML"
 fi
 
-if ! grep -q 'barAudioColor' "$AUDIO_QML"; then
-    sed -i '/^  onRawAudioSinksChanged:/i\
-  readonly property color barAudioColor: {\
-    if (!hasOutput || outputMuted) return "#565f89" // muted: gray\
-    if (outputVolume < 0.34) return "#94e2d5" // quiet: cyan\
-    if (outputVolume < 0.68) return "#a9e790" // normal: green\
-    return "#f3d38c" // loud: yellow\
-  }\
-' "$AUDIO_QML"
-    sed -i '/^  BarIconButton {/,/^  }$/ { /^    bar: root.bar$/a\
-    foreground: root.barAudioColor
-}' "$AUDIO_QML"
+# Ensure audio plugin has no custom colors (use default bar color)
+if grep -q 'barAudioColor' "$AUDIO_QML"; then
+    sed -i '/readonly property color barAudioColor:/,/^  }/d' "$AUDIO_QML"
+    sed -i '/foreground: root.barAudioColor/d' "$AUDIO_QML"
 fi
 
 if ! grep -q 'Japanese formatter' "$CLOCK_QML"; then
@@ -231,6 +226,12 @@ Panel {
   readonly property string cpuCores: statsInfo["cpu_cores"] || "4"
   readonly property string cpuTemp: statsInfo["cpu_temp"] || "--"
 
+  readonly property color barCpuColor: {
+    if (cpuPercent > 85) return "#ff9eaf" // high: red
+    if (cpuPercent > 60) return "#f3d38c" // medium: yellow
+    return "#a9e790" // normal: green
+  }
+
   function refresh() {
     if (!statsProc.running) statsProc.running = true
   }
@@ -297,6 +298,7 @@ Panel {
     id: button
     anchors.fill: parent
     bar: root.bar
+    foreground: root.barCpuColor
     text: "󰍛"
     slotSize: Style.bar.iconSlot
     tooltipText: "System Resources"
