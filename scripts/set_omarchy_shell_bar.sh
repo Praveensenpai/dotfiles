@@ -228,8 +228,8 @@ Panel {
 
   readonly property color barCpuColor: {
     if (cpuPercent > 85) return "#ff9eaf" // high: red
-    if (cpuPercent > 60) return "#f3d38c" // medium: yellow
-    return "#a9e790" // normal: green
+    if (cpuPercent >= 50) return "#f3d38c" // medium: yellow
+    return root.bar ? root.bar.foreground : Color.foreground // normal
   }
 
   function refresh() {
