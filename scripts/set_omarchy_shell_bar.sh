@@ -54,7 +54,7 @@ if ! grep -q 'barBatteryColor' "$POWER_QML"; then
   readonly property color barBatteryColor: {\
     if (root.batteryFraction <= 0.30) return "#ff9eaf" // low: red\
     if (root.batteryFraction <= 0.70) return "#f3d38c" // medium: yellow\
-    return "#a9e790" // high, charging, and full: green\
+    return root.bar ? root.bar.foreground : Color.foreground // high, charging, and full: default\
   }\
 ' "$POWER_QML"
     sed -i '/^  BarIconButton {/,/^  }$/ { /^    bar: root.bar$/a\
@@ -80,7 +80,7 @@ fi
 if ! grep -q 'barNetworkColor' "$NETWORK_QML"; then
     sed -i '/^  \/\/ The share card is its own panel plugin/i\
   readonly property color barNetworkColor: {\
-    if (kind === "wifi" || kind === "ethernet") return "#a9e790" // connected: green\
+    if (kind === "wifi" || kind === "ethernet") return root.bar ? root.bar.foreground : Color.foreground // connected: default\
     if (Networking.wifiEnabled) return "#f5a97f" // enabled, disconnected: orange\
     return "#565f89" // disabled: gray\
   }\
