@@ -61,6 +61,13 @@ Layout=
 EOC
 echo -e "${GREEN}✔ Configured ~/.config/fcitx5/profile.${NC}"
 
+# Disable Fcitx5 system tray icon (so only the Omarchy bar widget shows)
+cat << 'EOC' > "$HOME/.config/fcitx5/config"
+[Addon/notificationitem]
+Enabled=False
+EOC
+echo -e "${GREEN}✔ Disabled Fcitx5 duplicate system tray icon.${NC}"
+
 # 4. Setup Hyprland autostart
 mkdir -p "$HOME/.config/hypr"
 AUTOSTART_CONF="$HOME/.config/hypr/autostart.conf"
