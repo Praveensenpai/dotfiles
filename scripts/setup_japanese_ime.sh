@@ -109,4 +109,14 @@ if ! pgrep -x fcitx5 >/dev/null 2>&1; then
     fcitx5 -d >/dev/null 2>&1 || true
 fi
 
+# 7. Install & Enable paisen.japanese-ime Omarchy bar widget from GitHub
+PLUGINS_DIR="$HOME/.config/omarchy/plugins"
+USER_PREFIX="$(id -un)"
+if [ ! -d "$PLUGINS_DIR/$USER_PREFIX.japanese-ime" ]; then
+    echo -e "${BLUE}📦 Installing $USER_PREFIX.japanese-ime plugin from GitHub...${NC}"
+    omarchy plugin add https://github.com/Praveensenpai/omarchy-japanese-ime --enable --yes >/dev/null 2>&1 || true
+else
+    omarchy plugin enable "$USER_PREFIX.japanese-ime" >/dev/null 2>&1 || true
+fi
+
 echo -e "${GREEN}🎉 Japanese Input Method setup completed successfully!${NC}"
