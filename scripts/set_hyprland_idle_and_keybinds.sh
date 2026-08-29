@@ -76,10 +76,24 @@ if [ -f "$BINDINGS_CONF" ]; then
         echo 'bindeld = SUPER, XF86MonBrightnessDown, Brightness 0%, exec, omarchy-brightness-display 0%' >> "$BINDINGS_CONF"
         echo -e "${GREEN}✔ Added Super+BrightnessDown 0% keybinding to bindings.conf.${NC}"
     fi
+    if ! grep -q "fcitx5-remote -t" "$BINDINGS_CONF"; then
+        echo -e "${BLUE}📝 Adding Ctrl+Space Japanese IME binding to ${BINDINGS_CONF}...${NC}"
+        echo 'bind = CTRL, SPACE, exec, fcitx5-remote -t' >> "$BINDINGS_CONF"
+        echo -e "${GREEN}✔ Added Ctrl+Space Japanese IME keybinding to bindings.conf.${NC}"
+    fi
 else
-    echo -e "${BLUE}⚙ Creating bindings.conf with Super+BrightnessDown...${NC}"
+    echo -e "${BLUE}⚙ Creating bindings.conf with Super+BrightnessDown and Ctrl+Space...${NC}"
     cat << 'EOF' > "$BINDINGS_CONF"
 bindeld = SUPER, XF86MonBrightnessDown, Brightness 0%, exec, omarchy-brightness-display 0%
+bind = CTRL, SPACE, exec, fcitx5-remote -t
 EOF
     echo -e "${GREEN}✔ Created bindings.conf.${NC}"
+fi
+
+if [ -f "$BINDINGS_LUA" ]; then
+    if ! grep -q "fcitx5-remote -t" "$BINDINGS_LUA"; then
+        echo -e "${BLUE}📝 Adding Ctrl+Space Japanese IME binding to ${BINDINGS_LUA}...${NC}"
+        echo 'o.bind("CTRL + SPACE", "Toggle Japanese IME", "fcitx5-remote -t")' >> "$BINDINGS_LUA"
+        echo -e "${GREEN}✔ Added Ctrl+Space Japanese IME keybinding to bindings.lua.${NC}"
+    fi
 fi
