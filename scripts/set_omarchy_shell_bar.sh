@@ -561,7 +561,16 @@ else
     omarchy plugin enable "$USER_PREFIX.japanese-ime" >/dev/null 2>&1 || true
 fi
 
-jq --arg sysres "$USER_PREFIX.system-resources" --arg im "$USER_PREFIX.japanese-ime" --arg clock "$USER_PREFIX.clock" '
+# Setup Omo Anitrack Plugin (managed via standalone repo)
+ANITRACK_DIR="$PLUGINS_DIR/$USER_PREFIX.omo-anitrack"
+if [ ! -d "$ANITRACK_DIR" ]; then
+    echo "Adding paisen.omo-anitrack plugin..."
+    omarchy plugin add https://github.com/Praveensenpai/omo-anitrack --enable --yes >/dev/null 2>&1 || true
+else
+    omarchy plugin enable "$USER_PREFIX.omo-anitrack" >/dev/null 2>&1 || true
+fi
+
+jq --arg sysres "$USER_PREFIX.system-resources" --arg im "$USER_PREFIX.japanese-ime" --arg ani "$USER_PREFIX.omo-anitrack" --arg clock "$USER_PREFIX.clock" '
   .bar.layout.center |= (
     map(
       if .id == $clock then . + {
@@ -569,7 +578,7 @@ jq --arg sysres "$USER_PREFIX.system-resources" --arg im "$USER_PREFIX.japanese-
         formatAlt: "yyyy年M月d日（dddd） HH:mm"
       } else . end
     )
-    | map(select(.id != "omarchy.keyboard-layout" and .id != $im and .id != "paisen.input-method"))
+    | map(select(.id != "omarchy.keyboard-layout" and .id != $im and .id != $ani and .id != "paisen.input-method"))
   )
   | .bar.layout.right |= map(select(.id != "paisen.input-method"))
   | if (.bar.layout.right | map(.id) | index($im)) == null then
@@ -578,6 +587,17 @@ jq --arg sysres "$USER_PREFIX.system-resources" --arg im "$USER_PREFIX.japanese-
           map(if .id == "omarchy.tray" then ., { "id": $im } else . end)
         else
           [{ "id": $im }] + .
+        end
+      )
+    else
+      .
+    end
+  | if (.bar.layout.right | map(.id) | index($ani)) == null then
+      .bar.layout.right |= (
+        if (map(.id) | index($im)) != null then
+          map(if .id == $im then ., { "id": $ani } else . end)
+        else
+          [{ "id": $ani }] + .
         end
       )
     else
@@ -604,7 +624,9 @@ omarchy plugin validate "$PLUGINS_DIR/$USER_PREFIX.audio"
 omarchy plugin validate "$PLUGINS_DIR/$USER_PREFIX.clock"
 omarchy plugin validate "$SYS_RES_DIR"
 omarchy plugin validate "$IM_DIR"
+[ -d "$ANITRACK_DIR" ] && omarchy plugin validate "$ANITRACK_DIR"
 omarchy restart shell
 
-echo "✔ Omarchy Shell bar colours, Japanese clock, System Resources, and Japanese IME widgets configured."
+echo "✔ Omarchy Shell bar colours, Japanese clock, System Resources, Japanese IME, and Omo Anitrack widgets configured."
+
 
