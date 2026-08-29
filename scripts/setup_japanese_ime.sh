@@ -63,8 +63,16 @@ echo -e "${GREEN}✔ Configured ~/.config/fcitx5/profile.${NC}"
 
 # Disable Fcitx5 system tray icon (so only the Omarchy bar widget shows)
 cat << 'EOC' > "$HOME/.config/fcitx5/config"
-[Addon/notificationitem]
-Enabled=False
+[Hotkey/TriggerKeys]
+0=Control+space
+1=Zenkaku_Hankaku
+
+[Hotkey/EnumerateGroupForwardKeys]
+
+[Hotkey/EnumerateGroupBackwardKeys]
+
+[Behavior/DisabledAddons]
+0=notificationitem
 EOC
 echo -e "${GREEN}✔ Disabled Fcitx5 duplicate system tray icon.${NC}"
 
