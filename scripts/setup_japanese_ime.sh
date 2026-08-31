@@ -33,7 +33,7 @@ fi
 # 2. Setup environment variables for IME
 mkdir -p "$HOME/.config/environment.d"
 cat << 'EOC' > "$HOME/.config/environment.d/im.conf"
-GTK_IM_MODULE=fcitx
+# Leave GTK_IM_MODULE unset on Wayland; Fcitx5 uses its Wayland frontend.
 QT_IM_MODULE=fcitx
 XMODIFIERS=@im=fcitx
 SDL_IM_MODULE=fcitx
