@@ -54,26 +54,46 @@ EOF
     echo -e "${GREEN}✔ Created hypridle timeouts config.${NC}"
 fi
 
-# Configure bindings.lua (Super+BrightnessDown to 0%)
+# Configure bindings.lua (Shift+BrightnessDown and Super+BrightnessDown to 0%)
 if [ -f "$BINDINGS_LUA" ]; then
-    if ! grep -q "XF86MonBrightnessDown" "$BINDINGS_LUA"; then
+    if ! grep -q "SHIFT + XF86MonBrightnessDown" "$BINDINGS_LUA"; then
+        echo -e "${BLUE}📝 Adding Shift+BrightnessDown 0% binding to ${BINDINGS_LUA}...${NC}"
+        cat << 'EOF' >> "$BINDINGS_LUA"
+
+-- Override brightness minimum: Shift + Brightness Down drops to 0%
+hl.unbind("SHIFT + XF86MonBrightnessDown")
+o.bind("SHIFT + XF86MonBrightnessDown", "Brightness 0%", "brightnessctl set 0%", { locked = true })
+EOF
+        echo -e "${GREEN}✔ Added Shift+BrightnessDown 0% keybinding to bindings.lua.${NC}"
+    fi
+    if ! grep -q "SUPER + XF86MonBrightnessDown" "$BINDINGS_LUA"; then
         echo -e "${BLUE}📝 Adding Super+BrightnessDown binding to ${BINDINGS_LUA}...${NC}"
-        echo 'o.bind("SUPER + XF86MonBrightnessDown", "Brightness 0%", "omarchy-brightness-display 0%")' >> "$BINDINGS_LUA"
+        echo 'o.bind("SUPER + XF86MonBrightnessDown", "Brightness 0%", "brightnessctl set 0%", { locked = true })' >> "$BINDINGS_LUA"
         echo -e "${GREEN}✔ Added Super+BrightnessDown 0% keybinding to bindings.lua.${NC}"
     fi
 else
-    echo -e "${BLUE}⚙ Creating bindings.lua with Super+BrightnessDown...${NC}"
+    echo -e "${BLUE}⚙ Creating bindings.lua with Shift+BrightnessDown and Super+BrightnessDown...${NC}"
     cat << 'EOF' > "$BINDINGS_LUA"
-o.bind("SUPER + XF86MonBrightnessDown", "Brightness 0%", "omarchy-brightness-display 0%")
+-- Override brightness minimum: Shift + Brightness Down drops to 0%
+hl.unbind("SHIFT + XF86MonBrightnessDown")
+o.bind("SHIFT + XF86MonBrightnessDown", "Brightness 0%", "brightnessctl set 0%", { locked = true })
+
+-- Optional: Super + Brightness Down shortcut for 0%
+o.bind("SUPER + XF86MonBrightnessDown", "Brightness 0%", "brightnessctl set 0%", { locked = true })
 EOF
     echo -e "${GREEN}✔ Created bindings.lua.${NC}"
 fi
 
-# Configure bindings.conf (Super+BrightnessDown to 0%)
+# Configure bindings.conf (Super+BrightnessDown / Shift+BrightnessDown to 0%)
 if [ -f "$BINDINGS_CONF" ]; then
-    if ! grep -q "XF86MonBrightnessDown.*0%" "$BINDINGS_CONF"; then
+    if ! grep -q "SHIFT, XF86MonBrightnessDown.*0%" "$BINDINGS_CONF"; then
+        echo -e "${BLUE}📝 Adding Shift+BrightnessDown binding to ${BINDINGS_CONF}...${NC}"
+        echo 'bindeld = SHIFT, XF86MonBrightnessDown, Brightness 0%, exec, brightnessctl set 0%' >> "$BINDINGS_CONF"
+        echo -e "${GREEN}✔ Added Shift+BrightnessDown 0% keybinding to bindings.conf.${NC}"
+    fi
+    if ! grep -q "SUPER, XF86MonBrightnessDown.*0%" "$BINDINGS_CONF"; then
         echo -e "${BLUE}📝 Adding Super+BrightnessDown binding to ${BINDINGS_CONF}...${NC}"
-        echo 'bindeld = SUPER, XF86MonBrightnessDown, Brightness 0%, exec, omarchy-brightness-display 0%' >> "$BINDINGS_CONF"
+        echo 'bindeld = SUPER, XF86MonBrightnessDown, Brightness 0%, exec, brightnessctl set 0%' >> "$BINDINGS_CONF"
         echo -e "${GREEN}✔ Added Super+BrightnessDown 0% keybinding to bindings.conf.${NC}"
     fi
     if ! grep -q "fcitx5-remote -t" "$BINDINGS_CONF"; then
@@ -82,9 +102,10 @@ if [ -f "$BINDINGS_CONF" ]; then
         echo -e "${GREEN}✔ Added Ctrl+Space Japanese IME keybinding to bindings.conf.${NC}"
     fi
 else
-    echo -e "${BLUE}⚙ Creating bindings.conf with Super+BrightnessDown and Ctrl+Space...${NC}"
+    echo -e "${BLUE}⚙ Creating bindings.conf with Brightness 0% and Ctrl+Space...${NC}"
     cat << 'EOF' > "$BINDINGS_CONF"
-bindeld = SUPER, XF86MonBrightnessDown, Brightness 0%, exec, omarchy-brightness-display 0%
+bindeld = SHIFT, XF86MonBrightnessDown, Brightness 0%, exec, brightnessctl set 0%
+bindeld = SUPER, XF86MonBrightnessDown, Brightness 0%, exec, brightnessctl set 0%
 bind = CTRL, SPACE, exec, fcitx5-remote -t
 EOF
     echo -e "${GREEN}✔ Created bindings.conf.${NC}"
