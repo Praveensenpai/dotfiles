@@ -29,8 +29,8 @@ if ! grep -q "alias ls='eza" "$BASHRC"; then
     echo -e "${CYAN}▶ Adding eza and bat aliases to ${YELLOW}$BASHRC${CYAN}...${NC}"
     echo "" >> "$BASHRC"
     echo "# Modern CLI Tool Aliases" >> "$BASHRC"
-    echo "alias ls='eza --icons --group-directories-first'" >> "$BASHRC"
-    echo "alias ll='eza -la --icons --group-directories-first'" >> "$BASHRC"
+    echo "alias ls='eza --icons=always --group-directories-first'" >> "$BASHRC"
+    echo "alias ll='eza -la --icons=always --group-directories-first'" >> "$BASHRC"
     echo "alias cat='bat --style=plain'" >> "$BASHRC"
     echo -e "${GREEN}✔ Added aliases to $BASHRC${NC}"
 else

@@ -50,6 +50,7 @@ dotfiles/
     ├── setup_github_ssh.sh             # Generates Ed25519 SSH key & guides GitHub key setup 🔑
     ├── setup_mtu_fix.sh                # Applies and persists a NetworkManager MTU override 🔧
     ├── setup_otopod.sh                 # Installs otopod audio condenser for anime immersion 🎧
+    ├── setup_starship.sh               # Configures Starship prompt with Nerd Font symbols & language modules 🚀
     ├── setup_subsink.sh                # Installs subsink automatic Japanese subtitle syncer ⛩️
     ├── setup_kotonoha.sh               # Installs kotonoha Japanese i+1 sentence miner 🌸
     ├── setup_mpd.sh                    # Installs MPD, generates mpd.conf, & enables user service 🎵
