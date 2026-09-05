@@ -7,8 +7,10 @@ use crate::infra::runner::RunnerEvent;
 /// Executes a tool task by its unique task ID.
 pub async fn execute(id: &str, tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
     match id {
-        "install_antigravity_cli" => cmd::run_curl_bash("https://antigravity.google/install.sh", tx, id).await,
-        "install_codex" => cmd::run_curl_bash("https://raw.githubusercontent.com/Praveensenpai/codex-cli/main/install.sh", tx, id).await,
+        "install_antigravity_cli" => {
+            cmd::run_curl_bash("https://antigravity.google/cli/install.sh", tx, id).await
+        }
+        "install_codex" => install_codex(tx).await,
         "setup_agym" => cmd::run_curl_bash("https://raw.githubusercontent.com/Praveensenpai/agym/main/install.sh", tx, id).await,
         "setup_cxm" => cmd::run_curl_bash("https://raw.githubusercontent.com/Praveensenpai/cxm/main/install.sh", tx, id).await,
         "setup_dns" => setup_dns(tx).await,
@@ -84,4 +86,26 @@ async fn setup_ufw(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
     cmd::run_sudo("ufw", &["default", "allow", "outgoing"], tx, "setup_ufw").await?;
     cmd::run_sudo("ufw", &["allow", "ssh"], tx, "setup_ufw").await?;
     cmd::run_sudo("ufw", &["--force", "enable"], tx, "setup_ufw").await
+}
+
+async fn install_codex(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
+    if cmd::command_exists("codex").await {
+        return Ok(());
+    }
+    if cmd::run_pacman(&["openai-codex"], tx, "install_codex")
+        .await
+        .is_ok()
+    {
+        return Ok(());
+    }
+    if cmd::command_exists("yay").await {
+        let _ = cmd::run(
+            "yay",
+            &["-S", "--needed", "--noconfirm", "openai-codex-bin"],
+            tx,
+            "install_codex",
+        )
+        .await;
+    }
+    Ok(())
 }

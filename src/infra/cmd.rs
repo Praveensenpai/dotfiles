@@ -23,6 +23,7 @@ pub async fn run(
 ) -> Result<()> {
     let mut child = Command::new(program)
         .args(args)
+        .current_dir(std::env::temp_dir())
         .stdin(Stdio::null())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
@@ -65,10 +66,33 @@ pub async fn run_sudo(
     run("sudo", &full_args, tx, task_id).await
 }
 
-/// Downloads and executes a remote bash installer script silently.
+/// Downloads and executes a remote bash installer script silently in a clean session.
 pub async fn run_curl_bash(url: &str, tx: &mpsc::Sender<RunnerEvent>, task_id: &str) -> Result<()> {
-    let cmd = format!("curl -4 -fsSL -H 'Cache-Control: no-cache' \"{url}\" | bash");
+    let cmd =
+        format!("cd /tmp && curl -4 -fsSL -H 'Cache-Control: no-cache' \"{url}\" | setsid bash");
     run("bash", &["-c", &cmd], tx, task_id).await
+}
+
+/// Downloads and executes a remote bash installer script with arguments silently.
+pub async fn run_curl_bash_args(
+    url: &str,
+    script_args: &str,
+    tx: &mpsc::Sender<RunnerEvent>,
+    task_id: &str,
+) -> Result<()> {
+    let cmd = format!(
+        "cd /tmp && curl -4 -fsSL -H 'Cache-Control: no-cache' \"{url}\" | setsid bash -s -- {script_args}"
+    );
+    run("bash", &["-c", &cmd], tx, task_id).await
+}
+
+/// Checks whether a command is installed and executable in PATH.
+pub async fn command_exists(name: &str) -> bool {
+    Command::new("which")
+        .arg(name)
+        .output()
+        .await
+        .is_ok_and(|o| o.status.success())
 }
 
 /// Installs Arch Linux packages via pacman if they are not already installed.
