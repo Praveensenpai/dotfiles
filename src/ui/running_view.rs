@@ -1,7 +1,10 @@
 use ratatui::layout::{Alignment, Rect};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
-use ratatui::widgets::{Block, BorderType, Borders, Gauge, List, ListItem, Paragraph};
+use ratatui::widgets::{
+    Block, BorderType, Borders, Gauge, List, ListItem, Paragraph, Scrollbar, ScrollbarOrientation,
+    ScrollbarState,
+};
 use ratatui::Frame;
 
 use crate::app::{App, AppState, TaskItem, TaskStatus};
@@ -65,6 +68,19 @@ pub fn render_body(frame: &mut Frame, area: Rect, app: &App) {
         .style(Style::default().bg(Theme::BG_OVERLAY));
 
     frame.render_widget(List::new(items).block(block), area);
+
+    if selected_items.len() > visible_rows {
+        render_running_scrollbar(frame, area, selected_items.len(), active_idx);
+    }
+}
+
+fn render_running_scrollbar(frame: &mut Frame, area: Rect, total: usize, active_idx: usize) {
+    let mut scroll_state = ScrollbarState::new(total).position(active_idx);
+    let scrollbar = Scrollbar::default()
+        .orientation(ScrollbarOrientation::VerticalRight)
+        .thumb_style(Style::default().fg(Theme::SAKURA_PINK))
+        .track_style(Style::default().fg(Theme::BORDER_COLOR));
+    frame.render_stateful_widget(scrollbar, area, &mut scroll_state);
 }
 
 fn find_active_index(items: &[&TaskItem]) -> usize {

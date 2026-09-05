@@ -1,7 +1,10 @@
 use ratatui::layout::{Alignment, Constraint, Direction, Layout, Rect};
 use ratatui::style::{Modifier, Style};
 use ratatui::text::{Line, Span};
-use ratatui::widgets::{Block, BorderType, Borders, List, ListItem, Paragraph};
+use ratatui::widgets::{
+    Block, BorderType, Borders, List, ListItem, Paragraph, Scrollbar, ScrollbarOrientation,
+    ScrollbarState,
+};
 use ratatui::Frame;
 
 use crate::app::{App, TaskItem};
@@ -14,16 +17,44 @@ pub fn render_body(frame: &mut Frame, area: Rect, app: &App) {
         .constraints([Constraint::Percentage(55), Constraint::Percentage(45)])
         .split(area);
 
+    render_task_list(frame, body_chunks[0], app);
+    render_detail_panel(frame, body_chunks[1], app);
+}
+
+fn calculate_start_idx(cursor: usize, total: usize, visible_rows: usize) -> usize {
+    if total <= visible_rows || visible_rows == 0 {
+        0
+    } else if cursor >= visible_rows / 2 {
+        let max_start = total.saturating_sub(visible_rows);
+        let ideal_start = cursor.saturating_sub(visible_rows / 2);
+        ideal_start.min(max_start)
+    } else {
+        0
+    }
+}
+
+fn render_task_list(frame: &mut Frame, area: Rect, app: &App) {
     let indices = app.filtered_indices();
+    let total = indices.len();
+    let visible_rows = area.height.saturating_sub(2) as usize;
+    let start_idx = calculate_start_idx(app.cursor, total, visible_rows);
+
     let items: Vec<ListItem<'_>> = indices
         .iter()
         .enumerate()
+        .skip(start_idx)
+        .take(visible_rows)
         .map(|(i, &idx)| format_selection_item(&app.tasks[idx], i == app.cursor))
         .collect();
 
     let selected_count = app.tasks.iter().filter(|t| t.selected).count();
+    let pos = if total > visible_rows {
+        format!(" • {}/{} ", app.cursor + 1, total)
+    } else {
+        String::new()
+    };
     let title = format!(
-        " Task Selection ({selected_count}/{} Active) ",
+        " Task Selection ({selected_count}/{} Active){pos} ",
         app.tasks.len()
     );
 
@@ -34,8 +65,20 @@ pub fn render_body(frame: &mut Frame, area: Rect, app: &App) {
         .border_style(Style::default().fg(Theme::BORDER_COLOR))
         .style(Style::default().bg(Theme::BG_OVERLAY));
 
-    frame.render_widget(List::new(items).block(list_block), body_chunks[0]);
-    render_detail_panel(frame, body_chunks[1], app);
+    frame.render_widget(List::new(items).block(list_block), area);
+
+    if total > visible_rows {
+        render_list_scrollbar(frame, area, total, app.cursor);
+    }
+}
+
+fn render_list_scrollbar(frame: &mut Frame, area: Rect, total: usize, cursor: usize) {
+    let mut scroll_state = ScrollbarState::new(total).position(cursor);
+    let scrollbar = Scrollbar::default()
+        .orientation(ScrollbarOrientation::VerticalRight)
+        .thumb_style(Style::default().fg(Theme::SAKURA_PINK))
+        .track_style(Style::default().fg(Theme::BORDER_COLOR));
+    frame.render_stateful_widget(scrollbar, area, &mut scroll_state);
 }
 
 fn format_selection_item(item: &TaskItem, is_cursor: bool) -> ListItem<'_> {
