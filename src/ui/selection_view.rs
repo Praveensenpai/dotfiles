@@ -132,15 +132,12 @@ fn render_detail_panel(frame: &mut Frame, area: Rect, app: &App) {
         Line::from(""),
         Line::from(vec![
             Span::styled(
-                "Script: ",
+                "Task ID: ",
                 Style::default()
                     .fg(Theme::SKY_BLUE)
                     .add_modifier(Modifier::BOLD),
             ),
-            Span::styled(
-                item.task.script_filename,
-                Style::default().fg(Theme::LAVENDER),
-            ),
+            Span::styled(item.task.id, Style::default().fg(Theme::LAVENDER)),
         ]),
         Line::from(""),
         Line::from(Span::styled(

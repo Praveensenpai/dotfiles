@@ -34,8 +34,8 @@ pub fn print_task_list() {
                 " [optional]"
             };
             println!(
-                "  • \x1b[1m{:<32}\x1b[0m {:<30} \x1b[90m{}\x1b[0m{}",
-                t.name, t.script_filename, t.description, def
+                "  • \x1b[1m{:<32}\x1b[0m {:<26} \x1b[90m{}\x1b[0m{}",
+                t.name, t.id, t.description, def
             );
         }
         println!();

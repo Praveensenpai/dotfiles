@@ -12,53 +12,43 @@
 
 ## 🍡 ⁺ . ⊹ Structure . ⁺ ☁️
 
-Here's a little peek into how things are organized!
+Here's a peek into how the modern Rust codebase is organized!
 
 ```text
 dotfiles/
-├── install.sh                          # The magic master script ✨
-├── remote-install.sh                   # The one-liner magic script 🪄
-└── scripts/
-    ├── disable_bluetooth.sh            # No more annoying bluetooth on boot! 📶
-    ├── disable_voxtype.sh              # Disables Voxtype service and dictation keybind 🎙️
-    ├── install_anime4k.sh              # Makes videos look super pretty! 📺
-    ├── install_antigravity_cli.sh      # Installs Antigravity CLI via official curl script 🚀
-    ├── install_codex.sh                # Installs OpenAI Codex CLI package 🤖
-    ├── install_essential_apps.sh       # Installs mpv, anki, qbittorrent, wget, neovim, firefox, yazi, zoxide, rust, & google-chrome 📦
-    ├── install_jdk.sh                  # Installs OpenJDK 21 LTS & hides launcher entries ☕
-    ├── install_uv.sh                   # Installs uv Python package manager via official installer 🐍
-    ├── install_voicevox.sh             # VOICEVOX installer (disabled) 🎙️
-    ├── install_wallpapers.sh           # Deploys custom wallpapers to active Omarchy theme 🖼️
-    ├── remove_omarchy_preinstalls.sh   # Installs & runs omarchy-debloat Rust CLI tool 🗑️
-    ├── set_alacritty_font_size.sh      # Sets Alacritty font size to 10 🔤
-    ├── set_hyprland_gaps_and_borders.sh # Configures window gaps & border colors 🪟
-    ├── set_hyprland_idle_and_keybinds.sh # Configures Hyprland idle timeouts & keybindings ⌨️
-    ├── set_hyprland_monitor_scale.sh   # Sets monitor scale to 1.5 🖥️
-    ├── set_mpv_lang.sh                 # Sets default mpv audio & subtitle languages 🔊
-    ├── set_omarchy_shell_bar.sh        # Configures Omarchy 4 bar colors, System Resources widget & Japanese calendar 🎨
-    ├── setup_mpv_resume.sh             # Enables saving playback position on quit in mpv ⏯️
-    ├── setup_agym.sh                   # Deploys agym binary & sets up PATH/alias 👤
-    ├── setup_arch_cleaner.sh           # Installs arch-cleaner package, log, & trash cleaner 🧹
-    ├── setup_blesh.sh                  # Configures ble.sh for Bash live auto-suggestions 🎨
-    ├── setup_cli_tools.sh              # Installs eza & bat for modern terminal icons & cat 📦
-    ├── setup_cxm.sh                    # Installs the Codex account manager & switcher 🤖
-    ├── setup_dns.sh                    # Configures persistent systemd-resolved DNS servers 🌐
-    ├── setup_docker.sh                 # Enables docker.service/socket & adds user to docker group 🐳
-    ├── setup_editor.sh                 # Sets EDITOR & VISUAL to neovim in shell configs ✏️
-    ├── setup_fzf_keybinds.sh           # Configures fzf interactive fuzzy search shortcuts 🔍
-    ├── setup_git_config.sh             # Configures global Git name/email with overwrite prompt ⚙️
-    ├── setup_github_ssh.sh             # Generates Ed25519 SSH key & guides GitHub key setup 🔑
-    ├── setup_mtu_fix.sh                # Applies and persists a NetworkManager MTU override 🔧
-    ├── setup_otopod.sh                 # Installs otopod audio condenser for anime immersion 🎧
-    ├── setup_starship.sh               # Configures Starship prompt with Nerd Font symbols & language modules 🚀
-    ├── setup_subsink.sh                # Installs subsink automatic Japanese subtitle syncer ⛩️
-    ├── setup_kotonoha.sh               # Installs kotonoha Japanese i+1 sentence miner 🌸
-    ├── setup_mpd.sh                    # Installs MPD, generates mpd.conf, & enables user service 🎵
-    ├── setup_tmux_resurrect.sh         # Configures TPM & tmux-resurrect auto-restore daemon 📟
-    ├── setup_toss.sh                   # Installs toss (Rust TUI trash manager) 🗑️
-    ├── setup_ufw.sh                    # Configures UFW firewall defaults & enables service 🛡️
-    ├── setup_sys_chronicle.sh         # Installs sys-chronicle system activity logger & TUI dashboard ⏱️
-    └── setup_zoxide.sh                 # Configures zoxide smart directory navigation 🚀
+├── Cargo.toml                          # Rust crate definition & dependencies
+├── RULES.md                            # Hard rules (max lines, complexity, zero-unwrap)
+├── remote-install.sh                   # The one-liner magic script (fetches Rust binary) 🪄
+├── src/
+│   ├── main.rs                         # Entry point & terminal setup
+│   ├── app.rs                          # App state & interactive event loop
+│   ├── cli.rs                          # CLI argument parsing
+│   ├── domain.rs                       # Domain module declarations
+│   ├── domain/
+│   │   ├── catalog.rs                  # All 47 installation tasks catalog
+│   │   ├── task.rs                     # Task, Category, and TaskStatus models
+│   │   ├── executor.rs                 # Central task runner & dispatcher
+│   │   ├── exec_core.rs                # 12 core native Rust installers
+│   │   ├── exec_desktop.rs             # 8 desktop & window manager installers
+│   │   ├── exec_shell_bar.rs           # Quickshell bar & widgets configuration
+│   │   ├── exec_rice.rs                # 4 aesthetic & theming installers
+│   │   ├── exec_media.rs               # 9 media & anime immersion installers
+│   │   ├── exec_tools.rs               # 12 modern CLI tools installers
+│   │   └── exec_maint.rs               # System maintenance & cleaner installers
+│   ├── infra.rs                        # Infrastructure module declarations
+│   ├── infra/
+│   │   ├── cmd.rs                      # Subprocess runner with clean stdout/stderr streaming
+│   │   ├── fs_util.rs                  # File and directory utilities
+│   │   ├── runner.rs                   # Multi-task background worker engine
+│   │   └── sudo.rs                     # Sudo keep-alive & credential check
+│   ├── ui.rs                           # UI module declarations
+│   └── ui/
+│       ├── theme.rs                    # Pastel sakura & matcha color palette
+│       ├── header.rs                   # Aesthetic ASCII banner & status headers
+│       ├── selection_view.rs           # Interactive task & category selector
+│       ├── running_view.rs             # Progress gauges, spinning spinners, & task progress
+│       └── log_drawer.rs               # Expandable real-time log drawer (toggle with 'l')
+└── wallpapers/                         # Curated aesthetic wallpapers 🖼️
 ```
 
 <br>
@@ -69,7 +59,7 @@ Ready to make things pretty with just one command? 🚀
 
 ### 🪄 The One-Liner Magic
 
-Paste this into your terminal to clone and install everything automatically:
+Paste this into your terminal to download and run the standalone Rust installer:
 
 ```bash
 curl -LsSf -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/Praveensenpai/dotfiles/main/remote-install.sh | bash
@@ -77,7 +67,32 @@ curl -LsSf -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/Pravee
 
 <br>
 
-### 🧹 Standalone Interactive System Cleanup (No cloning required)
+### 💌 Manual Build & Run
+
+If you prefer building and running from source:
+
+```bash
+git clone https://github.com/Praveensenpai/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+cargo run --release
+```
+
+Or use CLI flags:
+
+```bash
+# Run all default tasks immediately
+./target/release/omarchy-dotfiles --all
+
+# List all available tasks and exit
+./target/release/omarchy-dotfiles --list
+
+# Simulate execution (dry-run mode)
+./target/release/omarchy-dotfiles --dry-run
+```
+
+<br>
+
+### 🧹 Standalone Interactive System Cleanup
 
 Run the interactive system cleanup directly via [`Praveensenpai/arch-cleaner`](https://github.com/Praveensenpai/arch-cleaner):
 
@@ -87,63 +102,60 @@ curl -LsSf -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/Pravee
 
 <br>
 
-### 💌 Manual Setup
+## 🎀 ⁺ . ⊹ Native Installation Tasks . ⁺ 🌸
 
-If you prefer doing things by hand:
+All 47 tasks are written in 100% native Rust logic with automated logging to `install.log` and live terminal drawer inspection:
 
-```bash
-git clone https://github.com/Praveensenpai/dotfiles.git ~/dotfiles
-cd ~/dotfiles
-./install.sh
-```
+| Task ID | Category | What it does (*´▽`*) |
+| :--- | :--- | :--- |
+| `setup_dns` | Core | Configures persistent Cloudflare, Quad9, and Google DNS servers via `systemd-resolved`. |
+| `setup_mtu_fix` | Core | Applies MTU and creates NetworkManager dispatcher hook. |
+| `setup_ufw` | Core | Configures UFW with sensible defaults (deny in, allow out, allow SSH) and enables service. |
+| `setup_tcp_keepalive` | Core | Sets persistent TCP keepalive sysctl configurations. |
+| `install_essential_apps` | Core | Installs essential software (`mpv`, `anki`, `qbittorrent`, `wget`, `neovim`, `firefox`, `yazi`, `zoxide`, `rust`, `google-chrome`). |
+| `install_jdk` | Core | Installs OpenJDK 21 LTS, sets default via `archlinux-java`, and hides desktop entries. |
+| `install_uv` | Core | Installs Astral `uv` Python package manager via official installer. |
+| `setup_docker` | Core | Configures `docker.service`/`socket` and adds user to docker group. |
+| `setup_editor` | Core | Sets `EDITOR=nvim` and `VISUAL=nvim` in shell configs. |
+| `setup_git_config` | Core | Sets global Git name/email defaults. |
+| `setup_github_ssh` | Core | Generates Ed25519 SSH key & sets up GitHub SSH authentication. |
+| `setup_japanese_ime` | Core | Installs and configures Fcitx5 with Mozc for Japanese input. |
+| `remove_omarchy_preinstalls`| Desktop | Purges default bloatware via [`omarchy-debloat`](https://github.com/Praveensenpai/omarchy-debloat). |
+| `disable_bluetooth` | Desktop | Disables bluetooth auto-power on boot. |
+| `disable_voxtype` | Desktop | Disables `voxtype` systemd user service and dictation keybinds. |
+| `set_alacritty_font_size` | Desktop | Sets Alacritty terminal font size to 10. |
+| `set_hyprland_gaps_and_borders` | Desktop | Sets Hyprland inner/outer gaps to 0 and custom border colors. |
+| `set_hyprland_idle_and_keybinds` | Desktop | Configures Hyprland idle timeouts and keybindings. |
+| `set_hyprland_monitor_scale` | Desktop | Configures Hyprland monitor resolution and scale. |
+| `setup_omarchy_refined_menu`| Desktop | Configures refined, aesthetic application launcher menu. |
+| `install_wallpapers` | Rice | Deploys custom wallpapers to active Omarchy theme directory. |
+| `setup_starship` | Rice | Configures Starship prompt with Nerd Font symbols & language modules. |
+| `setup_blesh` | Rice | Configures `ble.sh` for Bash live syntax highlighting & auto-suggestions. |
+| `set_omarchy_shell_bar` | Rice | Configures live Quickshell bar widgets, Japanese calendar & System Resources monitor. |
+| `install_anime4k` | Media | Downloads and configures Anime4K GLSL shaders for `mpv`. |
+| `set_mpv_lang` | Media | Sets default Japanese audio & English subtitle priorities in `mpv.conf`. |
+| `setup_mpv_resume` | Media | Enables saving playback position on quit in `mpv.conf`. |
+| `setup_mpv_youtube` | Media | Configures yt-dlp high quality streaming playback in `mpv`. |
+| `setup_mpd` | Media | Installs MPD, generates user `mpd.conf`, and enables user service. |
+| `setup_ototune` | Media | Installs `ototune` minimal aesthetic Rust TUI MPD player. |
+| `setup_otopod` | Media | Installs `otopod` anime audio condenser tool for language immersion. |
+| `setup_subsink` | Media | Installs `subsink` automatic Japanese subtitle synchronizer. |
+| `setup_kotonoha` | Media | Installs `kotonoha` Japanese $i+1$ sentence miner. |
+| `setup_omo_anitrack` | Media | Installs `omo-anitrack` anime episode tracking utility. |
+| `setup_cli_tools` | Tools | Installs `eza` and `bat` for modern icons, colors, and syntax-highlighted `cat`. |
+| `setup_zoxide` | Tools | Configures `zoxide` smart directory navigation (`z`). |
+| `setup_fzf_keybinds` | Tools | Configures `fzf` interactive fuzzy search shortcuts (`Ctrl+R`, `Ctrl+T`). |
+| `setup_toss` | Tools | Installs `toss` Rust TUI trash manager with shell completions & alias. |
+| `setup_vnstat_service` | Tools | Installs `vnstat` network monitor and enables `vnstat.service`. |
+| `setup_tmux_resurrect` | Tools | Configures TPM, tmux-resurrect/continuum, & auto-restore daemon. |
+| `setup_agym` | Tools | Installs `agym` Antigravity manager & configures shell environment. |
+| `setup_cxm` | Tools | Installs `cxm` Codex account manager & switcher. |
+| `install_antigravity_cli` | Tools | Installs official Google Antigravity CLI. |
+| `install_codex` | Tools | Installs OpenAI Codex CLI package. |
+| `setup_sys_chronicle` | Tools | Installs `sys-chronicle` system activity logger & TUI dashboard. |
+| `setup_arch_cleaner` | Maintenance | Installs `arch-cleaner` package, log, & trash cleanup utility. |
 
 <br>
-
-## 🎀 ⁺ . ⊹ Utility Scripts . ⁺ 🌸
-
-| Script | What it does (*´▽`*) |
-| :--- | :--- |
-| `setup_arch_cleaner.sh` | Installs `arch-cleaner` via [`Praveensenpai/arch-cleaner`](https://github.com/Praveensenpai/arch-cleaner) to clean package cache, journal logs, and trash. |
-| `disable_bluetooth.sh` | Disables bluetooth auto-power on boot. |
-| `disable_voxtype.sh` | Disables `voxtype` systemd user service and dictation keybindings. |
-| `install_anime4k.sh` | Downloads and configures Anime4K GLSL shaders for `mpv` via [`Praveensenpai/anime4k-cli`](https://github.com/Praveensenpai/anime4k-cli). |
-| `install_antigravity_cli.sh` | Installs Antigravity CLI via `https://antigravity.google/cli/install.sh`. |
-| `install_codex.sh` | Installs OpenAI Codex CLI (`openai-codex`) via `pacman` / `yay`. |
-| `install_essential_apps.sh` | Installs essential software (`mpv`, `anki`, `qbittorrent`, `wget`, `neovim`, `firefox`, `yazi`, `zoxide`, `rust`, `google-chrome`). |
-| `install_jdk.sh` | Installs `jdk21-openjdk` (LTS) via pacman, sets it as default with `archlinux-java`, and hides the JDK desktop entries from the launcher. |
-| `install_uv.sh` | Installs `uv` Python package manager via the official Astral installer. Skips if already installed. |
-| `install_voicevox.sh` | Fetches and installs VOICEVOX Japanese TTS engine (disabled). |
-| `install_wallpapers.sh` | Deploys custom wallpapers from `dotfiles/wallpapers/` to active Omarchy theme background directory. |
-| `remove_omarchy_preinstalls.sh` | Purges default DHH/Omarchy bloatware via [`Praveensenpai/omarchy-debloat`](https://github.com/Praveensenpai/omarchy-debloat). |
-| `set_alacritty_font_size.sh` | Sets Alacritty terminal font size to 10. |
-| `set_hyprland_gaps_and_borders.sh` | Sets Hyprland inner/outer gaps to 0 and configures active/inactive border colors. |
-| `set_hyprland_idle_and_keybinds.sh` | Configures Hyprland idle timeouts and applies the configured keybindings. |
-| `set_hyprland_monitor_scale.sh` | Configures Hyprland monitor resolution and scale to 1.5. |
-| `set_mpv_lang.sh` | Sets default audio & subtitle language priorities in `mpv.conf`. |
-| `setup_mpv_resume.sh` | Enables saving playback position on quit in `mpv.conf`. |
-| `set_omarchy_shell_bar.sh` | Configures live Quickshell bar widgets (battery, Bluetooth, Wi-Fi, audio, Japanese date/calendar, and System Resources CPU/RAM widget). |
-| `setup_blesh.sh` | Configures `ble.sh` for Bash live auto-suggestions. |
-| `setup_cli_tools.sh` | Installs `eza` and `bat` for modern icons, colors, and syntax-highlighted `cat`. |
-| `setup_cxm.sh` | Installs `cxm`, the Codex account manager and account switcher, from GitHub. |
-| `setup_dns.sh` | Configures persistent Cloudflare, Quad9, and Google DNS servers through `systemd-resolved`. |
-| `setup_docker.sh` | Enables `docker.service` and `docker.socket`, adds current user to `docker` group. Skips gracefully if already configured. |
-| `setup_editor.sh` | Sets `EDITOR=nvim` and `VISUAL=nvim` in `~/.bashrc` if not already configured. |
-| `setup_fzf_keybinds.sh` | Configures `fzf` interactive fuzzy search shortcuts (`Ctrl+R`, `Ctrl+T`). |
-| `setup_git_config.sh` | Sets global `user.name` and `user.email` defaults, with an overwrite confirmation prompt if credentials exist. |
-| `setup_github_ssh.sh` | Generates Ed25519 SSH key & setup via [`Praveensenpai/github-ssh-key-setup`](https://github.com/Praveensenpai/github-ssh-key-setup). |
-| `setup_mtu_fix.sh` | Applies an MTU immediately and creates a NetworkManager dispatcher hook to reapply it after reconnects. Defaults to `wlan0` and MTU `1400`; accepts `<interface> <mtu>`. |
-| `setup_toss.sh` | Installs `toss` via [`Praveensenpai/toss-rs`](https://github.com/Praveensenpai/toss-rs) and configures shell completions & alias. |
-| `setup_ufw.sh` | Configures UFW with sensible defaults (deny incoming, allow outgoing, allow SSH) and enables it. |
-| `setup_vnstat_service.sh` | Installs `vnstat` network traffic monitor and enables `vnstat.service` systemd daemon. |
-| `setup_zoxide.sh` | Configures `zoxide` smart directory navigation (`z` / `cd`). |
-| `setup_otopod.sh` | Installs `otopod` anime audio condenser via [`Praveensenpai/otopod`](https://github.com/Praveensenpai/otopod). |
-| `setup_subsink.sh` | Installs `subsink` Japanese subtitle synchronizer via [`Praveensenpai/subsink`](https://github.com/Praveensenpai/subsink). |
-| `setup_kotonoha.sh` | Installs `kotonoha` Japanese $i+1$ sentence miner via [`Praveensenpai/kotonoha`](https://github.com/Praveensenpai/kotonoha). |
-| `setup_tmux_resurrect.sh` | Configures TPM, tmux-resurrect/continuum, & systemd user daemon via [`Praveensenpai/tmux-resurrect-systemd`](https://github.com/Praveensenpai/tmux-resurrect-systemd). |
-| `setup_agym.sh` | Installs `agym` from GitHub (`Praveensenpai/agym`) & configures shell environment. |
-| `setup_mpd.sh` | Installs MPD (Music Player Daemon), generates default user `~/.config/mpd/mpd.conf`, and enables/starts `mpd` systemd user service. |
-| `setup_ototune.sh` | Installs `ototune` minimal Rust TUI MPD player tailored for audio immersion. |
-| `setup_sys_chronicle.sh` | Installs `sys-chronicle` system activity logger & TUI dashboard via [`Praveensenpai/sys-chronicle`](https://github.com/Praveensenpai/sys-chronicle). |
 
 <br>
 

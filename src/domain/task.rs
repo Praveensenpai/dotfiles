@@ -42,7 +42,5 @@ pub struct Task {
     pub name: &'static str,
     pub description: &'static str,
     pub category: TaskCategory,
-    pub script_filename: &'static str,
-    pub script_content: &'static str,
     pub default_selected: bool,
 }
