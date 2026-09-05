@@ -1,0 +1,33 @@
+[package]
+name = "omarchy-dotfiles"
+version = "0.1.0"
+edition = "2021"
+authors = ["Praveen Senpai <pvnt20@gmail.com>"]
+description = "🌸 Cute, clean, and minimal installer & TUI manager for Omarchy Dotfiles"
+
+[[bin]]
+name = "omarchy-dotfiles"
+path = "src/main.rs"
+
+[dependencies]
+ratatui = "0.29"
+crossterm = "0.28"
+tokio = { version = "1.42", features = ["full"] }
+clap = { version = "4.6", features = ["derive"] }
+anyhow = "1.0"
+chrono = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[lints.rust]
+unused = "deny"
+dead_code = "deny"
+warnings = "deny"
+
+[lints.clippy]
+all = { level = "deny", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+cognitive_complexity = "warn"
+too_many_arguments = "deny"
+unwrap_used = "deny"
+expect_used = "deny"

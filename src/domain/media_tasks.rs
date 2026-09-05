@@ -1,0 +1,88 @@
+use crate::domain::task::{Task, TaskCategory};
+
+/// Returns tasks belonging to the media category.
+pub fn get_tasks() -> Vec<Task> {
+    vec![
+        Task {
+            id: "install_anime4k",
+            name: "Install Anime4K Shaders",
+            description: "Installs high quality Anime4K real-time upscaling shaders for mpv",
+            category: TaskCategory::Media,
+            script_filename: "install_anime4k.sh",
+            script_content: include_str!("../../scripts/install_anime4k.sh"),
+            default_selected: true,
+        },
+        Task {
+            id: "set_mpv_lang",
+            name: "MPV Audio & Subtitle Lang",
+            description: "Sets Japanese audio and English subtitle defaults for mpv",
+            category: TaskCategory::Media,
+            script_filename: "set_mpv_lang.sh",
+            script_content: include_str!("../../scripts/set_mpv_lang.sh"),
+            default_selected: true,
+        },
+        Task {
+            id: "setup_kotonoha",
+            name: "Kotonoha Sentence Miner",
+            description: "Installs kotonoha Japanese immersion i+1 sentence miner",
+            category: TaskCategory::Media,
+            script_filename: "setup_kotonoha.sh",
+            script_content: include_str!("../../scripts/setup_kotonoha.sh"),
+            default_selected: true,
+        },
+        Task {
+            id: "setup_mpd",
+            name: "MPD Music Player Daemon",
+            description: "Installs Music Player Daemon and configures user systemd service",
+            category: TaskCategory::Media,
+            script_filename: "setup_mpd.sh",
+            script_content: include_str!("../../scripts/setup_mpd.sh"),
+            default_selected: true,
+        },
+        Task {
+            id: "setup_mpv_resume",
+            name: "MPV Playback Resume",
+            description: "Configures mpv to remember playback position on quit",
+            category: TaskCategory::Media,
+            script_filename: "setup_mpv_resume.sh",
+            script_content: include_str!("../../scripts/setup_mpv_resume.sh"),
+            default_selected: true,
+        },
+        Task {
+            id: "setup_mpv_youtube",
+            name: "MPV YouTube Quality Profiles",
+            description: "Configures optimal yt-dlp streaming formats for mpv",
+            category: TaskCategory::Media,
+            script_filename: "setup_mpv_youtube.sh",
+            script_content: include_str!("../../scripts/setup_mpv_youtube.sh"),
+            default_selected: true,
+        },
+        Task {
+            id: "setup_otopod",
+            name: "Otopod Audio Condenser",
+            description: "Installs otopod audio condenser for anime immersion",
+            category: TaskCategory::Media,
+            script_filename: "setup_otopod.sh",
+            script_content: include_str!("../../scripts/setup_otopod.sh"),
+            default_selected: true,
+        },
+        Task {
+            id: "setup_ototune",
+            name: "Ototune Pitch Profiler",
+            description: "Installs ototune Japanese pitch accent training utility",
+            category: TaskCategory::Media,
+            script_filename: "setup_ototune.sh",
+            script_content: include_str!("../../scripts/setup_ototune.sh"),
+            default_selected: true,
+        },
+        Task {
+            id: "setup_subsink",
+            name: "Subsink Subtitle Syncer",
+            description: "Installs automatic Japanese subtitle synchronization tool",
+            category: TaskCategory::Media,
+            script_filename: "setup_subsink.sh",
+            script_content: include_str!("../../scripts/setup_subsink.sh"),
+            default_selected: true,
+        },
+    ]
+}
