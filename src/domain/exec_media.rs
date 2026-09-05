@@ -16,7 +16,7 @@ pub async fn execute(id: &str, tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
         "install_anime4k" => {
             cmd::run_curl_bash_args(
                 "https://raw.githubusercontent.com/Praveensenpai/anime4k-cli/main/install.sh",
-                "install --preset low --mode a --yes",
+                "install --preset low --mode c+a --yes",
                 tx,
                 id,
             )
