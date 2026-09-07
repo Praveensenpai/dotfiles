@@ -93,12 +93,21 @@ fn patch_bar_qml_files(config_dir: &Path) -> Result<()> {
     Ok(())
 }
 
+const PANEL_QML_TEMPLATE: &str = include_str!("../../assets/system-resources/Panel.qml");
+const STATS_SH: &str = include_str!("../../assets/system-resources/stats.sh");
+
 fn deploy_system_resources_plugin(config_dir: &Path) -> Result<()> {
     let user = std::env::var("USER").unwrap_or_else(|_| "paisen".to_string());
     let sys_dir = config_dir
         .join("plugins")
         .join(format!("{user}.system-resources"));
 
+    write_system_resources_manifest(&sys_dir, &user)?;
+    write_system_resources_assets(&sys_dir, &user)?;
+    Ok(())
+}
+
+fn write_system_resources_manifest(sys_dir: &Path, user: &str) -> Result<()> {
     let manifest = format!(
         r#"{{
   "schemaVersion": 1,
@@ -106,32 +115,33 @@ fn deploy_system_resources_plugin(config_dir: &Path) -> Result<()> {
   "name": "System Resources",
   "version": "1.0.0",
   "author": "{user}",
-  "description": "CPU and RAM system resource usage monitor",
-  "kinds": ["bar-widget"]
+  "description": "CPU and RAM system resource usage monitor with detail popover",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {{
+    "barWidget": "Panel.qml"
+  }},
+  "barWidget": {{
+    "displayName": "System Resources",
+    "description": "CPU and RAM system resource usage monitor with detail popover",
+    "category": "System",
+    "allowMultiple": false
+  }}
 }}"#
     );
-    fs_util::write_file(&sys_dir.join("manifest.json"), &manifest)?;
+    fs_util::write_file(&sys_dir.join("manifest.json"), &manifest)
+}
 
-    let bar_widget_qml = r#"import QtQuick
-import Quickshell
-import Quickshell.Widgets
-import qs.Commons
+fn write_system_resources_assets(sys_dir: &Path, user: &str) -> Result<()> {
+    let panel_qml = PANEL_QML_TEMPLATE.replace("__USER__", user);
+    fs_util::write_file(&sys_dir.join("Panel.qml"), &panel_qml)?;
+    fs_util::write_executable_file(&sys_dir.join("stats.sh"), STATS_SH)?;
 
-Item {
-  id: root
-  implicitWidth: row.implicitWidth
-  implicitHeight: row.implicitHeight
-
-  Row {
-    id: row
-    spacing: 8
-    Text {
-      text: "⚡ CPU/RAM"
-      color: Color.foreground
+    let old_bar_widget = sys_dir.join("BarWidget.qml");
+    if old_bar_widget.exists() {
+        let _ = std::fs::remove_file(old_bar_widget);
     }
-  }
-}"#;
-    fs_util::write_file(&sys_dir.join("BarWidget.qml"), bar_widget_qml)?;
     Ok(())
 }
 
@@ -141,6 +151,20 @@ async fn enable_system_resources(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
     let _ = cmd::run(
         "omarchy",
         &["plugin", "enable", &plugin_id],
+        tx,
+        "set_omarchy_shell_bar",
+    )
+    .await;
+    let _ = cmd::run(
+        "omarchy",
+        &["bar", "put", &plugin_id, "--after", "omarchy.monitor"],
+        tx,
+        "set_omarchy_shell_bar",
+    )
+    .await;
+    let _ = cmd::run(
+        "omarchy",
+        &["restart", "shell"],
         tx,
         "set_omarchy_shell_bar",
     )

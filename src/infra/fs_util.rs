@@ -35,3 +35,16 @@ pub fn write_file(path: &Path, content: &str) -> Result<()> {
     }
     fs::write(path, content).with_context(|| format!("Failed to write {}", path.display()))
 }
+
+/// Safely writes content to a file with executable permissions (0755).
+pub fn write_executable_file(path: &Path, content: &str) -> Result<()> {
+    write_file(path, content)?;
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        let perms = fs::Permissions::from_mode(0o755);
+        fs::set_permissions(path, perms)
+            .with_context(|| format!("Failed to set permissions on {}", path.display()))?;
+    }
+    Ok(())
+}
