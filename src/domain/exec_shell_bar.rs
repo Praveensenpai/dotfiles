@@ -21,6 +21,7 @@ pub async fn execute(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
     clone_and_enable_widgets(tx).await?;
     disable_unused_widgets(tx).await?;
     patch_bar_qml_files(&config_dir)?;
+    deploy_power_plugin(&config_dir)?;
     deploy_system_resources_plugin(&config_dir)?;
     enable_system_resources(tx).await?;
 
@@ -65,6 +66,13 @@ async fn disable_unused_widgets(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
         "set_omarchy_shell_bar",
     )
     .await;
+    let _ = cmd::run(
+        "omarchy",
+        &["plugin", "disable", "omarchy.power"],
+        tx,
+        "set_omarchy_shell_bar",
+    )
+    .await;
     Ok(())
 }
 
@@ -90,6 +98,21 @@ fn patch_bar_qml_files(config_dir: &Path) -> Result<()> {
             let _ = std::fs::write(&clock_qml, updated);
         }
     }
+    Ok(())
+}
+
+const POWER_MODEL_JS: &str = include_str!("../../assets/power/Model.js");
+const POWER_PANEL_QML: &str = include_str!("../../assets/power/Panel.qml");
+
+fn deploy_power_plugin(config_dir: &Path) -> Result<()> {
+    let user = std::env::var("USER").unwrap_or_else(|_| "paisen".to_string());
+    let power_dir = config_dir.join("plugins").join(format!("{user}.power"));
+
+    if !power_dir.exists() {
+        std::fs::create_dir_all(&power_dir)?;
+    }
+    fs_util::write_file(&power_dir.join("Model.js"), POWER_MODEL_JS)?;
+    fs_util::write_file(&power_dir.join("Panel.qml"), POWER_PANEL_QML)?;
     Ok(())
 }
 
