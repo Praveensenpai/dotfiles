@@ -14,20 +14,6 @@ fn home_dir() -> PathBuf {
 pub async fn execute(id: &str, tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
     match id {
         "install_wallpapers" => install_wallpapers(),
-        "setup_japanese_ime" => cmd::run_curl_bash(
-            "https://raw.githubusercontent.com/Praveensenpai/paisen.japanese-ime/main/install.sh",
-            tx,
-            id,
-        )
-        .await,
-        "setup_omo_anitrack" => {
-            cmd::run_curl_bash(
-                "https://raw.githubusercontent.com/Praveensenpai/omo-anitrack/main/install.sh",
-                tx,
-                id,
-            )
-            .await
-        }
         "setup_starship" => setup_starship(tx).await,
         _ => Ok(()),
     }

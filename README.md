@@ -104,7 +104,7 @@ curl -LsSf -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/Pravee
 
 ## 🎀 ⁺ . ⊹ Native Installation Tasks . ⁺ 🌸
 
-All 47 tasks are written in 100% native Rust logic with automated logging to `install.log` and live terminal drawer inspection:
+All 44 tasks are written in 100% native Rust logic with automated logging to `install.log` and live terminal drawer inspection:
 
 | Task ID | Category | What it does (*´▽`*) |
 | :--- | :--- | :--- |
@@ -119,7 +119,7 @@ All 47 tasks are written in 100% native Rust logic with automated logging to `in
 | `setup_editor` | Core | Sets `EDITOR=nvim` and `VISUAL=nvim` in shell configs. |
 | `setup_git_config` | Core | Sets global Git name/email defaults. |
 | `setup_github_ssh` | Core | Generates Ed25519 SSH key & sets up GitHub SSH authentication. |
-| `setup_japanese_ime` | Core | Installs and configures Fcitx5 with Mozc for Japanese input. |
+
 | `remove_omarchy_preinstalls`| Desktop | Purges default bloatware via [`omarchy-debloat`](https://github.com/Praveensenpai/omarchy-debloat). |
 | `disable_bluetooth` | Desktop | Disables bluetooth auto-power on boot. |
 | `disable_voxtype` | Desktop | Disables `voxtype` systemd user service and dictation keybinds. |
@@ -141,7 +141,7 @@ All 47 tasks are written in 100% native Rust logic with automated logging to `in
 | `setup_otopod` | Media | Installs `otopod` anime audio condenser tool for language immersion. |
 | `setup_subsink` | Media | Installs `subsink` automatic Japanese subtitle synchronizer. |
 | `setup_kotonoha` | Media | Installs `kotonoha` Japanese $i+1$ sentence miner. |
-| `setup_omo_anitrack` | Media | Installs `omo-anitrack` anime episode tracking utility. |
+
 | `setup_cli_tools` | Tools | Installs `eza` and `bat` for modern icons, colors, and syntax-highlighted `cat`. |
 | `setup_zoxide` | Tools | Configures `zoxide` smart directory navigation (`z`). |
 | `setup_fzf_keybinds` | Tools | Configures `fzf` interactive fuzzy search shortcuts (`Ctrl+R`, `Ctrl+T`). |
@@ -149,7 +149,7 @@ All 47 tasks are written in 100% native Rust logic with automated logging to `in
 | `setup_vnstat_service` | Tools | Installs `vnstat` network monitor and enables `vnstat.service`. |
 | `setup_tmux_resurrect` | Tools | Configures TPM, tmux-resurrect/continuum, & auto-restore daemon. |
 | `setup_agym` | Tools | Installs `agym` Antigravity manager & configures shell environment. |
-| `setup_cxm` | Tools | Installs `cxm` Codex account manager & switcher. |
+
 | `install_antigravity_cli` | Tools | Installs official Google Antigravity CLI. |
 | `install_codex` | Tools | Installs OpenAI Codex CLI package. |
 | `setup_sys_chronicle` | Tools | Installs `sys-chronicle` system activity logger & TUI dashboard. |

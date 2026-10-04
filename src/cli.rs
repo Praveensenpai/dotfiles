@@ -6,7 +6,7 @@ use crate::domain::{catalog, TaskCategory};
 #[derive(Parser, Debug)]
 #[command(name = "omarchy-dotfiles")]
 #[command(about = "🌸 Cute, aesthetic, and clutter-free Omarchy dotfiles installer & manager")]
-#[command(version = "0.1.0")]
+#[command(version)]
 pub struct Cli {
     /// Run all default tasks immediately without launching the selection TUI
     #[arg(short, long)]

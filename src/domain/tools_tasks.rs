@@ -31,13 +31,6 @@ fn get_cli_tools() -> Vec<Task> {
             default_selected: true,
         },
         Task {
-            id: "setup_cxm",
-            name: "Codex Account Switcher (cxm)",
-            description: "Installs Codex account switcher tool",
-            category: TaskCategory::Tools,
-            default_selected: true,
-        },
-        Task {
             id: "setup_sys_chronicle",
             name: "Sys Chronicle Activity Monitor",
             description: "Installs system activity logger and TUI dashboard",

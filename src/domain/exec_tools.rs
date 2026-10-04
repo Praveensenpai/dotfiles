@@ -12,7 +12,6 @@ pub async fn execute(id: &str, tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
         }
         "install_codex" => install_codex(tx).await,
         "setup_agym" => cmd::run_curl_bash("https://raw.githubusercontent.com/Praveensenpai/agym/main/install.sh", tx, id).await,
-        "setup_cxm" => cmd::run_curl_bash("https://raw.githubusercontent.com/Praveensenpai/cxm/main/install.sh", tx, id).await,
         "setup_dns" => setup_dns(tx).await,
         "setup_mtu_fix" => setup_mtu_fix(tx).await,
         "setup_sys_chronicle" => cmd::run_curl_bash("https://raw.githubusercontent.com/Praveensenpai/sys-chronicle/main/install.sh", tx, id).await,
