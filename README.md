@@ -115,6 +115,7 @@ All 44 tasks are written in 100% native Rust logic with automated logging to `in
 | `install_essential_apps` | Core | Installs essential software (`mpv`, `anki`, `qbittorrent`, `wget`, `neovim`, `firefox`, `yazi`, `zoxide`, `rust`, `google-chrome`). |
 | `install_jdk` | Core | Installs OpenJDK 21 LTS, sets default via `archlinux-java`, and hides desktop entries. |
 | `install_uv` | Core | Installs Astral `uv` Python package manager via official installer. |
+| `setup_android_sdk` | Core | Configures Android development environment variables. |
 | `setup_docker` | Core | Configures `docker.service`/`socket` and adds user to docker group. |
 | `setup_editor` | Core | Sets `EDITOR=nvim` and `VISUAL=nvim` in shell configs. |
 | `setup_git_config` | Core | Sets global Git name/email defaults. |
