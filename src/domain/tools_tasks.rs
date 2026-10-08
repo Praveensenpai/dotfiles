@@ -71,13 +71,6 @@ fn get_system_tools() -> Vec<Task> {
             default_selected: true,
         },
         Task {
-            id: "setup_tmux_resurrect",
-            name: "Tmux Resurrect Auto-Save",
-            description: "Configures TPM & tmux-resurrect session daemon",
-            category: TaskCategory::Tools,
-            default_selected: true,
-        },
-        Task {
             id: "setup_ufw",
             name: "UFW Firewall Security",
             description: "Configures sensible firewall rules and enables service",

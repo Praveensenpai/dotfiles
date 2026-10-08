@@ -148,7 +148,6 @@ All 44 tasks are written in 100% native Rust logic with automated logging to `in
 | `setup_fzf_keybinds` | Tools | Configures `fzf` interactive fuzzy search shortcuts (`Ctrl+R`, `Ctrl+T`). |
 | `setup_toss` | Tools | Installs `toss` Rust TUI trash manager with shell completions & alias. |
 | `setup_vnstat_service` | Tools | Installs `vnstat` network monitor and enables `vnstat.service`. |
-| `setup_tmux_resurrect` | Tools | Configures TPM, tmux-resurrect/continuum, & auto-restore daemon. |
 | `setup_agym` | Tools | Installs `agym` Antigravity manager & configures shell environment. |
 
 | `install_antigravity_cli` | Tools | Installs official Google Antigravity CLI. |
@@ -189,7 +188,6 @@ Modern CLI enhancements integrated into your shell environment:
 | 🔍 **`fzf`** | Fuzzy Search | Interactive fuzzy history search (`Ctrl+R`) and file selection (`Ctrl+T`). |
 | 🗑️ **`toss`** | Safe Deletion | FreeDesktop Rust TUI trash manager ([`Praveensenpai/toss-rs`](https://github.com/Praveensenpai/toss-rs)). |
 | 📊 **`vnstat`** | Traffic Monitor | Background daemon logging hourly, daily, and monthly network bandwidth usage. |
-| 📟 **`tmux`** | Session Resurrect | Terminal multiplexer with auto-save & auto-restore across reboots. |
 
 <br>
 
