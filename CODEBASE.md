@@ -125,7 +125,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   async fn execute (tx : & mpsc :: Sender < RunnerEvent >) -> Result < () >
   ```
 
-### `src/domain/exec_tools.rs` (Role: domain, Lines: 110)
+### `src/domain/exec_tools.rs` (Role: domain, Lines: 132)
 - **Responsibility**: Core domain logic in src/domain/exec_tools.rs
 - **Imports**: use anyhow :: Result , use tokio :: sync :: mpsc , use crate :: infra :: cmd , use crate :: infra :: runner :: RunnerEvent 
 - **Public Functions & Signatures**:
@@ -178,7 +178,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn all () -> & 'static [Self]
   ```
 
-### `src/domain/tools_tasks.rs` (Role: domain, Lines: 95)
+### `src/domain/tools_tasks.rs` (Role: domain, Lines: 88)
 - **Responsibility**: Core domain logic in src/domain/tools_tasks.rs
 - **Imports**: use crate :: domain :: task :: { Task , TaskCategory } 
 - **Public Functions & Signatures**:
