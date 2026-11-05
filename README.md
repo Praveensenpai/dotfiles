@@ -104,7 +104,7 @@ curl -LsSf -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/Pravee
 
 ## 🎀 ⁺ . ⊹ Native Installation Tasks . ⁺ 🌸
 
-All 44 tasks are written in 100% native Rust logic with automated logging to `install.log` and live terminal drawer inspection:
+All 45 tasks are written in 100% native Rust logic with automated logging to `install.log` and live terminal drawer inspection:
 
 | Task ID | Category | What it does (*´▽`*) |
 | :--- | :--- | :--- |
@@ -129,6 +129,7 @@ All 44 tasks are written in 100% native Rust logic with automated logging to `in
 | `set_hyprland_idle_and_keybinds` | Desktop | Configures Hyprland idle timeouts and keybindings. |
 | `set_hyprland_monitor_scale` | Desktop | Configures Hyprland monitor resolution and scale. |
 | `setup_omarchy_refined_menu`| Desktop | Configures refined, aesthetic application launcher menu. |
+| `setup_poweroff_hibernation`| Desktop | Configures automatic hibernation on low battery (5%) and shutdown. |
 | `install_wallpapers` | Rice | Deploys custom wallpapers to active Omarchy theme directory. |
 | `setup_starship` | Rice | Configures Starship prompt with Nerd Font symbols & language modules. |
 | `setup_blesh` | Rice | Configures `ble.sh` for Bash live syntax highlighting & auto-suggestions. |

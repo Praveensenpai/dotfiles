@@ -107,6 +107,9 @@ async fn setup_cli_tools(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
     fs_util::ensure_line(&bashrc, "alias ll='eza -la --icons'")?;
     fs_util::ensure_line(&bashrc, "alias ls='eza --icons'")?;
     fs_util::ensure_line(&bashrc, "alias cat='bat'")?;
+    fs_util::ensure_line(&bashrc, "alias poweroff='systemctl hibernate'")?;
+    fs_util::ensure_line(&bashrc, "alias shutdown='systemctl hibernate'")?;
+    fs_util::ensure_line(&bashrc, "alias cold-poweroff='command poweroff'")?;
     Ok(())
 }
 

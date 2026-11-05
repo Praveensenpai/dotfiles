@@ -69,7 +69,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn get_tasks () -> Vec < Task >
   ```
 
-### `src/domain/desktop_tasks.rs` (Role: domain, Lines: 71)
+### `src/domain/desktop_tasks.rs` (Role: domain, Lines: 77)
 - **Responsibility**: Core domain logic in src/domain/desktop_tasks.rs
 - **Imports**: use crate :: domain :: task :: { Task , TaskCategory } 
 - **Public Functions & Signatures**:
@@ -77,7 +77,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn get_tasks () -> Vec < Task >
   ```
 
-### `src/domain/exec_core.rs` (Role: domain, Lines: 158)
+### `src/domain/exec_core.rs` (Role: domain, Lines: 161)
 - **Responsibility**: Core domain logic in src/domain/exec_core.rs
 - **Imports**: use anyhow :: Result , use std :: path :: PathBuf , use tokio :: sync :: mpsc , use crate :: infra :: cmd , use crate :: infra :: fs_util , use crate :: infra :: runner :: RunnerEvent 
 - **Public Functions & Signatures**:
@@ -85,7 +85,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   async fn execute (id : & str , tx : & mpsc :: Sender < RunnerEvent >) -> Result < () >
   ```
 
-### `src/domain/exec_desktop.rs` (Role: domain, Lines: 148)
+### `src/domain/exec_desktop.rs` (Role: domain, Lines: 206)
 - **Responsibility**: Core domain logic in src/domain/exec_desktop.rs
 - **Imports**: use anyhow :: Result , use std :: path :: PathBuf , use tokio :: sync :: mpsc , use crate :: domain :: exec_shell_bar , use crate :: infra :: cmd , use crate :: infra :: fs_util , use crate :: infra :: runner :: RunnerEvent 
 - **Public Functions & Signatures**:

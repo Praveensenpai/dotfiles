@@ -44,6 +44,7 @@ pub async fn execute(id: &str, tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
             id,
         )
         .await,
+        "setup_poweroff_hibernation" => setup_poweroff_hibernation(tx).await,
         _ => Ok(()),
     }
 }
@@ -144,5 +145,62 @@ listener {
         &bindings,
         "bindd = SUPER, XF86MonBrightnessDown, Set brightness to 0%, exec, brightnessctl -q s 0%",
     )?;
+    Ok(())
+}
+
+async fn setup_poweroff_hibernation(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
+    cmd::run_sudo(
+        "mkdir",
+        &["-p", "/etc/UPower/UPower.conf.d"],
+        tx,
+        "setup_poweroff_hibernation",
+    )
+    .await?;
+    let upower_conf = "[UPower]\nPercentageLow=20.0\nPercentageCritical=10.0\nPercentageAction=5.0\nCriticalPowerAction=Hibernate\n";
+    let cmd_str = format!(
+        "printf '%s' \"{upower_conf}\" > /etc/UPower/UPower.conf.d/99-critical-hibernate.conf"
+    );
+    cmd::run_sudo("sh", &["-c", &cmd_str], tx, "setup_poweroff_hibernation").await?;
+    let _ = cmd::run_sudo(
+        "systemctl",
+        &["try-restart", "upower.service"],
+        tx,
+        "setup_poweroff_hibernation",
+    )
+    .await;
+
+    let ext_dir = home_dir().join(".config/omarchy/extensions");
+    if !ext_dir.exists() {
+        std::fs::create_dir_all(&ext_dir)?;
+    }
+    let menu_jsonc = ext_dir.join("omarchy-menu.jsonc");
+    let menu_item = "  \"system.shutdown\": {\n    \"icon\": \"󰐥\",\n    \"label\": \"Shutdown (Hibernate)\",\n    \"description\": \"Hibernate and save session state to disk\",\n    \"action\": \"systemctl hibernate\"\n  }\n";
+    if menu_jsonc.exists() {
+        let existing = std::fs::read_to_string(&menu_jsonc)?;
+        if !existing.contains("system.shutdown") {
+            let updated = if let Some(last_brace) = existing.rfind('}') {
+                let (prefix, suffix) = existing.split_at(last_brace);
+                format!("{prefix}{menu_item}{suffix}")
+            } else {
+                format!("{{\n{menu_item}}}\n")
+            };
+            std::fs::write(&menu_jsonc, updated)?;
+        }
+    } else {
+        fs_util::write_file(&menu_jsonc, &format!("{{\n{menu_item}}}\n"))?;
+    }
+
+    let bashrc = home_dir().join(".bashrc");
+    fs_util::ensure_line(&bashrc, "alias poweroff='systemctl hibernate'")?;
+    fs_util::ensure_line(&bashrc, "alias shutdown='systemctl hibernate'")?;
+    fs_util::ensure_line(&bashrc, "alias cold-poweroff='command poweroff'")?;
+
+    let _ = cmd::run(
+        "omarchy",
+        &["menu", "refresh"],
+        tx,
+        "setup_poweroff_hibernation",
+    )
+    .await;
     Ok(())
 }
