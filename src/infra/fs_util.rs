@@ -12,9 +12,9 @@ fn ensure_parent_dir(path: &Path) -> Result<()> {
     match fs::create_dir_all(parent) {
         Ok(()) => Ok(()),
         Err(e) if e.kind() == io::ErrorKind::AlreadyExists && parent.is_dir() => Ok(()),
-        Err(e) => Err(e).with_context(|| {
-            format!("Failed to create directory {}", parent.display())
-        }),
+        Err(e) => {
+            Err(e).with_context(|| format!("Failed to create directory {}", parent.display()))
+        }
     }
 }
 
