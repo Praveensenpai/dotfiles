@@ -1,13 +1,26 @@
 use anyhow::{Context, Result};
 use std::fs::{self, OpenOptions};
-use std::io::Write;
+use std::io::{self, Write};
 use std::path::Path;
+
+/// Creates parent directories for `path`, tolerating the case where they
+/// already exist (EEXIST / `AlreadyExists` is not an error).
+fn ensure_parent_dir(path: &Path) -> Result<()> {
+    let Some(parent) = path.parent() else {
+        return Ok(());
+    };
+    match fs::create_dir_all(parent) {
+        Ok(()) => Ok(()),
+        Err(e) if e.kind() == io::ErrorKind::AlreadyExists && parent.is_dir() => Ok(()),
+        Err(e) => Err(e).with_context(|| {
+            format!("Failed to create directory {}", parent.display())
+        }),
+    }
+}
 
 /// Appends a line to a file if it is not already present.
 pub fn ensure_line(path: &Path, line: &str) -> Result<()> {
-    if let Some(parent) = path.parent() {
-        fs::create_dir_all(parent)?;
-    }
+    ensure_parent_dir(path)?;
 
     let existing = if path.exists() {
         fs::read_to_string(path).with_context(|| format!("Failed to read {}", path.display()))?
@@ -30,9 +43,7 @@ pub fn ensure_line(path: &Path, line: &str) -> Result<()> {
 
 /// Safely writes content to a file, creating parent directories if needed.
 pub fn write_file(path: &Path, content: &str) -> Result<()> {
-    if let Some(parent) = path.parent() {
-        fs::create_dir_all(parent)?;
-    }
+    ensure_parent_dir(path)?;
     fs::write(path, content).with_context(|| format!("Failed to write {}", path.display()))
 }
 

@@ -203,9 +203,9 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   async fn run_pacman (packages : & [& str] , tx : & mpsc :: Sender < RunnerEvent > , task_id : & str ,) -> Result < () >
   ```
 
-### `src/infra/fs_util.rs` (Role: infra, Lines: 50)
+### `src/infra/fs_util.rs` (Role: infra, Lines: 60)
 - **Responsibility**: Core infra logic in src/infra/fs_util.rs
-- **Imports**: use anyhow :: { Context , Result } , use std :: fs :: { self , OpenOptions } , use std :: io :: Write , use std :: path :: Path 
+- **Imports**: use anyhow :: { Context , Result } , use std :: fs :: { self , OpenOptions } , use std :: io :: { self , Write } , use std :: path :: Path 
 - **Public Functions & Signatures**:
   ```rust
   fn ensure_line (path : & Path , line : & str) -> Result < () >
