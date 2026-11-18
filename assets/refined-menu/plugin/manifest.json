@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "paisen.menu",
+  "name": "My Menu",
+  "version": "1.0.0",
+  "author": "Omarchy",
+  "description": "Enhanced Quickshell-powered Omarchy command menu",
+  "kinds": [
+    "menu",
+    "bar-widget"
+  ],
+  "keepLoaded": true,
+  "entryPoints": {
+    "menu": "Menu.qml",
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "My Menu",
+    "description": "Launches the enhanced Omarchy menu",
+    "category": "Compositor",
+    "allowMultiple": false
+  },
+  "omarchy": {
+    "clonedFrom": "omarchy.menu"
+  }
+}

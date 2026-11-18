@@ -7,6 +7,7 @@ pub mod exec_desktop;
 pub mod exec_ime;
 pub mod exec_maint;
 pub mod exec_media;
+pub mod exec_menu;
 pub mod exec_plugins;
 pub mod exec_rice;
 pub mod exec_shell_bar;

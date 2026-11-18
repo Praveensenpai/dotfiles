@@ -93,7 +93,7 @@ fn get_window_tasks() -> Vec<Task> {
         dt(
             "setup_omarchy_refined_menu",
             "Omarchy Refined Menu",
-            "Customizes Omarchy application menu presentation",
+            "Deploys the refined Quickshell menu plugin with app-priority search",
             true,
         ),
     ]

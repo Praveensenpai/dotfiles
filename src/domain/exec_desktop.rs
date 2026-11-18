@@ -2,6 +2,7 @@ use anyhow::Result;
 use tokio::sync::mpsc;
 
 use crate::domain::exec_ime;
+use crate::domain::exec_menu;
 use crate::domain::exec_shell_bar;
 use crate::infra::cmd;
 use crate::infra::env_util::home_dir;
@@ -37,12 +38,7 @@ pub async fn execute(id: &str, tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
         "set_omarchy_shell_bar" => exec_shell_bar::execute(tx).await,
         "setup_japanese_ime" => setup_japanese_ime(tx).await,
         "setup_kitty_default_terminal" => setup_kitty_default_terminal(tx).await,
-        "setup_omarchy_refined_menu" => cmd::run_curl_bash(
-            "https://raw.githubusercontent.com/Praveensenpai/omarchy-refined-menu/main/install.sh",
-            tx,
-            id,
-        )
-        .await,
+        "setup_omarchy_refined_menu" => exec_menu::execute(tx, id).await,
         "setup_poweroff_hibernation" => setup_poweroff_hibernation(tx).await,
         _ => Ok(()),
     }
