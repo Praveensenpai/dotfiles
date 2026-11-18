@@ -1,14 +1,10 @@
 use anyhow::Result;
-use std::path::PathBuf;
 use tokio::sync::mpsc;
 
 use crate::infra::cmd;
+use crate::infra::env_util::{home_dir, user_name};
 use crate::infra::fs_util;
 use crate::infra::runner::RunnerEvent;
-
-fn home_dir() -> PathBuf {
-    PathBuf::from(std::env::var("HOME").unwrap_or_else(|_| ".".to_string()))
-}
 
 /// Executes a core task by its unique task ID.
 pub async fn execute(id: &str, tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
@@ -75,8 +71,13 @@ async fn setup_docker(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
         "setup_docker",
     )
     .await?;
-    let user = std::env::var("USER").unwrap_or_else(|_| "paisen".to_string());
-    cmd::run_sudo("usermod", &["-aG", "docker", &user], tx, "setup_docker").await
+    cmd::run_sudo(
+        "usermod",
+        &["-aG", "docker", &user_name()],
+        tx,
+        "setup_docker",
+    )
+    .await
 }
 
 fn setup_editor() -> Result<()> {
@@ -151,12 +152,48 @@ async fn setup_git_config(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
 }
 
 async fn setup_github_ssh(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
-    cmd::run_curl_bash(
-        "https://raw.githubusercontent.com/Praveensenpai/github-ssh-key-setup/main/install.sh",
-        tx,
-        "setup_github_ssh",
-    )
-    .await
+    const TASK: &str = "setup_github_ssh";
+    let ssh_dir = home_dir().join(".ssh");
+    std::fs::create_dir_all(&ssh_dir)?;
+    let private_key = ssh_dir.join("id_ed25519");
+    let public_key = ssh_dir.join("id_ed25519.pub");
+
+    if !public_key.exists() {
+        cmd::run(
+            "ssh-keygen",
+            &[
+                "-t",
+                "ed25519",
+                "-C",
+                "git@github.com",
+                "-f",
+                &private_key.to_string_lossy(),
+                "-N",
+                "",
+            ],
+            tx,
+            TASK,
+        )
+        .await?;
+    }
+
+    let agent = "eval \"$(ssh-agent -s)\" >/dev/null 2>&1; ssh-add \"$HOME/.ssh/id_ed25519\" >/dev/null 2>&1 || true";
+    let _ = cmd::run("bash", &["-c", agent], tx, TASK).await;
+
+    let key = std::fs::read_to_string(&public_key).unwrap_or_default();
+    for line in [
+        format!("Public key: {}", key.trim()),
+        "Add it at https://github.com/settings/ssh/new (Authentication Key)".to_string(),
+        "Verify with: ssh -T git@github.com".to_string(),
+    ] {
+        let _ = tx
+            .send(RunnerEvent::TaskProgress {
+                id: TASK.to_string(),
+                line,
+            })
+            .await;
+    }
+    Ok(())
 }
 
 async fn setup_zoxide(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {

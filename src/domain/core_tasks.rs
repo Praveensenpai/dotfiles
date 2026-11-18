@@ -87,7 +87,8 @@ fn get_shell_tasks() -> Vec<Task> {
         Task {
             id: "setup_github_ssh",
             name: "GitHub SSH Key Setup",
-            description: "Generates Ed25519 SSH key and guides GitHub key connection",
+            description:
+                "Generates an Ed25519 key, starts ssh-agent, and prints the key for GitHub",
             category: TaskCategory::Core,
             default_selected: true,
         },
