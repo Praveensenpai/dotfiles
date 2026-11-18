@@ -40,9 +40,15 @@ async fn main() -> Result<()> {
         return Ok(());
     }
 
-    infra::sudo::warmup()?;
-    let sudo_running = Arc::new(AtomicBool::new(true));
-    infra::sudo::spawn_keepalive(sudo_running.clone());
+    let sudo_running = if args.dry_run {
+        println!("\x1b[1;33m[dry-run] Skipping sudo authentication\x1b[0m");
+        None
+    } else {
+        infra::sudo::warmup()?;
+        let flag = Arc::new(AtomicBool::new(true));
+        infra::sudo::spawn_keepalive(flag.clone());
+        Some(flag)
+    };
 
     let mut app = App::new();
     let (tx, rx) = mpsc::channel::<RunnerEvent>(100);
@@ -65,7 +71,9 @@ async fn main() -> Result<()> {
 
     disable_raw_mode()?;
     stdout().execute(LeaveAlternateScreen)?;
-    sudo_running.store(false, Ordering::Relaxed);
+    if let Some(flag) = &sudo_running {
+        flag.store(false, Ordering::Relaxed);
+    }
 
     if let Err(err) = res {
         eprintln!("\n❌ Error running dotfiles setup: {err:#}");
@@ -81,9 +89,13 @@ fn start_execution(app: &mut App, ctx: &mut RunContext) -> Result<()> {
     app.state = AppState::Running;
     app.start_time = Some(Instant::now());
 
-    let runner = ProcessRunner::new()?;
-    let tx = ctx.tx.clone();
     let dry_run = ctx.dry_run;
+    let runner = if dry_run {
+        None
+    } else {
+        Some(ProcessRunner::new()?)
+    };
+    let tx = ctx.tx.clone();
     let tasks: Vec<Task> = app
         .tasks
         .iter()
@@ -93,10 +105,10 @@ fn start_execution(app: &mut App, ctx: &mut RunContext) -> Result<()> {
 
     ctx.handle = Some(tokio::spawn(async move {
         for task in tasks {
-            if dry_run {
-                simulate_dry_run(&task, &tx).await;
-            } else {
+            if let Some(runner) = &runner {
                 let _ = runner.run_task(&task, tx.clone()).await;
+            } else {
+                simulate_dry_run(&task, &tx).await;
             }
         }
         let _ = tx.send(RunnerEvent::AllFinished).await;
