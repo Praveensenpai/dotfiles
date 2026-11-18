@@ -6,7 +6,7 @@ pub fn get_tasks() -> Vec<Task> {
         Task {
             id: "install_anime4k",
             name: "Install Anime4K Shaders",
-            description: "Installs high quality Anime4K real-time upscaling shaders for mpv",
+            description: "Deploys bundled Anime4K shaders, hotkeys, and default preset for mpv",
             category: TaskCategory::Media,
             default_selected: true,
         },

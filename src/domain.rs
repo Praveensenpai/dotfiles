@@ -1,3 +1,4 @@
+pub mod anime4k_assets;
 pub mod catalog;
 pub mod core_tasks;
 pub mod desktop_tasks;

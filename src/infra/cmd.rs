@@ -73,19 +73,6 @@ pub async fn run_curl_bash(url: &str, tx: &mpsc::Sender<RunnerEvent>, task_id: &
     run("bash", &["-c", &cmd], tx, task_id).await
 }
 
-/// Downloads and executes a remote bash installer script with arguments silently.
-pub async fn run_curl_bash_args(
-    url: &str,
-    script_args: &str,
-    tx: &mpsc::Sender<RunnerEvent>,
-    task_id: &str,
-) -> Result<()> {
-    let cmd = format!(
-        "cd /tmp && curl -4 -fsSL -H 'Cache-Control: no-cache' \"{url}\" | setsid bash -s -- {script_args}"
-    );
-    run("bash", &["-c", &cmd], tx, task_id).await
-}
-
 /// Checks whether a command is installed and executable in PATH.
 pub async fn command_exists(name: &str) -> bool {
     Command::new("which")
