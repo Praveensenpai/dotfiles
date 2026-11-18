@@ -53,6 +53,9 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn print_task_list ()
   ```
 
+### `src/domain/anime4k_assets.rs` (Role: domain, Lines: 162)
+- **Responsibility**: Core domain logic in src/domain/anime4k_assets.rs
+
 ### `src/domain/catalog.rs` (Role: domain, Lines: 14)
 - **Responsibility**: Core domain logic in src/domain/catalog.rs
 - **Imports**: use crate :: domain :: task :: Task , use crate :: domain :: { core_tasks , desktop_tasks , maint_tasks , media_tasks , rice_tasks , tools_tasks } 
@@ -61,7 +64,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn get_all_tasks () -> Vec < Task >
   ```
 
-### `src/domain/core_tasks.rs` (Role: domain, Lines: 102)
+### `src/domain/core_tasks.rs` (Role: domain, Lines: 104)
 - **Responsibility**: Core domain logic in src/domain/core_tasks.rs
 - **Imports**: use crate :: domain :: task :: { Task , TaskCategory } 
 - **Public Functions & Signatures**:
@@ -77,20 +80,28 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn get_tasks () -> Vec < Task >
   ```
 
-### `src/domain/exec_core.rs` (Role: domain, Lines: 161)
+### `src/domain/exec_core.rs` (Role: domain, Lines: 204)
 - **Responsibility**: Core domain logic in src/domain/exec_core.rs
-- **Imports**: use anyhow :: Result , use std :: path :: PathBuf , use tokio :: sync :: mpsc , use crate :: infra :: cmd , use crate :: infra :: fs_util , use crate :: infra :: runner :: RunnerEvent 
+- **Imports**: use anyhow :: Result , use tokio :: sync :: mpsc , use crate :: infra :: cmd , use crate :: infra :: env_util :: { home_dir , user_name } , use crate :: infra :: fs_util , use crate :: infra :: runner :: RunnerEvent 
 - **Public Functions & Signatures**:
   ```rust
   async fn execute (id : & str , tx : & mpsc :: Sender < RunnerEvent >) -> Result < () >
   ```
 
-### `src/domain/exec_desktop.rs` (Role: domain, Lines: 301)
+### `src/domain/exec_desktop.rs` (Role: domain, Lines: 295)
 - **Responsibility**: Core domain logic in src/domain/exec_desktop.rs
-- **Imports**: use anyhow :: Result , use std :: path :: PathBuf , use tokio :: sync :: mpsc , use crate :: domain :: exec_shell_bar , use crate :: infra :: cmd , use crate :: infra :: fs_util , use crate :: infra :: runner :: RunnerEvent 
+- **Imports**: use anyhow :: Result , use tokio :: sync :: mpsc , use crate :: domain :: exec_ime , use crate :: domain :: exec_menu , use crate :: domain :: exec_shell_bar , use crate :: infra :: cmd , use crate :: infra :: env_util :: home_dir , use crate :: infra :: fs_util , use crate :: infra :: runner :: RunnerEvent 
 - **Public Functions & Signatures**:
   ```rust
   async fn execute (id : & str , tx : & mpsc :: Sender < RunnerEvent >) -> Result < () >
+  ```
+
+### `src/domain/exec_ime.rs` (Role: domain, Lines: 56)
+- **Responsibility**: Core domain logic in src/domain/exec_ime.rs
+- **Imports**: use anyhow :: Result , use tokio :: sync :: mpsc , use crate :: domain :: exec_plugins , use crate :: infra :: env_util :: user_name , # [cfg (test)] use crate :: infra :: fs_util , use crate :: infra :: runner :: RunnerEvent 
+- **Public Functions & Signatures**:
+  ```rust
+  async fn execute (tx : & mpsc :: Sender < RunnerEvent > , task_id : & str) -> Result < () >
   ```
 
 ### `src/domain/exec_maint.rs` (Role: domain, Lines: 19)
@@ -101,12 +112,38 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   async fn execute (id : & str , tx : & mpsc :: Sender < RunnerEvent >) -> Result < () >
   ```
 
-### `src/domain/exec_media.rs` (Role: domain, Lines: 115)
+### `src/domain/exec_media.rs` (Role: domain, Lines: 182)
 - **Responsibility**: Core domain logic in src/domain/exec_media.rs
-- **Imports**: use anyhow :: Result , use std :: path :: PathBuf , use tokio :: sync :: mpsc , use crate :: infra :: cmd , use crate :: infra :: fs_util , use crate :: infra :: runner :: RunnerEvent 
+- **Imports**: use anyhow :: Result , use std :: path :: { Path , PathBuf } , use tokio :: sync :: mpsc , use crate :: domain :: anime4k_assets :: { INPUT_CONF , MPV_CONF , SHADERS } , use crate :: infra :: cmd , use crate :: infra :: env_util :: { config_dir , home_dir } , use crate :: infra :: fs_util , use crate :: infra :: runner :: RunnerEvent 
 - **Public Functions & Signatures**:
   ```rust
   async fn execute (id : & str , tx : & mpsc :: Sender < RunnerEvent >) -> Result < () >
+  ```
+
+### `src/domain/exec_menu.rs` (Role: domain, Lines: 41)
+- **Responsibility**: Core domain logic in src/domain/exec_menu.rs
+- **Imports**: use anyhow :: Result , use tokio :: sync :: mpsc , use crate :: domain :: exec_plugins , use crate :: infra :: env_util :: user_name , use crate :: infra :: runner :: RunnerEvent 
+- **Public Functions & Signatures**:
+  ```rust
+  async fn execute (tx : & mpsc :: Sender < RunnerEvent > , task_id : & str) -> Result < () >
+  ```
+
+### `src/domain/exec_opencode.rs` (Role: domain, Lines: 232)
+- **Responsibility**: Core domain logic in src/domain/exec_opencode.rs
+- **Imports**: use anyhow :: Result , use std :: path :: { Path , PathBuf } , use tokio :: sync :: mpsc , use crate :: infra :: cmd , use crate :: infra :: env_util :: { config_dir , home_dir } , use crate :: infra :: fs_util , use crate :: infra :: runner :: RunnerEvent 
+- **Public Functions & Signatures**:
+  ```rust
+  async fn execute (tx : & mpsc :: Sender < RunnerEvent >) -> Result < () >
+  ```
+
+### `src/domain/exec_plugins.rs` (Role: domain, Lines: 75)
+- **Responsibility**: Core domain logic in src/domain/exec_plugins.rs
+- **Imports**: use anyhow :: Result , use std :: path :: Path , use tokio :: sync :: mpsc , use crate :: infra :: cmd , use crate :: infra :: env_util :: config_dir , use crate :: infra :: fs_util , use crate :: infra :: runner :: RunnerEvent 
+- **Public Functions & Signatures**:
+  ```rust
+  fn deploy_plugin_at (target : & Path , assets : & [(& str , & str , bool)] , user : & str) -> Result < () >
+  fn deploy_plugin (name : & str , assets : & [(& str , & str , bool)] , user : & str) -> Result < () >
+  async fn enable_plugin (plugin_id : & str , tx : & mpsc :: Sender < RunnerEvent > , task_id : & str ,) -> Result < () >
   ```
 
 ### `src/domain/exec_rice.rs` (Role: domain, Lines: 110)
@@ -117,17 +154,17 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   async fn execute (id : & str , tx : & mpsc :: Sender < RunnerEvent >) -> Result < () >
   ```
 
-### `src/domain/exec_shell_bar.rs` (Role: domain, Lines: 173)
+### `src/domain/exec_shell_bar.rs` (Role: domain, Lines: 170)
 - **Responsibility**: Core domain logic in src/domain/exec_shell_bar.rs
-- **Imports**: use anyhow :: Result , use std :: path :: { Path , PathBuf } , use tokio :: sync :: mpsc , use crate :: infra :: cmd , use crate :: infra :: fs_util , use crate :: infra :: runner :: RunnerEvent 
+- **Imports**: use anyhow :: Result , use std :: path :: Path , use tokio :: sync :: mpsc , use crate :: infra :: cmd , use crate :: infra :: env_util :: { home_dir , user_name } , use crate :: infra :: fs_util , use crate :: infra :: runner :: RunnerEvent 
 - **Public Functions & Signatures**:
   ```rust
   async fn execute (tx : & mpsc :: Sender < RunnerEvent >) -> Result < () >
   ```
 
-### `src/domain/exec_tools.rs` (Role: domain, Lines: 132)
+### `src/domain/exec_tools.rs` (Role: domain, Lines: 134)
 - **Responsibility**: Core domain logic in src/domain/exec_tools.rs
-- **Imports**: use anyhow :: Result , use tokio :: sync :: mpsc , use crate :: infra :: cmd , use crate :: infra :: runner :: RunnerEvent 
+- **Imports**: use anyhow :: Result , use tokio :: sync :: mpsc , use crate :: domain :: exec_opencode , use crate :: infra :: cmd , use crate :: infra :: runner :: RunnerEvent 
 - **Public Functions & Signatures**:
   ```rust
   async fn execute (id : & str , tx : & mpsc :: Sender < RunnerEvent >) -> Result < () >
@@ -178,7 +215,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn all () -> & 'static [Self]
   ```
 
-### `src/domain/tools_tasks.rs` (Role: domain, Lines: 88)
+### `src/domain/tools_tasks.rs` (Role: domain, Lines: 95)
 - **Responsibility**: Core domain logic in src/domain/tools_tasks.rs
 - **Imports**: use crate :: domain :: task :: { Task , TaskCategory } 
 - **Public Functions & Signatures**:
@@ -186,30 +223,44 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn get_tasks () -> Vec < Task >
   ```
 
-### `src/domain.rs` (Role: domain, Lines: 19)
+### `src/domain.rs` (Role: domain, Lines: 24)
 - **Responsibility**: Core domain logic in src/domain.rs
 - **Imports**: pub use executor :: execute_task , pub use task :: { Task , TaskCategory } 
 
-### `src/infra/cmd.rs` (Role: infra, Lines: 158)
+### `src/infra/cmd.rs` (Role: infra, Lines: 156)
 - **Responsibility**: Core infra logic in src/infra/cmd.rs
 - **Imports**: use anyhow :: { anyhow , Context , Result } , use std :: fs :: OpenOptions , use std :: io :: Write , use std :: path :: PathBuf , use std :: process :: Stdio , use tokio :: io :: { AsyncBufReadExt , BufReader } , use tokio :: process :: Command , use tokio :: sync :: mpsc , use crate :: infra :: runner :: RunnerEvent 
 - **Public Functions & Signatures**:
   ```rust
   async fn run (program : & str , args : & [& str] , tx : & mpsc :: Sender < RunnerEvent > , task_id : & str ,) -> Result < () >
+  async fn run_in (program : & str , args : & [& str] , dir : & std :: path :: Path , tx : & mpsc :: Sender < RunnerEvent > , task_id : & str ,) -> Result < () >
   async fn run_sudo (program : & str , args : & [& str] , tx : & mpsc :: Sender < RunnerEvent > , task_id : & str ,) -> Result < () >
   async fn run_curl_bash (url : & str , tx : & mpsc :: Sender < RunnerEvent > , task_id : & str) -> Result < () >
-  async fn run_curl_bash_args (url : & str , script_args : & str , tx : & mpsc :: Sender < RunnerEvent > , task_id : & str ,) -> Result < () >
   async fn command_exists (name : & str) -> bool
   async fn run_pacman (packages : & [& str] , tx : & mpsc :: Sender < RunnerEvent > , task_id : & str ,) -> Result < () >
   ```
 
-### `src/infra/fs_util.rs` (Role: infra, Lines: 61)
-- **Responsibility**: Core infra logic in src/infra/fs_util.rs
-- **Imports**: use anyhow :: { Context , Result } , use std :: fs :: { self , OpenOptions } , use std :: io :: { self , Write } , use std :: path :: Path 
+### `src/infra/env_util.rs` (Role: infra, Lines: 16)
+- **Responsibility**: Core infra logic in src/infra/env_util.rs
+- **Imports**: use std :: path :: PathBuf 
 - **Public Functions & Signatures**:
   ```rust
+  fn user_name () -> String
+  fn home_dir () -> PathBuf
+  fn config_dir () -> PathBuf
+  ```
+
+### `src/infra/fs_util.rs` (Role: infra, Lines: 138)
+- **Responsibility**: Core infra logic in src/infra/fs_util.rs
+- **Imports**: use anyhow :: { Context , Result } , use std :: fs :: { self , OpenOptions } , use std :: io :: { self , Write } , use std :: path :: Path , # [cfg (test)] use std :: sync :: atomic :: { AtomicUsize , Ordering } 
+- **Public Functions & Signatures**:
+  ```rust
+  fn test_dir (label : & str) -> std :: path :: PathBuf
   fn ensure_line (path : & Path , line : & str) -> Result < () >
   fn write_file (path : & Path , content : & str) -> Result < () >
+  fn deploy_assets (base : & Path , assets : & [(& str , & str , bool)]) -> Result < () >
+  fn replace_managed_block (content : & str , start : & str , end : & str , block : & str) -> String
+  fn write_private_file (path : & Path , content : & str) -> Result < () >
   fn write_executable_file (path : & Path , content : & str) -> Result < () >
   ```
 
@@ -236,11 +287,11 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn spawn_keepalive (running : Arc < AtomicBool >)
   ```
 
-### `src/infra.rs` (Role: infra, Lines: 6)
+### `src/infra.rs` (Role: infra, Lines: 7)
 - **Responsibility**: Core infra logic in src/infra.rs
 - **Imports**: pub use runner :: { ProcessRunner , RunnerEvent } 
 
-### `src/main.rs` (Role: general, Lines: 274)
+### `src/main.rs` (Role: general, Lines: 286)
 - **Responsibility**: Core general logic in src/main.rs
 - **Imports**: use std :: io :: { self , stdout } , use std :: sync :: atomic :: { AtomicBool , Ordering } , use std :: sync :: Arc , use std :: time :: { Duration , Instant } , use anyhow :: Result , use clap :: Parser , use crossterm :: event :: { self , Event , KeyCode , KeyEvent , KeyEventKind , KeyModifiers } , use crossterm :: terminal :: { disable_raw_mode , enable_raw_mode , EnterAlternateScreen , LeaveAlternateScreen , } , use crossterm :: ExecutableCommand , use ratatui :: backend :: CrosstermBackend , use ratatui :: Terminal , use tokio :: sync :: mpsc , use app :: { App , AppState , TaskStatus } , use cli :: Cli , use domain :: Task , use infra :: { ProcessRunner , RunnerEvent } 
 

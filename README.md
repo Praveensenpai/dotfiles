@@ -104,7 +104,7 @@ curl -LsSf -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/Pravee
 
 ## 🎀 ⁺ . ⊹ Native Installation Tasks . ⁺ 🌸
 
-All 45 tasks are written in 100% native Rust logic with automated logging to `install.log` and live terminal drawer inspection:
+All 47 tasks are written in 100% native Rust logic with automated logging to `install.log` and live terminal drawer inspection:
 
 | Task ID | Category | What it does (*´▽`*) |
 | :--- | :--- | :--- |
@@ -119,7 +119,7 @@ All 45 tasks are written in 100% native Rust logic with automated logging to `in
 | `setup_docker` | Core | Configures `docker.service`/`socket` and adds user to docker group. |
 | `setup_editor` | Core | Sets `EDITOR=nvim` and `VISUAL=nvim` in shell configs. |
 | `setup_git_config` | Core | Sets global Git name/email defaults. |
-| `setup_github_ssh` | Core | Generates Ed25519 SSH key & sets up GitHub SSH authentication. |
+| `setup_github_ssh` | Core | Generates an Ed25519 SSH key, starts `ssh-agent`, and prints the key to register on GitHub. |
 
 | `remove_omarchy_preinstalls`| Desktop | Purges default bloatware via [`omarchy-debloat`](https://github.com/Praveensenpai/omarchy-debloat). |
 | `disable_bluetooth` | Desktop | Disables bluetooth auto-power on boot. |
@@ -128,13 +128,14 @@ All 45 tasks are written in 100% native Rust logic with automated logging to `in
 | `set_hyprland_gaps_and_borders` | Desktop | Sets Hyprland inner/outer gaps to 0 and custom border colors. |
 | `set_hyprland_idle_and_keybinds` | Desktop | Configures Hyprland idle timeouts and keybindings. |
 | `set_hyprland_monitor_scale` | Desktop | Configures Hyprland monitor resolution and scale. |
-| `setup_omarchy_refined_menu`| Desktop | Configures refined, aesthetic application launcher menu. |
+| `setup_japanese_ime` | Desktop | Configures Fcitx5/Mozc and deploys the Japanese IME toggle widget with status popover. |
+| `setup_omarchy_refined_menu`| Desktop | Deploys the refined Quickshell menu plugin with app-priority search. |
 | `setup_poweroff_hibernation`| Desktop | Configures automatic hibernation on low battery (5%) and shutdown. |
 | `install_wallpapers` | Rice | Deploys custom wallpapers to active Omarchy theme directory. |
 | `setup_starship` | Rice | Configures Starship prompt with Nerd Font symbols & language modules. |
-| `setup_blesh` | Rice | Configures `ble.sh` for Bash live syntax highlighting & auto-suggestions. |
+| `setup_blesh` | Core | Installs `ble.sh` nightly and enables Bash live syntax highlighting & auto-suggestions. |
 | `set_omarchy_shell_bar` | Rice | Configures live Quickshell bar widgets, Japanese calendar & System Resources monitor. |
-| `install_anime4k` | Media | Downloads and configures Anime4K GLSL shaders for `mpv`. |
+| `install_anime4k` | Media | Deploys bundled Anime4K GLSL shaders, hotkeys, and default preset for `mpv`. |
 | `set_mpv_lang` | Media | Sets default Japanese audio & English subtitle priorities in `mpv.conf`. |
 | `setup_mpv_resume` | Media | Enables saving playback position on quit in `mpv.conf`. |
 | `setup_mpv_youtube` | Media | Configures yt-dlp high quality streaming playback in `mpv`. |
@@ -149,6 +150,7 @@ All 45 tasks are written in 100% native Rust logic with automated logging to `in
 | `setup_fzf_keybinds` | Tools | Configures `fzf` interactive fuzzy search shortcuts (`Ctrl+R`, `Ctrl+T`). |
 | `setup_toss` | Tools | Installs `toss` Rust TUI trash manager with shell completions & alias. |
 | `setup_vnstat_service` | Tools | Installs `vnstat` network monitor and enables `vnstat.service`. |
+| `setup_opencode_config` | Tools | Deploys the bundled OpenCode provider/model config, plugins, and karakuri sync. |
 | `setup_agym` | Tools | Installs `agym` Antigravity manager & configures shell environment. |
 
 | `install_antigravity_cli` | Tools | Installs official Google Antigravity CLI. |
