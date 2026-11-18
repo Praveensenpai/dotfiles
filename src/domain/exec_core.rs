@@ -87,18 +87,24 @@ fn setup_editor() -> Result<()> {
 }
 
 async fn setup_blesh(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
-    cmd::run_curl_bash(
-        "https://raw.githubusercontent.com/akinomyoga/ble.sh/master/ble.sh",
-        tx,
-        "setup_blesh",
-    )
-    .await?;
-    let bashrc = home_dir().join(".bashrc");
-    fs_util::ensure_line(
-        &bashrc,
-        "[[ $- == *i* ]] && source ~/.local/share/blesh/ble.sh",
-    )?;
-    Ok(())
+    const NIGHTLY: &str =
+        "https://github.com/akinomyoga/ble.sh/releases/download/nightly/ble-nightly.tar.xz";
+    let system_ble = std::path::PathBuf::from("/usr/share/blesh/ble.sh");
+    let local_ble = home_dir().join(".local/share/blesh/ble.sh");
+
+    if !local_ble.exists() && !system_ble.exists() {
+        let script = format!(
+            "set -eu; tmp=$(mktemp -d); trap 'rm -rf \"$tmp\"' EXIT; curl -fsSL '{NIGHTLY}' | tar -xJ -C \"$tmp\"; mkdir -p \"$HOME/.local/share\"; rm -rf \"$HOME/.local/share/blesh\"; mv \"$tmp/ble-nightly\" \"$HOME/.local/share/blesh\""
+        );
+        cmd::run("bash", &["-c", &script], tx, "setup_blesh").await?;
+    }
+
+    let source_line = if local_ble.exists() {
+        "[[ $- == *i* ]] && source ~/.local/share/blesh/ble.sh"
+    } else {
+        "[[ $- == *i* ]] && source /usr/share/blesh/ble.sh"
+    };
+    fs_util::ensure_line(&home_dir().join(".bashrc"), source_line)
 }
 
 async fn setup_cli_tools(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
