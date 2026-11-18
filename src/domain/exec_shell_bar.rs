@@ -1,14 +1,11 @@
 use anyhow::Result;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use tokio::sync::mpsc;
 
 use crate::infra::cmd;
+use crate::infra::env_util::{home_dir, user_name};
 use crate::infra::fs_util;
 use crate::infra::runner::RunnerEvent;
-
-fn home_dir() -> PathBuf {
-    PathBuf::from(std::env::var("HOME").unwrap_or_else(|_| ".".to_string()))
-}
 
 /// Configures Omarchy Quickshell bar themes, widgets, and Japanese calendar.
 pub async fn execute(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
@@ -28,7 +25,7 @@ pub async fn execute(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
 }
 
 async fn clone_and_enable_widgets(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
-    let user = std::env::var("USER").unwrap_or_else(|_| "paisen".to_string());
+    let user = user_name();
     let plugins = ["bluetooth", "network", "audio", "clock"];
     for w in plugins {
         let plugin_id = format!("{user}.{w}");
@@ -69,7 +66,7 @@ async fn disable_unused_widgets(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
 }
 
 fn patch_bar_qml_files(config_dir: &Path) -> Result<()> {
-    let user = std::env::var("USER").unwrap_or_else(|_| "paisen".to_string());
+    let user = user_name();
     let plugins_dir = config_dir.join("plugins");
 
     let clock_qml = plugins_dir.join(format!("{user}.clock/BarWidget.qml"));
@@ -97,7 +94,7 @@ const PANEL_QML_TEMPLATE: &str = include_str!("../../assets/system-resources/Pan
 const STATS_SH: &str = include_str!("../../assets/system-resources/stats.sh");
 
 fn deploy_system_resources_plugin(config_dir: &Path) -> Result<()> {
-    let user = std::env::var("USER").unwrap_or_else(|_| "paisen".to_string());
+    let user = user_name();
     let sys_dir = config_dir
         .join("plugins")
         .join(format!("{user}.system-resources"));
@@ -146,7 +143,7 @@ fn write_system_resources_assets(sys_dir: &Path, user: &str) -> Result<()> {
 }
 
 async fn enable_system_resources(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
-    let user = std::env::var("USER").unwrap_or_else(|_| "paisen".to_string());
+    let user = user_name();
     let plugin_id = format!("{user}.system-resources");
     let _ = cmd::run(
         "omarchy",

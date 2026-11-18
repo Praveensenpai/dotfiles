@@ -59,7 +59,8 @@ fn get_shell_tasks() -> Vec<Task> {
         Task {
             id: "setup_blesh",
             name: "Setup ble.sh Auto-Suggestions",
-            description: "Configures ble.sh for real-time Bash syntax highlighting & suggestions",
+            description:
+                "Installs ble.sh nightly and enables Bash syntax highlighting & suggestions",
             category: TaskCategory::Core,
             default_selected: true,
         },
