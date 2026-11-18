@@ -21,9 +21,20 @@ pub async fn run(
     tx: &mpsc::Sender<RunnerEvent>,
     task_id: &str,
 ) -> Result<()> {
+    run_in(program, args, &std::env::temp_dir(), tx, task_id).await
+}
+
+/// Executes an external command from `dir`, streaming logs and progress events.
+pub async fn run_in(
+    program: &str,
+    args: &[&str],
+    dir: &std::path::Path,
+    tx: &mpsc::Sender<RunnerEvent>,
+    task_id: &str,
+) -> Result<()> {
     let mut child = Command::new(program)
         .args(args)
-        .current_dir(std::env::temp_dir())
+        .current_dir(dir)
         .stdin(Stdio::null())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())

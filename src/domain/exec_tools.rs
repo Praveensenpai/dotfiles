@@ -1,6 +1,7 @@
 use anyhow::Result;
 use tokio::sync::mpsc;
 
+use crate::domain::exec_opencode;
 use crate::infra::cmd;
 use crate::infra::runner::RunnerEvent;
 
@@ -38,6 +39,7 @@ pub async fn execute(id: &str, tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
             )
             .await
         }
+        "setup_opencode_config" => exec_opencode::execute(tx).await,
         "setup_ufw" => setup_ufw(tx).await,
         "setup_vnstat_service" => {
             cmd::run_sudo("systemctl", &["enable", "--now", "vnstat.service"], tx, id).await

@@ -50,6 +50,13 @@ fn get_cli_tools() -> Vec<Task> {
 fn get_system_tools() -> Vec<Task> {
     vec![
         Task {
+            id: "setup_opencode_config",
+            name: "OpenCode Configuration",
+            description: "Deploys OpenCode provider, models, plugins, and karakuri sync setup",
+            category: TaskCategory::Tools,
+            default_selected: true,
+        },
+        Task {
             id: "setup_dns",
             name: "DNS Resolver Setup",
             description: "Configures persistent systemd-resolved DNS servers",
