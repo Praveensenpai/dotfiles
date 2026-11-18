@@ -69,7 +69,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn get_tasks () -> Vec < Task >
   ```
 
-### `src/domain/desktop_tasks.rs` (Role: domain, Lines: 77)
+### `src/domain/desktop_tasks.rs` (Role: domain, Lines: 100)
 - **Responsibility**: Core domain logic in src/domain/desktop_tasks.rs
 - **Imports**: use crate :: domain :: task :: { Task , TaskCategory } 
 - **Public Functions & Signatures**:
@@ -85,7 +85,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   async fn execute (id : & str , tx : & mpsc :: Sender < RunnerEvent >) -> Result < () >
   ```
 
-### `src/domain/exec_desktop.rs` (Role: domain, Lines: 206)
+### `src/domain/exec_desktop.rs` (Role: domain, Lines: 301)
 - **Responsibility**: Core domain logic in src/domain/exec_desktop.rs
 - **Imports**: use anyhow :: Result , use std :: path :: PathBuf , use tokio :: sync :: mpsc , use crate :: domain :: exec_shell_bar , use crate :: infra :: cmd , use crate :: infra :: fs_util , use crate :: infra :: runner :: RunnerEvent 
 - **Public Functions & Signatures**:
@@ -117,7 +117,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   async fn execute (id : & str , tx : & mpsc :: Sender < RunnerEvent >) -> Result < () >
   ```
 
-### `src/domain/exec_shell_bar.rs` (Role: domain, Lines: 196)
+### `src/domain/exec_shell_bar.rs` (Role: domain, Lines: 173)
 - **Responsibility**: Core domain logic in src/domain/exec_shell_bar.rs
 - **Imports**: use anyhow :: Result , use std :: path :: { Path , PathBuf } , use tokio :: sync :: mpsc , use crate :: infra :: cmd , use crate :: infra :: fs_util , use crate :: infra :: runner :: RunnerEvent 
 - **Public Functions & Signatures**:
@@ -203,7 +203,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   async fn run_pacman (packages : & [& str] , tx : & mpsc :: Sender < RunnerEvent > , task_id : & str ,) -> Result < () >
   ```
 
-### `src/infra/fs_util.rs` (Role: infra, Lines: 60)
+### `src/infra/fs_util.rs` (Role: infra, Lines: 61)
 - **Responsibility**: Core infra logic in src/infra/fs_util.rs
 - **Imports**: use anyhow :: { Context , Result } , use std :: fs :: { self , OpenOptions } , use std :: io :: { self , Write } , use std :: path :: Path 
 - **Public Functions & Signatures**:

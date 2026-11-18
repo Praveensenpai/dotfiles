@@ -12,6 +12,12 @@ fn dt(id: &'static str, name: &'static str, desc: &'static str, default_selected
 
 /// Returns tasks belonging to the desktop category.
 pub fn get_tasks() -> Vec<Task> {
+    let mut tasks = get_system_tasks();
+    tasks.extend(get_window_tasks());
+    tasks
+}
+
+fn get_system_tasks() -> Vec<Task> {
     vec![
         dt(
             "disable_bluetooth",
@@ -32,9 +38,32 @@ pub fn get_tasks() -> Vec<Task> {
             true,
         ),
         dt(
+            "setup_japanese_ime",
+            "Japanese IME (Fcitx5 + Mozc)",
+            "Configures Fcitx5 global state sharing, Mozc profile, and native shortcuts",
+            true,
+        ),
+        dt(
+            "setup_poweroff_hibernation",
+            "Hibernate on Shutdown & Low Battery",
+            "Configures system to hibernate instead of direct poweroff on low battery and shutdown",
+            true,
+        ),
+    ]
+}
+
+fn get_window_tasks() -> Vec<Task> {
+    vec![
+        dt(
             "set_alacritty_font_size",
             "Alacritty Font Size",
             "Configures Alacritty font size to 10 for clean readability",
+            true,
+        ),
+        dt(
+            "setup_kitty_default_terminal",
+            "Kitty Default Terminal & Media Icons",
+            "Configures Kitty as default terminal with Adwaita Mono media symbol maps and clean bindings",
             true,
         ),
         dt(
@@ -65,12 +94,6 @@ pub fn get_tasks() -> Vec<Task> {
             "setup_omarchy_refined_menu",
             "Omarchy Refined Menu",
             "Customizes Omarchy application menu presentation",
-            true,
-        ),
-        dt(
-            "setup_poweroff_hibernation",
-            "Hibernate on Shutdown & Low Battery",
-            "Configures system to hibernate instead of direct poweroff on low battery and shutdown",
             true,
         ),
     ]
