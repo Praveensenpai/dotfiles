@@ -1,15 +1,12 @@
 use anyhow::Result;
-use std::path::PathBuf;
 use tokio::sync::mpsc;
 
+use crate::domain::exec_ime;
 use crate::domain::exec_shell_bar;
 use crate::infra::cmd;
+use crate::infra::env_util::home_dir;
 use crate::infra::fs_util;
 use crate::infra::runner::RunnerEvent;
-
-fn home_dir() -> PathBuf {
-    PathBuf::from(std::env::var("HOME").unwrap_or_else(|_| ".".to_string()))
-}
 
 /// Executes a desktop task by its unique task ID.
 pub async fn execute(id: &str, tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
@@ -225,6 +222,7 @@ async fn setup_japanese_ime(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
     fs_util::write_file(&env_path, im_env)?;
 
     patch_ime_keybinds()?;
+    exec_ime::execute(tx, "setup_japanese_ime").await?;
 
     let _ = cmd::run(
         "systemctl",

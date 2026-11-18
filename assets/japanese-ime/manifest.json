@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "paisen.japanese-ime",
+  "name": "Japanese Input Method",
+  "version": "1.0.0",
+  "author": "paisen",
+  "description": "Japanese (Mozc) and English input method toggle widget with status popover for Omarchy Quattro.",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Panel.qml"
+  },
+  "barWidget": {
+    "displayName": "Japanese Input Method",
+    "description": "Japanese (Mozc) and English input method toggle widget with status popover",
+    "category": "Input",
+    "allowMultiple": false
+  }
+}

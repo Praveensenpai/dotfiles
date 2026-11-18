@@ -40,7 +40,7 @@ fn get_system_tasks() -> Vec<Task> {
         dt(
             "setup_japanese_ime",
             "Japanese IME (Fcitx5 + Mozc)",
-            "Configures Fcitx5 global state sharing, Mozc profile, and native shortcuts",
+            "Configures Fcitx5/Mozc and deploys the IME toggle widget with status popover",
             true,
         ),
         dt(
