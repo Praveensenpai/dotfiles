@@ -72,12 +72,20 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn get_tasks () -> Vec < Task >
   ```
 
-### `src/domain/desktop_tasks.rs` (Role: domain, Lines: 100)
+### `src/domain/desktop_tasks.rs` (Role: domain, Lines: 106)
 - **Responsibility**: Core domain logic in src/domain/desktop_tasks.rs
 - **Imports**: use crate :: domain :: task :: { Task , TaskCategory } 
 - **Public Functions & Signatures**:
   ```rust
   fn get_tasks () -> Vec < Task >
+  ```
+
+### `src/domain/exec_battery.rs` (Role: domain, Lines: 145)
+- **Responsibility**: Core domain logic in src/domain/exec_battery.rs
+- **Imports**: use anyhow :: Result , use std :: path :: { Path , PathBuf } , use tokio :: sync :: mpsc , use crate :: infra :: cmd , use crate :: infra :: fs_util , use crate :: infra :: runner :: RunnerEvent 
+- **Public Functions & Signatures**:
+  ```rust
+  async fn execute (tx : & mpsc :: Sender < RunnerEvent >) -> Result < () >
   ```
 
 ### `src/domain/exec_core.rs` (Role: domain, Lines: 204)
@@ -88,9 +96,9 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   async fn execute (id : & str , tx : & mpsc :: Sender < RunnerEvent >) -> Result < () >
   ```
 
-### `src/domain/exec_desktop.rs` (Role: domain, Lines: 295)
+### `src/domain/exec_desktop.rs` (Role: domain, Lines: 297)
 - **Responsibility**: Core domain logic in src/domain/exec_desktop.rs
-- **Imports**: use anyhow :: Result , use tokio :: sync :: mpsc , use crate :: domain :: exec_ime , use crate :: domain :: exec_menu , use crate :: domain :: exec_shell_bar , use crate :: infra :: cmd , use crate :: infra :: env_util :: home_dir , use crate :: infra :: fs_util , use crate :: infra :: runner :: RunnerEvent 
+- **Imports**: use anyhow :: Result , use tokio :: sync :: mpsc , use crate :: domain :: exec_battery , use crate :: domain :: exec_ime , use crate :: domain :: exec_menu , use crate :: domain :: exec_shell_bar , use crate :: infra :: cmd , use crate :: infra :: env_util :: home_dir , use crate :: infra :: fs_util , use crate :: infra :: runner :: RunnerEvent 
 - **Public Functions & Signatures**:
   ```rust
   async fn execute (id : & str , tx : & mpsc :: Sender < RunnerEvent >) -> Result < () >
@@ -223,7 +231,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn get_tasks () -> Vec < Task >
   ```
 
-### `src/domain.rs` (Role: domain, Lines: 24)
+### `src/domain.rs` (Role: domain, Lines: 25)
 - **Responsibility**: Core domain logic in src/domain.rs
 - **Imports**: pub use executor :: execute_task , pub use task :: { Task , TaskCategory } 
 

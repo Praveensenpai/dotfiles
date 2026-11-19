@@ -1,6 +1,7 @@
 use anyhow::Result;
 use tokio::sync::mpsc;
 
+use crate::domain::exec_battery;
 use crate::domain::exec_ime;
 use crate::domain::exec_menu;
 use crate::domain::exec_shell_bar;
@@ -40,6 +41,7 @@ pub async fn execute(id: &str, tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
         "setup_kitty_default_terminal" => setup_kitty_default_terminal(tx).await,
         "setup_omarchy_refined_menu" => exec_menu::execute(tx, id).await,
         "setup_poweroff_hibernation" => setup_poweroff_hibernation(tx).await,
+        "setup_battery_charge_limit" => exec_battery::execute(tx).await,
         _ => Ok(()),
     }
 }

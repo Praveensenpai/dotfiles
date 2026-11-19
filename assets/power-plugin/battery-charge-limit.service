@@ -1,0 +1,16 @@
+[Unit]
+Description=Restore battery charge limit on boot
+After=sysinit.target
+DefaultDependencies=no
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/bash -c '\
+  cfg=/etc/battery-charge-limit.conf; \
+  limit=80; \
+  [ -f "$cfg" ] && limit=$(cat "$cfg"); \
+  echo "$limit" > /sys/class/power_supply/BAT0/charge_control_end_threshold'
+
+[Install]
+WantedBy=sysinit.target

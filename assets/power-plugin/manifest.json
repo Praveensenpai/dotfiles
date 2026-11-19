@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "__USER__.power",
+  "name": "My Power",
+  "version": "1.0.0",
+  "author": "__USER__",
+  "description": "Battery, power profile, charge limiter, and system stats",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Panel.qml"
+  },
+  "barWidget": {
+    "displayName": "My Power",
+    "description": "Battery, power profile, and charge limit slider with password-protected writes",
+    "category": "System",
+    "allowMultiple": false
+  },
+  "omarchy": {
+    "clonedFrom": "omarchy.power"
+  }
+}

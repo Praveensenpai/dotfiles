@@ -49,6 +49,12 @@ fn get_system_tasks() -> Vec<Task> {
             "Configures system to hibernate instead of direct poweroff on low battery and shutdown",
             true,
         ),
+        dt(
+            "setup_battery_charge_limit",
+            "Battery Charge Limiter (80%)",
+            "Installs polkit helper, systemd service, and power panel plugin with charge limit slider",
+            true,
+        ),
     ]
 }
 

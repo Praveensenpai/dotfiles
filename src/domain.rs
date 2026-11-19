@@ -2,6 +2,7 @@ pub mod anime4k_assets;
 pub mod catalog;
 pub mod core_tasks;
 pub mod desktop_tasks;
+pub mod exec_battery;
 pub mod exec_core;
 pub mod exec_desktop;
 pub mod exec_ime;

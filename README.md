@@ -4,6 +4,18 @@
   # 🌸 dotfiles ✨
 
   *My personal collection of cute, clean, and minimal configurations for an Arch-based (Omarchy) system.* 🎀
+
+  <br>
+
+  [![Rust Edition](https://img.shields.io/badge/Rust-2021%20Edition-DEA584?style=flat-square&logo=rust)](https://www.rust-lang.org/)
+  [![Platform](https://img.shields.io/badge/Platform-Arch%20Linux%20%28Omarchy%29-FCC624?style=flat-square&logo=archlinux&logoColor=white)](https://archlinux.org/)
+  [![Window Manager](https://img.shields.io/badge/WM-Hyprland-89b4fa?style=flat-square&logo=wayland&logoColor=white)](https://hyprland.org/)
+  [![Shell](https://img.shields.io/badge/Shell-Quickshell-cba6f7?style=flat-square)](https://quickshell.outfoxxed.me/)
+  [![License](https://img.shields.io/badge/License-MIT-a6e3a1?style=flat-square)](LICENSE)
+
+  <br>
+
+  [🪄 Quick Install](#-the-one-liner-magic) • [🍡 Structure](#---structure---) • [🎀 Tasks (47)](#---native-installation-tasks---) • [🛠️ Custom Tools](#---custom-cli-tools--features---) • [⚡ Terminal Utilities](#---enhanced-shell--terminal-utilities---)
 </div>
 
 ---
@@ -19,6 +31,9 @@ dotfiles/
 ├── Cargo.toml                          # Rust crate definition & dependencies
 ├── RULES.md                            # Hard rules (max lines, complexity, zero-unwrap)
 ├── remote-install.sh                   # The one-liner magic script (fetches Rust binary) 🪄
+├── assets/
+│   ├── power-plugin/                   # Power panel plugin with charge limiter & polkit policy
+│   └── system-resources/              # Quickshell CPU & RAM resources monitor plugin
 ├── src/
 │   ├── main.rs                         # Entry point & terminal setup
 │   ├── app.rs                          # App state & interactive event loop
@@ -28,12 +43,19 @@ dotfiles/
 │   │   ├── catalog.rs                  # All 47 installation tasks catalog
 │   │   ├── task.rs                     # Task, Category, and TaskStatus models
 │   │   ├── executor.rs                 # Central task runner & dispatcher
-│   │   ├── exec_core.rs                # 12 core native Rust installers
-│   │   ├── exec_desktop.rs             # 8 desktop & window manager installers
+│   │   ├── core_tasks.rs               # 12 core system & dev tasks
+│   │   ├── desktop_tasks.rs            # 13 desktop & window manager tasks
+│   │   ├── rice_tasks.rs               # 2 aesthetic & theming tasks
+│   │   ├── media_tasks.rs              # 9 media & anime immersion tasks
+│   │   ├── tools_tasks.rs              # 10 modern CLI & network tool tasks
+│   │   ├── maint_tasks.rs              # 1 system maintenance task
+│   │   ├── exec_core.rs                # Core native Rust installers
+│   │   ├── exec_desktop.rs             # Desktop & window manager installers
+│   │   ├── exec_battery.rs             # Battery limiter, polkit policy & systemd service
 │   │   ├── exec_shell_bar.rs           # Quickshell bar & widgets configuration
-│   │   ├── exec_rice.rs                # 4 aesthetic & theming installers
-│   │   ├── exec_media.rs               # 9 media & anime immersion installers
-│   │   ├── exec_tools.rs               # 12 modern CLI tools installers
+│   │   ├── exec_rice.rs                # Aesthetic & theming installers
+│   │   ├── exec_media.rs               # Media & anime immersion installers
+│   │   ├── exec_tools.rs               # Modern CLI tools installers
 │   │   └── exec_maint.rs               # System maintenance & cleaner installers
 │   ├── infra.rs                        # Infrastructure module declarations
 │   ├── infra/
@@ -104,7 +126,7 @@ curl -LsSf -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/Pravee
 
 ## 🎀 ⁺ . ⊹ Native Installation Tasks . ⁺ 🌸
 
-All 47 tasks are written in 100% native Rust logic with automated logging to `install.log` and live terminal drawer inspection:
+All 48 tasks are written in 100% native Rust logic with automated logging to `install.log` and live terminal drawer inspection:
 
 | Task ID | Category | What it does (*´▽`*) |
 | :--- | :--- | :--- |
@@ -116,21 +138,22 @@ All 47 tasks are written in 100% native Rust logic with automated logging to `in
 | `install_jdk` | Core | Installs OpenJDK 21 LTS, sets default via `archlinux-java`, and hides desktop entries. |
 | `install_uv` | Core | Installs Astral `uv` Python package manager via official installer. |
 | `setup_android_sdk` | Core | Configures Android development environment variables. |
-| `setup_docker` | Core | Configures `docker.service`/`socket` and adds user to docker group. |
+| `setup_docker` | Core | Configures `docker.service` / socket and adds user to docker group. |
 | `setup_editor` | Core | Sets `EDITOR=nvim` and `VISUAL=nvim` in shell configs. |
 | `setup_git_config` | Core | Sets global Git name/email defaults. |
 | `setup_github_ssh` | Core | Generates an Ed25519 SSH key, starts `ssh-agent`, and prints the key to register on GitHub. |
-
-| `remove_omarchy_preinstalls`| Desktop | Purges default bloatware via [`omarchy-debloat`](https://github.com/Praveensenpai/omarchy-debloat). |
+| `remove_omarchy_preinstalls` | Desktop | Purges default bloatware via [`omarchy-debloat`](https://github.com/Praveensenpai/omarchy-debloat). |
 | `disable_bluetooth` | Desktop | Disables bluetooth auto-power on boot. |
 | `disable_voxtype` | Desktop | Disables `voxtype` systemd user service and dictation keybinds. |
 | `set_alacritty_font_size` | Desktop | Sets Alacritty terminal font size to 10. |
+| `setup_kitty_default_terminal` | Desktop | Configures Kitty as default terminal with Adwaita Mono symbol maps. |
 | `set_hyprland_gaps_and_borders` | Desktop | Sets Hyprland inner/outer gaps to 0 and custom border colors. |
 | `set_hyprland_idle_and_keybinds` | Desktop | Configures Hyprland idle timeouts and keybindings. |
-| `set_hyprland_monitor_scale` | Desktop | Configures Hyprland monitor resolution and scale. |
+| `set_hyprland_monitor_scale` | Desktop | Configures Hyprland monitor resolution and scale (1.5 HiDPI). |
 | `setup_japanese_ime` | Desktop | Configures Fcitx5/Mozc and deploys the Japanese IME toggle widget with status popover. |
-| `setup_omarchy_refined_menu`| Desktop | Deploys the refined Quickshell menu plugin with app-priority search. |
-| `setup_poweroff_hibernation`| Desktop | Configures automatic hibernation on low battery (5%) and shutdown. |
+| `setup_omarchy_refined_menu` | Desktop | Deploys the refined Quickshell menu plugin with app-priority search. |
+| `setup_poweroff_hibernation` | Desktop | Configures automatic hibernation on low battery (5%) and shutdown. |
+| `setup_battery_charge_limit` | Desktop | Installs polkit helper, systemd boot service & Quickshell power panel with charge limit slider (60–100%). |
 | `install_wallpapers` | Rice | Deploys custom wallpapers to active Omarchy theme directory. |
 | `setup_starship` | Rice | Configures Starship prompt with Nerd Font symbols & language modules. |
 | `setup_blesh` | Core | Installs `ble.sh` nightly and enables Bash live syntax highlighting & auto-suggestions. |
@@ -140,25 +163,18 @@ All 47 tasks are written in 100% native Rust logic with automated logging to `in
 | `setup_mpv_resume` | Media | Enables saving playback position on quit in `mpv.conf`. |
 | `setup_mpv_youtube` | Media | Configures yt-dlp high quality streaming playback in `mpv`. |
 | `setup_mpd` | Media | Installs MPD, generates user `mpd.conf`, and enables user service. |
-| `setup_ototune` | Media | Installs `ototune` minimal aesthetic Rust TUI MPD player. |
-| `setup_otopod` | Media | Installs `otopod` anime audio condenser tool for language immersion. |
-| `setup_subsink` | Media | Installs `subsink` automatic Japanese subtitle synchronizer. |
-| `setup_kotonoha` | Media | Installs `kotonoha` Japanese $i+1$ sentence miner. |
-
-| `setup_cli_tools` | Tools | Installs `eza` and `bat` for modern icons, colors, and syntax-highlighted `cat`. |
-| `setup_zoxide` | Tools | Configures `zoxide` smart directory navigation (`z`). |
-| `setup_fzf_keybinds` | Tools | Configures `fzf` interactive fuzzy search shortcuts (`Ctrl+R`, `Ctrl+T`). |
-| `setup_toss` | Tools | Installs `toss` Rust TUI trash manager with shell completions & alias. |
+| `setup_ototune` | Media | Installs `ototune` minimal aesthetic Rust TUI MPD player ([`Praveensenpai/ototune`](https://github.com/Praveensenpai/ototune)). |
+| `setup_otopod` | Media | Installs `otopod` anime audio condenser tool for language immersion ([`Praveensenpai/otopod`](https://github.com/Praveensenpai/otopod)). |
+| `setup_subsink` | Media | Installs `subsink` automatic Japanese subtitle synchronizer ([`Praveensenpai/subsink`](https://github.com/Praveensenpai/subsink)). |
+| `setup_kotonoha` | Media | Installs `kotonoha` Japanese $i+1$ sentence miner ([`Praveensenpai/kotonoha`](https://github.com/Praveensenpai/kotonoha)). |
+| `setup_toss` | Tools | Installs `toss` Rust TUI trash manager with shell completions & alias ([`Praveensenpai/toss-rs`](https://github.com/Praveensenpai/toss-rs)). |
 | `setup_vnstat_service` | Tools | Installs `vnstat` network monitor and enables `vnstat.service`. |
 | `setup_opencode_config` | Tools | Deploys the bundled OpenCode provider/model config, plugins, and karakuri sync. |
 | `setup_agym` | Tools | Installs `agym` Antigravity manager & configures shell environment. |
-
 | `install_antigravity_cli` | Tools | Installs official Google Antigravity CLI. |
 | `install_codex` | Tools | Installs OpenAI Codex CLI package. |
-| `setup_sys_chronicle` | Tools | Installs `sys-chronicle` system activity logger & TUI dashboard. |
-| `setup_arch_cleaner` | Maintenance | Installs `arch-cleaner` package, log, & trash cleanup utility. |
-
-<br>
+| `setup_sys_chronicle` | Tools | Installs `sys-chronicle` system activity logger & TUI dashboard ([`Praveensenpai/sys-chronicle`](https://github.com/Praveensenpai/sys-chronicle)). |
+| `setup_arch_cleaner` | Maintenance | Installs `arch-cleaner` package, log, & trash cleanup utility ([`Praveensenpai/arch-cleaner`](https://github.com/Praveensenpai/arch-cleaner)). |
 
 <br>
 
@@ -168,6 +184,7 @@ Here are special standalone tools included in this repository to enhance your te
 
 | Tool | Command | Description |
 | :--- | :--- | :--- |
+| 🔋 **Battery Limiter** | Polkit GUI / sysfs | Persistent battery charge limiter service with Quickshell slider and privileged polkit write authorization. |
 | 🎵 **ototune** | `ototune` | Minimal aesthetic Rust TUI MPD player tailored for audio immersion & daily playback. |
 | 🚀 **Antigravity Manager** | `agym` | Unified CLI tool combining session picker (`agym`), account switcher (`agym accounts`), and quota stats (`agym stats`). |
 | ⏱️ **System Activity Chronicle** | `sys-chronicle` | System activity, power state, & resource load logger with AI markdown exporter & Ratatui TUI (`Praveensenpai/sys-chronicle`). |
