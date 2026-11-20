@@ -650,7 +650,7 @@ Panel {
             }
             InfoPair {
               label: root.chargeThresholdActive ? "Battery state" : (root.discharging ? "Discharging" : "Charging")
-              value: root.chargeThresholdActive ? "Holding" : (root.batteryFull ? "-" : (root.batteryInfo.rate || ""))
+              value: root.chargeThresholdActive ? (root.batteryFraction >= 0.99 ? "Fully charged (holding)" : "Holding limit") : (root.batteryFull ? "-" : (root.batteryInfo.rate || ""))
             }
           }
         }
@@ -707,7 +707,7 @@ Panel {
               anchors.rightMargin: Style.space(6)
               minimum: 60
               maximum: 100
-              step: 1
+              step: 20
               value: root.chargeLimit
               integer: true
               onMoved: function(v) { root.previewChargeLimit(v) }

@@ -80,7 +80,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn get_tasks () -> Vec < Task >
   ```
 
-### `src/domain/exec_battery.rs` (Role: domain, Lines: 145)
+### `src/domain/exec_battery.rs` (Role: domain, Lines: 208)
 - **Responsibility**: Core domain logic in src/domain/exec_battery.rs
 - **Imports**: use anyhow :: Result , use std :: path :: { Path , PathBuf } , use tokio :: sync :: mpsc , use crate :: infra :: cmd , use crate :: infra :: fs_util , use crate :: infra :: runner :: RunnerEvent 
 - **Public Functions & Signatures**:
@@ -162,7 +162,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   async fn execute (id : & str , tx : & mpsc :: Sender < RunnerEvent >) -> Result < () >
   ```
 
-### `src/domain/exec_shell_bar.rs` (Role: domain, Lines: 319)
+### `src/domain/exec_shell_bar.rs` (Role: domain, Lines: 322)
 - **Responsibility**: Core domain logic in src/domain/exec_shell_bar.rs
 - **Imports**: use anyhow :: Result , use std :: path :: Path , use tokio :: sync :: mpsc , use crate :: infra :: cmd , use crate :: infra :: env_util :: { home_dir , user_name } , use crate :: infra :: fs_util , use crate :: infra :: runner :: RunnerEvent 
 - **Public Functions & Signatures**:

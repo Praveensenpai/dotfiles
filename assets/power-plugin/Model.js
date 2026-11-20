@@ -61,8 +61,8 @@ function chargeThresholdActive(device, onBattery, states) {
   var fraction = batteryFraction(d)
   if (d.state === s.Discharging) return false
   if (d.state === s.PendingCharge) return true
-  if (d.state === s.FullyCharged && fraction < 0.99) return true
-  if (d.state !== s.Charging || fraction >= 0.99) return false
+  if (d.state === s.FullyCharged) return true
+  if (d.state !== s.Charging) return true
 
   return Number(d.changeRate || 0) <= 0.2 || Number(d.timeToFull || 0) >= 8 * 60 * 60
 }
@@ -74,11 +74,9 @@ function batteryIcon(device, onBattery, states) {
   var chargingIcons = ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"]
   var defaultIcons = ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
   var index = Math.max(0, Math.min(9, Math.floor(d.percentage * 10)))
-  var threshold = chargeThresholdActive(d, onBattery, states)
+  var isActivelyCharging = !onBattery && d.state === states.Charging && Number(d.changeRate || 0) > 0.2
 
-  if (threshold) return defaultIcons[index]
-  if (d.state === states.FullyCharged) return "󰂅"
-  if (!onBattery) return chargingIcons[index]
+  if (isActivelyCharging) return chargingIcons[index]
   return defaultIcons[index]
 }
 
@@ -87,10 +85,10 @@ function modeLabel(device, onBattery, states) {
   if (!d.isPresent) return ""
 
   var percentage = d.isPresent ? d.percentage : 0
-  if (chargeThresholdActive(d, onBattery, states)) return "Threshold"
   if (onBattery) return "On battery"
-  if (!onBattery && percentage >= 1) return "Fully charged"
-  return "Charging"
+  if (d.state === states.Charging && Number(d.changeRate || 0) > 0.2) return "Charging"
+  if (percentage >= 0.99) return "Fully charged"
+  return "Holding limit"
 }
 
 // ─── Charge-limit helpers ────────────────────────────────────────────────────
@@ -100,8 +98,10 @@ function chargeLimitMax() { return 100 }
 
 function clampChargeLimit(n) {
   var v = Math.round(Number(n))
-  if (!isFinite(v)) v = chargeLimitMin()
-  return Math.max(chargeLimitMin(), Math.min(chargeLimitMax(), v))
+  if (!isFinite(v)) return 80
+  if (v <= 70) return 60
+  if (v <= 90) return 80
+  return 100
 }
 
 function parseChargeLimit(raw) {

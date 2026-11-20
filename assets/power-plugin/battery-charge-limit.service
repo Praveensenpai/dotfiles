@@ -1,16 +1,11 @@
 [Unit]
-Description=Restore battery charge limit on boot
-After=sysinit.target
-DefaultDependencies=no
+Description=Restore battery charge limit on boot and resume
+After=multi-user.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/bin/bash -c '\
-  cfg=/etc/battery-charge-limit.conf; \
-  limit=80; \
-  [ -f "$cfg" ] && limit=$(cat "$cfg"); \
-  echo "$limit" > /sys/class/power_supply/BAT0/charge_control_end_threshold'
+ExecStart=/usr/local/bin/omarchy-set-charge-limit --restore
 
 [Install]
-WantedBy=sysinit.target
+WantedBy=multi-user.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target

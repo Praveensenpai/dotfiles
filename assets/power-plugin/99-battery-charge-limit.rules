@@ -1,0 +1,2 @@
+# Re-apply battery charge limit when AC power is plugged in or power state changes
+SUBSYSTEM=="power_supply", ACTION=="change", ATTR{online}=="1", RUN+="/usr/local/bin/omarchy-set-charge-limit --restore"

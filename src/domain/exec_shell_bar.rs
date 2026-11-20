@@ -206,7 +206,10 @@ fn partition_center_layout(val: &mut serde_json::Value, user: &str) -> bool {
         let id = item.get("id").and_then(|v| v.as_str()).unwrap_or("");
         if id == "omarchy.indicators" {
             indicators = Some(item);
-        } else if id == clock_id || id == "omarchy.clock" || id.split('.').next_back() == Some("clock") {
+        } else if id == clock_id
+            || id == "omarchy.clock"
+            || id.split('.').next_back() == Some("clock")
+        {
             clock = Some(item);
         } else {
             trailing.push(item);

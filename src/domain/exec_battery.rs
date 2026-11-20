@@ -13,6 +13,10 @@ const CHARGE_LIMIT_HELPER: &str = include_str!("../../assets/power-plugin/set-ch
 const CHARGE_LIMIT_POLICY: &str = include_str!("../../assets/power-plugin/charge-limit.policy");
 const CHARGE_LIMIT_SERVICE: &str =
     include_str!("../../assets/power-plugin/battery-charge-limit.service");
+const CHARGE_LIMIT_SLEEP_HOOK: &str =
+    include_str!("../../assets/power-plugin/battery-charge-limit-sleep.sh");
+const CHARGE_LIMIT_UDEV_RULE: &str =
+    include_str!("../../assets/power-plugin/99-battery-charge-limit.rules");
 
 fn home_dir() -> PathBuf {
     PathBuf::from(std::env::var("HOME").unwrap_or_else(|_| ".".to_string()))
@@ -62,6 +66,23 @@ async fn install_system_binaries(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
     )
     .await?;
 
+    let tmp_sleep = std::env::temp_dir().join("battery-charge-limit-sleep.sh");
+    fs_util::write_file(&tmp_sleep, CHARGE_LIMIT_SLEEP_HOOK)?;
+
+    let sleep_str = tmp_sleep.to_string_lossy();
+    cmd::run_sudo(
+        "install",
+        &[
+            "-Dm",
+            "0755",
+            &sleep_str,
+            "/usr/lib/systemd/system-sleep/battery-charge-limit.sh",
+        ],
+        tx,
+        task,
+    )
+    .await?;
+
     let tmp_policy = std::env::temp_dir().join("org.omarchy.charge-limit.policy");
     fs_util::write_file(&tmp_policy, CHARGE_LIMIT_POLICY)?;
 
@@ -99,6 +120,23 @@ async fn install_system_configs(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
     )
     .await?;
 
+    let tmp_udev = std::env::temp_dir().join("99-battery-charge-limit.rules");
+    fs_util::write_file(&tmp_udev, CHARGE_LIMIT_UDEV_RULE)?;
+
+    let udev_str = tmp_udev.to_string_lossy();
+    cmd::run_sudo(
+        "install",
+        &[
+            "-Dm",
+            "0644",
+            &udev_str,
+            "/etc/udev/rules.d/99-battery-charge-limit.rules",
+        ],
+        tx,
+        task,
+    )
+    .await?;
+
     let cfg = Path::new("/etc/battery-charge-limit.conf");
     if !cfg.exists() {
         let tmp_cfg = std::env::temp_dir().join("battery-charge-limit.conf");
@@ -125,7 +163,8 @@ async fn enable_service(tx: &mpsc::Sender<RunnerEvent>) -> Result<()> {
         tx,
         task,
     )
-    .await
+    .await?;
+    cmd::run_sudo("udevadm", &["control", "--reload-rules"], tx, task).await
 }
 
 fn patch_power_in_shell_json(config_dir: &Path, user: &str) -> Result<()> {
@@ -142,4 +181,28 @@ fn patch_power_in_shell_json(config_dir: &Path, user: &str) -> Result<()> {
     }
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn service_covers_suspend_and_hibernate_targets() {
+        assert!(CHARGE_LIMIT_SERVICE.contains("suspend.target"));
+        assert!(CHARGE_LIMIT_SERVICE.contains("hibernate.target"));
+        assert!(CHARGE_LIMIT_SERVICE.contains("--restore"));
+    }
+
+    #[test]
+    fn sleep_hook_covers_post_resume() {
+        assert!(CHARGE_LIMIT_SLEEP_HOOK.contains("post/*"));
+        assert!(CHARGE_LIMIT_SLEEP_HOOK.contains("--restore"));
+    }
+
+    #[test]
+    fn udev_rule_monitors_ac_change() {
+        assert!(CHARGE_LIMIT_UDEV_RULE.contains("SUBSYSTEM==\"power_supply\""));
+        assert!(CHARGE_LIMIT_UDEV_RULE.contains("--restore"));
+    }
 }
